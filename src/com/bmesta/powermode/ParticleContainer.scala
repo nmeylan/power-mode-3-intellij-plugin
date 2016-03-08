@@ -23,6 +23,7 @@ import java.util.Iterator
 import javax.swing._
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.ui.JBColor
 import org.jetbrains.annotations.NotNull
 
@@ -52,8 +53,8 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
 
   protected override def paintComponent(@NotNull g: Graphics) {
-    if (od.isDefined && System.currentTimeMillis() - lastShake > 300) {
-      doShake
+    if (od.isDefined && System.currentTimeMillis() - lastShake > 100) {
+      doShake(Seq(editor.getComponent))
     }
     super.paintComponent(g)
     renderParticles(g)
@@ -61,20 +62,38 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
   var lastShake = System.currentTimeMillis()
 
-  val myShakeComponent = editor.getComponent
+  val myShakeComponents = Seq(editor.getComponent, editor.getContentComponent)
 
-  def doShake: Unit = {
-    if(config.isShakeEnabled) {
-      val bounds: Rectangle = myShakeComponent.getBounds
+  def doShake(myShakeComponents: Seq[JComponent]): Unit = {
+    val editorNotOk = {
+      editor match {
+        case impl: EditorImpl =>
+          impl.getPreferredSize.height < 100 || impl.getPreferredSize.width < 100
+        case _ =>
+          false
+      }
+    }
+    if (config.isShakeEnabled && !editorNotOk) {
       od = od match {
-        case Some((dx, dy)) =>
-          myShakeComponent.setBounds(bounds.x + dx, bounds.x + dx, bounds.width, bounds.height)
+        case Some((dx, dy, ox,oy)) =>
+          myShakeComponents.foreach { myShakeComponent =>
+            val bounds: Rectangle = myShakeComponent.getBounds
+            myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
+          }
+          editor.getScrollingModel.scrollHorizontally(ox-Math.abs(dx/2))
+          editor.getScrollingModel.scrollVertically(oy-Math.abs(dy/4).toInt)
           None
         case None =>
           val dx = genD
           val dy = genD
-          myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
-          Some((-dx, -dy))
+          val offsetX = editor.getScrollingModel.getHorizontalScrollOffset
+          val offsetY = editor.getScrollingModel.getVerticalScrollOffset
+          myShakeComponents.foreach { myShakeComponent =>
+            val bounds: Rectangle = myShakeComponent.getBounds
+            myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
+          }
+
+          Some((-dx, -dy, offsetX, offsetY))
       }
       lastShake = System.currentTimeMillis()
     }
@@ -114,7 +133,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   }
 
 
-  var od = Option.empty[(Int, Int)]
+  var od = Option.empty[(Int, Int, Int,Int)]
 
   def update(@NotNull point: Point) {
     this.setBounds(getMyBounds)
@@ -122,8 +141,8 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       addParticle(point.x, point.y)
     }
     od = None
-    doShake
-    myShakeComponent.repaint()
+    doShake(myShakeComponents)
+    //    myShakeComponents.map(_.repaint())
     repaint()
   }
 
