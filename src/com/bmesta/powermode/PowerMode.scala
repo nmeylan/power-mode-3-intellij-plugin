@@ -34,16 +34,24 @@ import org.jetbrains.annotations.Nullable
 /**
   * @author Baptiste Mesta
   */
-@State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml"))) object PowerMode {
+object PowerMode {
   @Nullable def getInstance: PowerMode = {
     ApplicationManager.getApplication.getComponent(classOf[PowerMode])
   }
 }
 
-@State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml"))) class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+@State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml")))
+class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  var particleRange = 50
+
+  var particleCount = 10
+
+  var shakeRange = 10
+
   private var particleContainerManager = Option.empty[ParticleContainerManager]
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
+
   def initComponent {
     val editorFactory = EditorFactory.getInstance
     particleContainerManager = Some(new ParticleContainerManager)
@@ -82,16 +90,36 @@ import org.jetbrains.annotations.Nullable
   }
 
   def isEnabled: Boolean = {
-      enabled
+    enabled
   }
 
   def setEnabled(enabled: Boolean) {
     this.enabled = enabled
   }
+
   def setShakeEnabled(shakeEnabled: Boolean) {
     this.shakeEnabled = shakeEnabled
   }
+
   def isShakeEnabled: Boolean = {
-      shakeEnabled
+    shakeEnabled
   }
+
+  def setParticleCount(particleCount: Int) {
+    this.particleCount = particleCount
+  }
+
+  def getParticleCount = particleCount
+
+  def setParticleRange(particleRange: Int) {
+    this.particleRange = particleRange
+  }
+
+  def getParticleRange = particleRange
+
+  def setShakeRange(shakeRange: Int) {
+    this.shakeRange = shakeRange
+  }
+
+  def getShakeRange = shakeRange
 }

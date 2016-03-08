@@ -64,23 +64,29 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   val myShakeComponent = editor.getComponent
 
   def doShake: Unit = {
-    val bounds: Rectangle = myShakeComponent.getBounds
-    od = od match {
-      case Some((dx, dy)) =>
-        myShakeComponent.setBounds(bounds.x + dx, bounds.x + dx, bounds.width, bounds.height)
-        None
-      case None =>
-        val dx = genD
-        val dy = genD
-        myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
-        Some((-dx, -dy))
+    if(config.isShakeEnabled) {
+      val bounds: Rectangle = myShakeComponent.getBounds
+      od = od match {
+        case Some((dx, dy)) =>
+          myShakeComponent.setBounds(bounds.x + dx, bounds.x + dx, bounds.width, bounds.height)
+          None
+        case None =>
+          val dx = genD
+          val dy = genD
+          myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
+          Some((-dx, -dy))
+      }
+      lastShake = System.currentTimeMillis()
     }
-    lastShake = System.currentTimeMillis()
   }
 
   def genD: Int = {
-    val range = 10
+    val range = config.shakeRange
     (range - (Math.random * 2 * range)).toInt
+  }
+
+  def config: PowerMode = {
+    PowerMode.getInstance
   }
 
   def updateParticles {
@@ -97,7 +103,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val dx = (Math.random * 4).toInt * (if (Math.random > 0.5) -1 else 1)
     val dy = (Math.random * -3 - 1).toInt * (if (Math.random > 0.5) -1 else 1)
     val size = ((Math.random * 5) + 1).toInt
-    val life = Math.random() * 50 toInt
+    val life = Math.random() * config.particleRange toInt
     val e = new Particle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
     particles :+= e
   }
@@ -112,7 +118,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
   def update(@NotNull point: Point) {
     this.setBounds(getMyBounds)
-    for (i <- 0 to 7) {
+    for (i <- 0 to config.particleCount) {
       addParticle(point.x, point.y)
     }
     od = None
