@@ -14,9 +14,11 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
 
     private JPanel mainPanel;
     private JCheckBox powerModeEnabled;
+    private JCheckBox shakeEnabled;
 
-    public PowerModeConfigurableUI(PowerMode powerMode) {
+    public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
+        shakeEnabled.setSelected(powerMode.isShakeEnabled());
     }
 
     @Override
