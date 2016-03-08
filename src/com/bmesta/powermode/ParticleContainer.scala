@@ -62,6 +62,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   var lastShake = System.currentTimeMillis()
 
   val myShakeComponent = editor.getComponent
+
   def doShake: Unit = {
     val bounds: Rectangle = myShakeComponent.getBounds
     od = od match {
@@ -78,7 +79,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   }
 
   def genD: Int = {
-    val range = 20
+    val range = 10
     (range - (Math.random * 2 * range)).toInt
   }
 
@@ -88,6 +89,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       repaint()
     }
   }
+
 
   val colors = Seq(JBColor.black, JBColor.white, JBColor.darkGray, JBColor.red, JBColor.CYAN, JBColor.pink, JBColor.YELLOW)
 
