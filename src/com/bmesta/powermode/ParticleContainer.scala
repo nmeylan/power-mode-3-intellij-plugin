@@ -45,7 +45,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
   myParent.add(this)
   this.setBounds(myParent.getBounds)
-  this.setBorder(BorderFactory.createLineBorder(JBColor.red))
+  //  this.setBorder(BorderFactory.createLineBorder(JBColor.red))
   setVisible(true)
   myParent.addComponentListener(this)
 
@@ -75,13 +75,13 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     }
     if (config.isShakeEnabled && !editorNotOk) {
       od = od match {
-        case Some((dx, dy, ox,oy)) =>
+        case Some((dx, dy, ox, oy)) =>
           myShakeComponents.foreach { myShakeComponent =>
             val bounds: Rectangle = myShakeComponent.getBounds
             myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
           }
-          editor.getScrollingModel.scrollHorizontally(ox-Math.abs(dx/2))
-          editor.getScrollingModel.scrollVertically(oy-Math.abs(dy/4).toInt)
+          editor.getScrollingModel.scrollHorizontally(ox - Math.abs(dx / 2))
+          editor.getScrollingModel.scrollVertically(oy - Math.abs(dy / 4).toInt)
           None
         case None =>
           val dx = genD
@@ -100,7 +100,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   }
 
   def genD: Int = {
-    val range = config.shakeRange
+    val range = config.shakeRange * config.valueFactor
     (range - (Math.random * 2 * range)).toInt
   }
 
@@ -122,7 +122,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val dx = (Math.random * 4).toInt * (if (Math.random > 0.5) -1 else 1)
     val dy = (Math.random * -3 - 1).toInt * (if (Math.random > 0.5) -1 else 1)
     val size = ((Math.random * 5) + 1).toInt
-    val life = Math.random() * config.particleRange toInt
+    val life = Math.random() * config.particleRange * config.valueFactor toInt
     val e = new Particle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
     particles :+= e
   }
@@ -133,11 +133,11 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   }
 
 
-  var od = Option.empty[(Int, Int, Int,Int)]
+  var od = Option.empty[(Int, Int, Int, Int)]
 
   def update(@NotNull point: Point) {
     this.setBounds(getMyBounds)
-    for (i <- 0 to config.particleCount) {
+    for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
       addParticle(point.x, point.y)
     }
     od = None
@@ -151,7 +151,6 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val bounds1: Rectangle = myParent.getBounds
     val area = editor.getScrollingModel.getVisibleArea
     val rectangle = new Rectangle(area.x, area.y, area.width, area.height)
-    println(rectangle)
     rectangle
   }
 

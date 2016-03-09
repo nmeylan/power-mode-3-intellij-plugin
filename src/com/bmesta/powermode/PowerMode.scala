@@ -31,6 +31,9 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
+import scala.collection.mutable
+import scala.util.Try
+
 /**
   * @author Baptiste Mesta
   */
@@ -42,11 +45,52 @@ object PowerMode {
 
 @State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  var heatupTime = 6000
+
+  var lastKeys: List[Long] = List.empty[Long]
+
+  def timeFactor: Double = {
+    val tf = Try {
+      if (heatupTime < 1000) {
+        1
+      } else {
+        math.min(heatupTime, lastKeys.max - lastKeys.min).toDouble / heatupTime
+      }
+    }.getOrElse(0.0)
+    tf
+  }
+
+
+  def updated {
+    val ct = System.currentTimeMillis()
+    lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
+    try {
+      println(s"valueFactor= $heatupFactor + ((1 - $heatupFactor) * $timeFactor)")
+      println(s"timeFactor=  math.min($heatupTime, ${lastKeys.max} - ${lastKeys.min} (${lastKeys.size}=${lastKeys.max - lastKeys.min})).toDouble / $heatupTime")
+    }catch {
+      case e=> e.printStackTrace()
+    }
+  }
+
+  def reduced: Unit = {
+    val ct = System.currentTimeMillis()
+    lastKeys = lastKeys.filter(_ >= ct - heatupTime)
+  }
+
+  var heatupFactor = 0.3
+
   var particleRange = 50
 
   var particleCount = 10
 
   var shakeRange = 10
+
+
+  //  def cooldownTimeFactor = math.max(0, heatupTime - (System.currentTimeMillis() - lastAction)) / heatupTime
+
+
+  def valueFactor = heatupFactor + ((1 - heatupFactor) * timeFactor)
+
 
   private var particleContainerManager = Option.empty[ParticleContainerManager]
   private var enabled: Boolean = true
@@ -122,4 +166,16 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   def getShakeRange = shakeRange
+
+  def setHeatup(heatup: Int) {
+    this.heatupFactor = heatup / 100.0
+  }
+
+  def getHeatup = (heatupFactor * 100).toInt
+
+  def setHeatupTime(heatupTime: Int) {
+    this.heatupTime = math.max(0, heatupTime)
+  }
+
+  def getHeatupTime = heatupTime
 }

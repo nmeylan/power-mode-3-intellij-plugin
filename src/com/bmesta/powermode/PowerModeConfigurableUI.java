@@ -20,6 +20,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JSlider particles;
     private JSlider particleRange;
     private JSlider shakeRange;
+    private JSlider heatup;
+    private JSlider heatupTime;
 
     public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
@@ -31,6 +33,10 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         particleRange.addChangeListener(e -> powerMode.setParticleRange(particleRange.getValue()));
         shakeRange.setValue(powerMode.getShakeRange());
         shakeRange.addChangeListener(e -> powerMode.setShakeRange(shakeRange.getValue()));
+        heatup.setValue(powerMode.getHeatup());
+        heatup.addChangeListener(e -> powerMode.setHeatup(heatup.getValue()));
+        heatupTime.setValue(powerMode.getHeatupTime());
+        heatupTime.addChangeListener(e -> powerMode.setHeatupTime(heatupTime.getValue()));
     }
 
     @Override

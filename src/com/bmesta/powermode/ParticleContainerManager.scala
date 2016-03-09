@@ -33,6 +33,7 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   val thread = new Thread(new Runnable() {
     def run {
       while (true) {
+        PowerMode.getInstance.reduced
         particleContainers.values.foreach(_.updateParticles)
         try {
           Thread.sleep(1000 / 60)
@@ -47,7 +48,6 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   thread.start()
 
 
-
   override def editorCreated(@NotNull event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
     particleContainers.put(editor, new ParticleContainer(editor))
@@ -58,11 +58,14 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   }
 
   def update(@NotNull editor: Editor) {
-    if (PowerMode.getInstance.isEnabled) SwingUtilities.invokeLater(new Runnable() {
-      def run {
-        updateInUI(editor)
-      }
-    })
+    if (PowerMode.getInstance.isEnabled || particleContainers.nonEmpty) {
+      PowerMode.getInstance.updated
+      SwingUtilities.invokeLater(new Runnable() {
+        def run {
+          updateInUI(editor)
+        }
+      })
+    }
   }
 
   private var lastUpdate: Long = 0L
@@ -70,7 +73,8 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   private def updateInUI(@NotNull editor: Editor) {
     val p: Point = editor.visualPositionToXY(editor.getCaretModel.getVisualPosition)
     val location = editor.getScrollingModel.getVisibleArea.getLocation
-    p.translate(-location.x,-location.y)
+    p.translate(-location.x, -location.y)
+
     particleContainers.get(editor).foreach(_.update(p))
   }
 
