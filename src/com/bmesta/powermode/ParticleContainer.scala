@@ -21,6 +21,7 @@ import java.awt.event.ComponentListener
 import java.util.ArrayList
 import java.util.Iterator
 import javax.swing._
+import com.bmesta.powermode.element.{ElementOfPower, PowerFire, PowerParticle}
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.impl.EditorImpl
@@ -49,7 +50,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   setVisible(true)
   myParent.addComponentListener(this)
 
-  var particles = Seq.empty[Particle]
+  var particles = Seq.empty[ElementOfPower]
 
 
   protected override def paintComponent(@NotNull g: Graphics) {
@@ -123,7 +124,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val dy = (Math.random * -3 - 1).toInt * (if (Math.random > 0.5) -1 else 1)
     val size = ((Math.random * 5) + 1).toInt
     val life = Math.random() * config.particleRange * config.valueFactor toInt
-    val e = new Particle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
+    val e = new PowerParticle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
     particles :+= e
   }
 
@@ -140,6 +141,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
       addParticle(point.x, point.y)
     }
+    particles :+= PowerFire(point.x, point.y,20,20,config.particleRange)
     od = None
     doShake(myShakeComponents)
     //    myShakeComponents.map(_.repaint())
