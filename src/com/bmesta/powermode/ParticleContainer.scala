@@ -141,10 +141,12 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
       addParticle(point.x, point.y)
     }
-    val wh = 100
-    val initLife = 2000
-    particles :+= PowerFire(point.x+5, point.y-10,wh,wh,initLife,true)
-    particles :+= PowerFire(point.x+5, point.y+22,wh,wh,initLife,false)
+    val wh = (100 * config.valueFactor).toInt
+    val initLife = (2000 * config.valueFactor).toInt
+    if (config.valueFactor > 0.25) {
+      particles :+= PowerFire(point.x + 5, point.y - 10, wh, wh, initLife, true, config)
+      particles :+= PowerFire(point.x + 5, point.y + 22, wh, wh, initLife, false, config)
+    }
     od = None
     doShake(myShakeComponents)
     //    myShakeComponents.map(_.repaint())

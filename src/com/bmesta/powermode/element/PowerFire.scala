@@ -7,6 +7,7 @@ import java.io.File
 import java.nio.file.Files
 import javax.imageio.ImageIO
 
+import com.bmesta.powermode.PowerMode
 import com.intellij.util.PathUtil
 
 import collection.JavaConversions._
@@ -44,7 +45,7 @@ object PowerFire {
 /**
   * Created by nyxos on 10.03.16.
   */
-case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int, up: Boolean) extends ElementOfPower {
+case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int, up: Boolean, config: PowerMode) extends ElementOfPower {
 
   var x = _x
   var y = _y
@@ -72,10 +73,11 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
     life > System.currentTimeMillis() //&& width >= 0 && width <= _width
   }
 
+
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {
     if (alive) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,   ( life-System.currentTimeMillis()) / initLife.toFloat))
+      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, ((life - System.currentTimeMillis()) / initLife.toFloat) * config.valueFactor toFloat))
       if (currentImage != null) g2d.drawImage(currentImage, x, y, width, height, null)
       g2d.dispose()
     }
