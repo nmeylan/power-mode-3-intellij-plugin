@@ -13,10 +13,10 @@ import com.intellij.util.PathUtil
 import collection.JavaConversions._
 
 object PowerFire {
-
+  val resolution = 256
 
   lazy val images = {
-    new File(PathUtil.getJarPathForClass(classOf[PowerFire]), "fire/animated").listFiles().filter(_.isFile).map { f =>
+    new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution").listFiles().filter(_.isFile).map { f =>
       val img = {
         try {
           ImageIO.read(f)
@@ -34,7 +34,8 @@ object PowerFire {
 
       val g = bi.createGraphics()
       g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f))
-      val at = AffineTransform.getScaleInstance(20, 20)
+
+      val at = AffineTransform.getScaleInstance(resolution, resolution)
       g.drawRenderedImage(bi, at)
       bi
     }
@@ -60,11 +61,13 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
     if (alive) {
       currentImage = PowerFire.images(i % 25)
       i += 1
-      x -= 1
+      x = _x - (0.5 * _width * lifeFactor).toInt
       if (up)
-        y -= 1
-      width += 1
-      height += 1
+        y = _y - (1.1 * _height * lifeFactor).toInt
+      else
+        y = _y + (0.25 * _height * lifeFactor).toInt
+      width = (_width * lifeFactor).toInt
+      height = (_height * lifeFactor).toInt
     }
     !alive
   }
@@ -76,10 +79,21 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
 
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {
     if (alive) {
+
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, ((life - System.currentTimeMillis()) / initLife.toFloat) * config.valueFactor toFloat))
-      if (currentImage != null) g2d.drawImage(currentImage, x, y, width, height, null)
+      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f * (1 - lifeFactor)))
+
+      if (up) {
+        if (currentImage != null) g2d.drawImage(currentImage, x + dxx, y + dyy, width, height, null)
+      } else {
+        // flip horizontally
+        if (currentImage != null) g2d.drawImage(currentImage, x + dxx, y + dyy + height, width, -height, null)
+      }
       g2d.dispose()
     }
+  }
+
+  def lifeFactor: Float = {
+    1 - ((life - System.currentTimeMillis()) / initLife.toFloat) toFloat
   }
 }

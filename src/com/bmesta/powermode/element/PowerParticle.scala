@@ -22,7 +22,9 @@ import org.jetbrains.annotations.NotNull
 /**
   * @author Baptiste Mesta
   */
-case class PowerParticle(var x: Int, var y: Int, dx: Int, dy: Int, size: Int, var life: Int, c: Color) extends ElementOfPower    {
+case class PowerParticle(var x: Int, var y: Int, dx: Int, dy: Int, size: Int, val _life: Int, c: (Float, Float, Float, Float)) extends ElementOfPower {
+  var life = _life
+
   def update: Boolean = {
     x += dx
     y += dy
@@ -33,8 +35,8 @@ case class PowerParticle(var x: Int, var y: Int, dx: Int, dy: Int, size: Int, va
   def render(@NotNull g: Graphics, dxx: Int, dyy: Int) {
     if (life > 0) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setColor(c)
-      g2d.fillRect(dxx + x - (size / 2), dyy + y - (size / 2), size, size)
+      g2d.setColor(new Color(c._1, c._2, c._3, c._4 * ((_life - life * 1.0f) / _life)))
+      g2d.fillOval(dxx + x - (size / 2), dyy + y - (size / 2), size, size)
       g2d.dispose()
     }
   }

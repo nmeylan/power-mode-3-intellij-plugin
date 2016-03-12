@@ -23,12 +23,13 @@ import java.util.Iterator
 import javax.swing._
 import com.bmesta.powermode.element.{ElementOfPower, PowerFire, PowerParticle}
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.{ScrollingModel, Editor}
 import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.ui.JBColor
 import org.jetbrains.annotations.NotNull
 
 import scala.collection.mutable.ListBuffer
+import scala.util.Random
 
 object ParticleContainer {
   private val logger = Logger.getInstance(this.getClass)
@@ -50,7 +51,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   setVisible(true)
   myParent.addComponentListener(this)
 
-  var particles = Seq.empty[ElementOfPower]
+  var particles = Seq.empty[(ElementOfPower, (Int, Int))]
 
 
   protected override def paintComponent(@NotNull g: Graphics) {
@@ -111,13 +112,17 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
   def updateParticles {
     if (particles.nonEmpty) {
-      particles = particles.seq.filterNot(_.update)
+      particles = particles.seq.filterNot(p => p._1.update)
       repaint()
     }
   }
 
 
-  val colors = Seq(JBColor.black, JBColor.white, JBColor.darkGray, JBColor.red, JBColor.CYAN, JBColor.pink, JBColor.YELLOW)
+  private val random = new Random()
+  val colors = Seq((56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f))
+
+  def getxy = (editor.getScrollingModel.getHorizontalScrollOffset,
+    editor.getScrollingModel.getVerticalScrollOffset)
 
   def addParticle(x: Int, y: Int) {
     val dx = (Math.random * 4).toInt * (if (Math.random > 0.5) -1 else 1)
@@ -125,31 +130,46 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val size = ((Math.random * 5) + 1).toInt
     val life = Math.random() * config.particleRange * config.valueFactor toInt
     val e = new PowerParticle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
-    particles :+= e
+    particles :+=(e, getxy)
   }
 
   def renderParticles(@NotNull g: Graphics) {
-    //        particles.foreach(_.render(g,editor.getScrollingModel.getHorizontalScrollOffset,editor.getScrollingModel.getVerticalScrollOffset))
-    particles.foreach(_.render(g, 0, 0))
+
+    val scrollingModel: ScrollingModel = editor.getScrollingModel
+    val xyNew = (scrollingModel.getHorizontalScrollOffset,
+      scrollingModel.getVerticalScrollOffset)
+
+    particles.foreach { pp =>
+      val (p, (x, y)) = pp
+      val dxx = x - xyNew._1
+      val dyy = y - xyNew._2
+      p.render(g, dxx, dyy)
+    }
+
   }
 
 
   var od = Option.empty[(Int, Int, Int, Int)]
 
+
   def update(@NotNull point: Point) {
+
     this.setBounds(getMyBounds)
     for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
       addParticle(point.x, point.y)
     }
-    val wh = (100 * config.valueFactor).toInt
-    val initLife = (2000 * config.valueFactor).toInt
-    if (config.valueFactor > 0.25) {
-      particles :+= PowerFire(point.x + 5, point.y - 10, wh, wh, initLife, true, config)
-      particles :+= PowerFire(point.x + 5, point.y + 22, wh, wh, initLife, false, config)
+
+    val base = 0.3
+    val wh = (config.maxFlameSize * base + ((math.random * config.maxFlameSize * (1 - base)) * config.valueFactor)).toInt
+    val initLife = (config.maxFlameLife * config.valueFactor).toInt
+    if (initLife > 100) {
+      particles :+=(PowerFire(point.x + 5, point.y - 1, wh, wh, initLife, true, config), getxy)
+      particles :+=(PowerFire(point.x + 5, point.y + 15, wh, wh, initLife, false, config), getxy)
     }
+
     od = None
     doShake(myShakeComponents)
-    //    myShakeComponents.map(_.repaint())
+    //    myShakeComponents.map(_.repaint())yyfdfsgagdsaasdgasdgasdg
     repaint()
   }
 

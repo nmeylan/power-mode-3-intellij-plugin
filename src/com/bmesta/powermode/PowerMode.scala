@@ -45,16 +45,24 @@ object PowerMode {
 
 @State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  var maxFlameSize = 100
+
+  var maxFlameLife = 2000
+
   var heatupTime = 6000
 
   var lastKeys: List[Long] = List.empty[Long]
+
+  var keyStrokesPerMinute = 300
 
   def timeFactor: Double = {
     val tf = Try {
       if (heatupTime < 1000) {
         1
       } else {
-        math.min(heatupTime, lastKeys.max - lastKeys.min).toDouble / heatupTime
+        //        math.min(heatupTime, lastKeys.max - lastKeys.min).toDouble / heatupTime
+        val d = heatupTime.toDouble / (60000.0/keyStrokesPerMinute)
+        math.min(lastKeys.size, d) / d
       }
     }.getOrElse(0.0)
     tf
@@ -64,12 +72,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def updated {
     val ct = System.currentTimeMillis()
     lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
-    try {
-      println(s"valueFactor= $heatupFactor + ((1 - $heatupFactor) * $timeFactor)")
-      println(s"timeFactor=  math.min($heatupTime, ${lastKeys.max} - ${lastKeys.min} (${lastKeys.size}=${lastKeys.max - lastKeys.min})).toDouble / $heatupTime")
-    }catch {
-      case e=> e.printStackTrace()
-    }
+//    println(s"valueFactor: $valueFactor")
+//    println(s"timeFactor: $timeFactor")
   }
 
   def reduced: Unit = {
@@ -178,4 +182,28 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   def getHeatupTime = heatupTime
+
+  def getFlameLife: Int = {
+    return maxFlameLife
+  }
+
+  def setFlameLife(flameLife: Int): Unit = {
+    maxFlameLife = flameLife
+  }
+
+  def getmaxFlameSize: Int = {
+    return maxFlameSize
+  }
+
+  def setmaxFlameSize(maxFlameSize: Int): Unit = {
+    this.maxFlameSize = maxFlameSize
+  }
+
+  def getKeyStrokesPerMinute: Int = {
+    return keyStrokesPerMinute
+  }
+
+  def setKeyStrokesPerMinute(keyStrokesPerMinute: Int) {
+    this.keyStrokesPerMinute = keyStrokesPerMinute
+  }
 }
