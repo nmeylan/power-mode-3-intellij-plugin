@@ -1,16 +1,31 @@
 <idea-plugin version="2">
     <id>com.bmesta.powermode</id>
     <name>Power mode</name>
-    <version>1.6</version>
-    <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste Mesta</vendor>
+    <version>1.8</version>
+    <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste
+        Mesta
+    </vendor>
 
-    <description><![CDATA[
-      Based on the activate-power-mode atom plugin.<br>
-      <h1>How to use</h1><br>
-Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
-    ]]></description>
+    <description><![CDATA[<h1>Power Mode</h1>
+<span>Based on the activate-power-mode atom plugin.</span>
+<h2>Features</h2>
+<ul>
+    <li>Exploding particles</li>
+    <li>Editor shaking</li>
+    <li>Flames</li>
+    <li>Heatup based on typing speed. The more you type the more happens.</li>
+    <li>Everything is configurable</li>
+</ul>
+<h2>Usage</h2>
+<ol>
+    <li>Install the plugin</li>
+    <li>ENTER POWER MODE in Preferences > Appearance > Power mode</li>
+    <li>CHANGE THE SLIDERS and options to your liking</li>
+</ol> ]]></description>
 
-    <idea-version since-build="143.0" />
+    <idea-version since-build="143.0"/>
+
+    <depends>com.intellij.modules.platform</depends>
 
     <application-components>
         <component>
@@ -19,7 +34,8 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     </application-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode" displayName="Power mode" instance="com.bmesta.powermode.PowerModeConfigurable"/>
+        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode" displayName="Power mode"
+                                 instance="com.bmesta.powermode.PowerModeConfigurable"/>
     </extensions>
 
     <actions>

@@ -1,23 +1,29 @@
 package com.bmesta.powermode.element
 
 import java.awt.geom.AffineTransform
-import java.awt.image.{RescaleOp, BufferedImage}
-import java.awt.{AlphaComposite, Graphics2D, Graphics}
+import java.awt.image.BufferedImage
+import java.awt.{AlphaComposite, Graphics, Graphics2D}
 import java.io.File
-import java.nio.file.Files
 import javax.imageio.ImageIO
 
 import com.bmesta.powermode.PowerMode
 import com.intellij.util.PathUtil
 
-import collection.JavaConversions._
-
 object PowerFire {
+
   val resolution = 256
+  val frames = 25
 
   lazy val images = {
-    new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution").listFiles().filter(_.isFile).map { f =>
-      val img = {
+    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution")
+    println(s"IMAGEFOLDER: ${file.getAbsolutePath}")
+    val imageFiles = file.listFiles()
+    val fileImages = imageFiles match {
+      case null =>
+
+        val imageUrls = (1 to frames).map(i => if (i > 9) s"$i" else s"0$i").map(i=>classOf[PowerFire].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
+        imageUrls.map(ImageIO.read)
+      case files => files.toList.filter(_.isFile).map { f =>
         try {
           ImageIO.read(f)
         } catch {
@@ -27,7 +33,8 @@ object PowerFire {
             throw e
         }
       }
-
+    }
+    fileImages.map { img =>
       val bi = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
       val gi = bi.getGraphics
       gi.drawImage(img, 0, 0, null)
@@ -40,6 +47,7 @@ object PowerFire {
       bi
     }
   }
+
 }
 
 
@@ -48,9 +56,9 @@ object PowerFire {
   */
 case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int, up: Boolean, config: PowerMode) extends ElementOfPower {
 
+  val life = System.currentTimeMillis() + initLife
   var x = _x
   var y = _y
-  val life = System.currentTimeMillis() + initLife
   var width = 0
   var height = 0
 
@@ -72,11 +80,6 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
     !alive
   }
 
-  def alive: Boolean = {
-    life > System.currentTimeMillis() //&& width >= 0 && width <= _width
-  }
-
-
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {
     if (alive) {
 
@@ -91,6 +94,10 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
       }
       g2d.dispose()
     }
+  }
+
+  def alive: Boolean = {
+    life > System.currentTimeMillis() //&& width >= 0 && width <= _width
   }
 
   def lifeFactor: Float = {

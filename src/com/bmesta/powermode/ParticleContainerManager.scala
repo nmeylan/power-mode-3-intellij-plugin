@@ -17,9 +17,9 @@ package com.bmesta.powermode
 
 import java.awt._
 import javax.swing._
+
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.event.EditorFactoryAdapter
-import com.intellij.openapi.editor.event.EditorFactoryEvent
+import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
 import org.jetbrains.annotations.NotNull
 
 import scala.collection.mutable
@@ -46,7 +46,7 @@ class ParticleContainerManager extends EditorFactoryAdapter {
     }
   })
   thread.start()
-
+  private var lastUpdate: Long = 0L
 
   override def editorCreated(@NotNull event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
@@ -58,7 +58,8 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   }
 
   def update(@NotNull editor: Editor) {
-    if (PowerMode.getInstance.isEnabled || particleContainers.nonEmpty) {
+
+    if (PowerMode.getInstance.isEnabled ) {
       PowerMode.getInstance.updated
       SwingUtilities.invokeLater(new Runnable() {
         def run {
@@ -67,8 +68,6 @@ class ParticleContainerManager extends EditorFactoryAdapter {
       })
     }
   }
-
-  private var lastUpdate: Long = 0L
 
   private def updateInUI(@NotNull editor: Editor) {
     val p: Point = editor.visualPositionToXY(editor.getCaretModel.getVisualPosition)

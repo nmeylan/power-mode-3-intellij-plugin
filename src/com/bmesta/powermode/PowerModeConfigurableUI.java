@@ -1,12 +1,12 @@
 package com.bmesta.powermode;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * @author Baptiste Mesta
@@ -33,11 +33,17 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JLabel flameLifeValue;
     private JSlider keyStrokesPerMinute;
     private JLabel keyStrokesPerMinuteValue;
+    private JCheckBox FLAMESCheckBox;
+    private JCheckBox PARTICLESCheckBox;
 
     public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
         shakeEnabled.setSelected(powerMode.isShakeEnabled());
         shakeEnabled.addChangeListener(e -> powerMode.setShakeEnabled(shakeEnabled.isSelected()));
+        FLAMESCheckBox.setSelected(powerMode.isFlamesEnabled());
+        FLAMESCheckBox.addChangeListener(e -> powerMode.setFlamesEnabled(FLAMESCheckBox.isSelected()));
+        PARTICLESCheckBox.setSelected(powerMode.isParticlesEnabled());
+        PARTICLESCheckBox.addChangeListener(e -> powerMode.setParticlesEnabled(PARTICLESCheckBox.isSelected()));
         initValues(powerMode.getParticleCount(), particles, particlesValue, powerMode, slider -> powerMode.setParticleCount(slider.getValue()));
         initValues(powerMode.getParticleRange(), particleRange, particleRangeValue, powerMode, slider -> powerMode.setParticleRange(slider.getValue()));
         initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, powerMode, slider -> powerMode.setShakeRange(slider.getValue()));
@@ -46,9 +52,11 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         initValues(powerMode.getFlameLife(), flameLife, flameLifeValue, powerMode, slider -> powerMode.setFlameLife(slider.getValue()));
         initValues(powerMode.getmaxFlameSize(), maxFlameSize, maxFlameSizeValue, powerMode, slider -> powerMode.setmaxFlameSize(slider.getValue()));
         initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, powerMode, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
+
+
     }
 
-    private void initValues(int n, JSlider ht, JLabel htv, PowerMode powerMode, ValueSettable valueSettable) {
+    private void initValues(int n, @NotNull JSlider ht, @NotNull JLabel htv, PowerMode powerMode, ValueSettable valueSettable) {
         ht.setValue(n);
         htv.setText(String.valueOf(n));
         ValueSettable vs = valueSettable;

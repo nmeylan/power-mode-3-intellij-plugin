@@ -16,19 +16,15 @@
 package com.bmesta.powermode
 
 import java.awt._
-import java.awt.event.ComponentEvent
-import java.awt.event.ComponentListener
-import java.util.ArrayList
-import java.util.Iterator
+import java.awt.event.{ComponentEvent, ComponentListener}
 import javax.swing._
+
 import com.bmesta.powermode.element.{ElementOfPower, PowerFire, PowerParticle}
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.editor.{ScrollingModel, Editor}
 import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.ui.JBColor
+import com.intellij.openapi.editor.{Editor, ScrollingModel}
 import org.jetbrains.annotations.NotNull
 
-import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 object ParticleContainer {
@@ -50,32 +46,56 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   //  this.setBorder(BorderFactory.createLineBorder(JBColor.red))
   setVisible(true)
   myParent.addComponentListener(this)
+  val myShakeComponents = Seq(editor.getComponent, editor.getContentComponent)
+  def colors = Seq((56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f),(116 / 255.0f, 80 / 255.0f, 0 / 0f, 0.95f),(0 / 255.0f, 0 / 255.0f, 0 / 0f, 1f))
 
+  private val random = new Random()
   var particles = Seq.empty[(ElementOfPower, (Int, Int))]
+  var lastShake = System.currentTimeMillis()
+  var od = Option.empty[(Int, Int, Int, Int)]
 
-
-  protected override def paintComponent(@NotNull g: Graphics) {
-    if (od.isDefined && System.currentTimeMillis() - lastShake > 100) {
-      doShake(Seq(editor.getComponent))
+  def updateParticles {
+    if (particles.nonEmpty) {
+      particles = particles.seq.filterNot(p => p._1.update)
+      repaint()
     }
-    super.paintComponent(g)
-    renderParticles(g)
   }
 
-  var lastShake = System.currentTimeMillis()
+  def update(@NotNull point: Point) {
 
-  val myShakeComponents = Seq(editor.getComponent, editor.getContentComponent)
+    this.setBounds(getMyBounds)
+
+    if (config.isParticlesEnabled) {
+      for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
+        addParticle(point.x, point.y)
+      }
+    }
+    if (config.isFlamesEnabled) {
+      val base = 0.3
+      val wh = (config.maxFlameSize * base + ((math.random * config.maxFlameSize * (1 - base)) * config.valueFactor)).toInt
+      val initLife = (config.maxFlameLife * config.valueFactor).toInt
+      if (initLife > 100) {
+        particles :+=(PowerFire(point.x + 5, point.y - 1, wh, wh, initLife, true, config), getxy)
+        particles :+=(PowerFire(point.x + 5, point.y + 15, wh, wh, initLife, false, config), getxy)
+      }
+    }
+    od = None
+    if(config.isShakeEnabled) {
+      doShake(myShakeComponents)
+    }
+    repaint()
+  }
 
   def doShake(myShakeComponents: Seq[JComponent]): Unit = {
-    val editorNotOk = {
-      editor match {
+    val editorOk = {
+      !(editor match {
         case impl: EditorImpl =>
           impl.getPreferredSize.height < 100 || impl.getPreferredSize.width < 100
         case _ =>
           false
-      }
+      })
     }
-    if (config.isShakeEnabled && !editorNotOk) {
+    if ( editorOk) {
       od = od match {
         case Some((dx, dy, ox, oy)) =>
           myShakeComponents.foreach { myShakeComponent =>
@@ -110,17 +130,6 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     PowerMode.getInstance
   }
 
-  def updateParticles {
-    if (particles.nonEmpty) {
-      particles = particles.seq.filterNot(p => p._1.update)
-      repaint()
-    }
-  }
-
-
-  private val random = new Random()
-  val colors = Seq((56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f))
-
   def getxy = (editor.getScrollingModel.getHorizontalScrollOffset,
     editor.getScrollingModel.getVerticalScrollOffset)
 
@@ -131,6 +140,37 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val life = Math.random() * config.particleRange * config.valueFactor toInt
     val e = new PowerParticle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
     particles :+=(e, getxy)
+  }
+
+  def getMyBounds: Rectangle = {
+    val bounds1: Rectangle = myParent.getBounds
+    val area = editor.getScrollingModel.getVisibleArea
+    val rectangle = new Rectangle(area.x, area.y, area.width, area.height)
+    rectangle
+  }
+
+  def componentResized(e: ComponentEvent) {
+    setBounds(getMyBounds)
+    logger.debug("Resized")
+  }
+
+  def componentMoved(e: ComponentEvent) {
+    setBounds(getMyBounds)
+    logger.debug("Moved")
+  }
+
+  def componentShown(e: ComponentEvent) {
+  }
+
+  def componentHidden(e: ComponentEvent) {
+  }
+
+  protected override def paintComponent(@NotNull g: Graphics) {
+    if (od.isDefined && System.currentTimeMillis() - lastShake > 100) {
+      doShake(Seq(editor.getComponent))
+    }
+    super.paintComponent(g)
+    renderParticles(g)
   }
 
   def renderParticles(@NotNull g: Graphics) {
@@ -146,54 +186,5 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       p.render(g, dxx, dyy)
     }
 
-  }
-
-
-  var od = Option.empty[(Int, Int, Int, Int)]
-
-
-  def update(@NotNull point: Point) {
-
-    this.setBounds(getMyBounds)
-    for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
-      addParticle(point.x, point.y)
-    }
-
-    val base = 0.3
-    val wh = (config.maxFlameSize * base + ((math.random * config.maxFlameSize * (1 - base)) * config.valueFactor)).toInt
-    val initLife = (config.maxFlameLife * config.valueFactor).toInt
-    if (initLife > 100) {
-      particles :+=(PowerFire(point.x + 5, point.y - 1, wh, wh, initLife, true, config), getxy)
-      particles :+=(PowerFire(point.x + 5, point.y + 15, wh, wh, initLife, false, config), getxy)
-    }
-
-    od = None
-    doShake(myShakeComponents)
-    //    myShakeComponents.map(_.repaint())yyfdfsgagdsaasdgasdgasdg
-    repaint()
-  }
-
-
-  def getMyBounds: Rectangle = {
-    val bounds1: Rectangle = myParent.getBounds
-    val area = editor.getScrollingModel.getVisibleArea
-    val rectangle = new Rectangle(area.x, area.y, area.width, area.height)
-    rectangle
-  }
-
-  def componentResized(e: ComponentEvent) {
-    setBounds(getMyBounds)
-    logger.info("Resized")
-  }
-
-  def componentMoved(e: ComponentEvent) {
-    setBounds(getMyBounds)
-    logger.info("Moved")
-  }
-
-  def componentShown(e: ComponentEvent) {
-  }
-
-  def componentHidden(e: ComponentEvent) {
   }
 }
