@@ -47,7 +47,8 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   setVisible(true)
   myParent.addComponentListener(this)
   val myShakeComponents = Seq(editor.getComponent, editor.getContentComponent)
-  def colors = Seq((56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f),(116 / 255.0f, 80 / 255.0f, 0 / 0f, 0.95f),(0 / 255.0f, 0 / 255.0f, 0 / 0f, 1f))
+
+  def colors = Seq((56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f), (116 / 255.0f, 80 / 255.0f, 0f, 0.95f), (0 / 255.0f, 0 / 255.0f, 0f, 1f))
 
   private val random = new Random()
   var particles = Seq.empty[(ElementOfPower, (Int, Int))]
@@ -80,7 +81,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       }
     }
     od = None
-    if(config.isShakeEnabled) {
+    if (config.isShakeEnabled) {
       doShake(myShakeComponents)
     }
     repaint()
@@ -95,7 +96,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
           false
       })
     }
-    if ( editorOk) {
+    if (editorOk) {
       od = od match {
         case Some((dx, dy, ox, oy)) =>
           myShakeComponents.foreach { myShakeComponent =>
@@ -134,11 +135,11 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     editor.getScrollingModel.getVerticalScrollOffset)
 
   def addParticle(x: Int, y: Int) {
-    val dx = (Math.random * 4).toInt * (if (Math.random > 0.5) -1 else 1)
-    val dy = (Math.random * -3 - 1).toInt * (if (Math.random > 0.5) -1 else 1)
-    val size = ((Math.random * 5) + 1).toInt
-    val life = Math.random() * config.particleRange * config.valueFactor toInt
-    val e = new PowerParticle(x, y, dx, dy, size, life, colors((Math.random() * (colors.size - 1)).toInt))
+    val dx = (Math.random * 2) * (if (Math.random > 0.5) -1 else 1)
+    val dy = ((Math.random * -3) - 1) //* (if (Math.random > 0.5) -1 else 1)
+    val size = ((Math.random * config.particleSize) + 1).toInt
+    val life = Math.random() * config.getParticleLife * config.valueFactor
+    val e = new PowerParticle(x, y, dx.toFloat, dy.toFloat, size, life.toInt, colors((Math.random() * (colors.size )).toInt))
     particles :+=(e, getxy)
   }
 

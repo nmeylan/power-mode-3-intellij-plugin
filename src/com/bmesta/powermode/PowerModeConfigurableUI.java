@@ -17,13 +17,13 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JPanel mainPanel;
     private JCheckBox powerModeEnabled;
     private JCheckBox shakeEnabled;
-    private JSlider particles;
-    private JSlider particleRange;
+    private JSlider particleCount;
+    private JSlider particleLife;
     private JSlider shakeRange;
     private JSlider heatup;
     private JSlider heatupTime;
-    private JLabel particlesValue;
-    private JLabel particleRangeValue;
+    private JLabel particleCountValue;
+    private JLabel particleLifeValue;
     private JLabel shakeRangeValue;
     private JLabel heatupValue;
     private JLabel heatupTimeValue;
@@ -35,6 +35,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JLabel keyStrokesPerMinuteValue;
     private JCheckBox FLAMESCheckBox;
     private JCheckBox PARTICLESCheckBox;
+    private JSlider particleSize;
+    private JLabel particleSizeValue;
 
     public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
@@ -44,8 +46,9 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         FLAMESCheckBox.addChangeListener(e -> powerMode.setFlamesEnabled(FLAMESCheckBox.isSelected()));
         PARTICLESCheckBox.setSelected(powerMode.isParticlesEnabled());
         PARTICLESCheckBox.addChangeListener(e -> powerMode.setParticlesEnabled(PARTICLESCheckBox.isSelected()));
-        initValues(powerMode.getParticleCount(), particles, particlesValue, powerMode, slider -> powerMode.setParticleCount(slider.getValue()));
-        initValues(powerMode.getParticleRange(), particleRange, particleRangeValue, powerMode, slider -> powerMode.setParticleRange(slider.getValue()));
+        initValues(powerMode.getParticleCount(), particleCount, particleCountValue, powerMode, slider -> powerMode.setParticleCount(slider.getValue()));
+        initValues(powerMode.getParticleSize(), particleSize, particleSizeValue, powerMode, slider -> powerMode.setParticleSize(slider.getValue()));
+        initValues(powerMode.getParticleLife(), particleLife, particleLifeValue, powerMode, slider -> powerMode.setParticleLife(slider.getValue()));
         initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, powerMode, slider -> powerMode.setShakeRange(slider.getValue()));
         initValues(powerMode.getHeatup(), heatup, heatupValue, powerMode, slider -> powerMode.setHeatup(slider.getValue()));
         initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, powerMode, slider -> powerMode.setHeatupTime(slider.getValue()));

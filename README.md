@@ -12,3 +12,5 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
 
 
 
+                                           dfgadfgafdg        rgfasdfasdfasdfasdgasasdgadgasdfasdf
+                                           sadfsadfasdf

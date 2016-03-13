@@ -41,6 +41,8 @@ object PowerMode {
 
 @State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  var particleSize = 3
+
   var particlesEnabled = true
 
 
@@ -56,7 +58,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   var keyStrokesPerMinute = 300
   var heatupFactor = 0.3
-  var particleRange = 50
+  var particleLife = 2000
   var particleCount = 10
   var shakeRange = 10
   private var particleContainerManager = Option.empty[ParticleContainerManager]
@@ -150,10 +152,10 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     this.particleCount = particleCount
   }
 
-  def getParticleRange = particleRange
+  def getParticleLife = particleLife
 
-  def setParticleRange(particleRange: Int) {
-    this.particleRange = particleRange
+  def setParticleLife(particleRange: Int) {
+    this.particleLife = particleRange
   }
 
   def getShakeRange = shakeRange
@@ -214,5 +216,13 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   def isParticlesEnabled: Boolean = {
     return particlesEnabled
+  }
+
+  def getParticleSize: Int = {
+    return particleSize
+  }
+
+  def setParticleSize(particleSize: Int) {
+    this.particleSize = particleSize
   }
 }
