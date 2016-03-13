@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.bmesta.powermode</id>
     <name>Power mode</name>
-    <version>1.8</version>
+    <version>1.10</version>
     <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste
         Mesta
     </vendor>
@@ -10,7 +10,7 @@
 <span>Based on the activate-power-mode atom plugin.</span>
 <h2>Features</h2>
 <ul>
-    <li>Exploding particles</li>
+    <li>Exploding falling particles</li>
     <li>Editor shaking</li>
     <li>Flames</li>
     <li>Heatup based on typing speed. The more you type the more happens.</li>
