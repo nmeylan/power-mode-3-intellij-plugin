@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bmesta.powermode.element
+package de.ax.powermode.element
 
 import java.awt._
 
-import com.bmesta.powermode.PowerColor
+
+import de.ax.powermode.{ElementOfPower, PowerColor}
 import org.jetbrains.annotations.NotNull
 
 /**

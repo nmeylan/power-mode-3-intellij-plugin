@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <category name="com.bmesta.powermode">
+    <category name="de.ax.powermode">
         <priority value="trace"/>
         <appender-ref ref="console"/>
     </category>

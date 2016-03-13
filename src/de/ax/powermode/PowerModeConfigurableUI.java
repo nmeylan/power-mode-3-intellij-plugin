@@ -1,4 +1,4 @@
-package com.bmesta.powermode;
+package de.ax.powermode;
 
 import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.openapi.options.ConfigurationException;

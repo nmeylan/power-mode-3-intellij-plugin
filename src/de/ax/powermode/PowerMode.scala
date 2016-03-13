@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bmesta.powermode
+package de.ax.powermode
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
@@ -39,7 +39,7 @@ object PowerMode {
   }
 }
 
-@State(name = "PowerMode", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.xml")))
+@State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
   var particleSize = 3
 
@@ -118,7 +118,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   @NotNull def getComponentName: String = {
-    return "PowerMode"
+    return "PowerModeII"
   }
 
   @Nullable def getState: PowerMode = {

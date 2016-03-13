@@ -1,4 +1,4 @@
-package com.bmesta.powermode;
+package de.ax.powermode;
 
 import javax.swing.*;
 

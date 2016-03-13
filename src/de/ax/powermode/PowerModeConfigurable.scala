@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bmesta.powermode
+package de.ax.powermode
 
 import com.intellij.openapi.options.ConfigurableBase
 import org.jetbrains.annotations.NotNull
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull
   * @author Baptiste Mesta
   */
 class PowerModeConfigurable(@NotNull settings: PowerMode = PowerMode.getInstance)
-  extends ConfigurableBase[PowerModeConfigurableUI, PowerMode]("power.mode", "Power mode", "power.mode") {
+  extends ConfigurableBase[PowerModeConfigurableUI, PowerMode]("power.mode.II", "Power Mode II", "power.mode.II") {
 
 
   @NotNull protected def getSettings: PowerMode = {

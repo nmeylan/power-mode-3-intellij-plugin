@@ -1,4 +1,4 @@
-package com.bmesta.powermode.element
+package de.ax.powermode
 
 import java.awt.Graphics
 

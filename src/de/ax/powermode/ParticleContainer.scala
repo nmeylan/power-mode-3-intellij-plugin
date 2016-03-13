@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bmesta.powermode
+package de.ax.powermode
 
 import java.awt._
 import java.awt.event.{ComponentEvent, ComponentListener}
 import javax.swing._
 
-import com.bmesta.powermode.element.{ElementOfPower, PowerFire, PowerParticle}
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Editor, ScrollingModel}
+import de.ax.powermode.element.{PowerFire, PowerParticle}
 import org.jetbrains.annotations.NotNull
 
 import scala.util.Random
@@ -100,7 +100,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     val size = ((Math.random * powerMode.particleSize) + 1).toInt
     val life = Math.random() * powerMode.getParticleLife * powerMode.valueFactor
     val powerColor = colors((Math.random() * colors.size).toInt)
-    val powerParticle = new PowerParticle(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor)
+    val powerParticle = PowerParticle(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor)
     elementsOfPower :+=(powerParticle, getScrollPosition)
   }
 
@@ -109,7 +109,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   )
 
   def getColorPart: Float = {
-    ((Math.random()*192)/256).toFloat
+    ((Math.random() * 192) / 256).toFloat
   }
 
   def powerMode: PowerMode = {

@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-    <id>com.bmesta.powermode</id>
+    <id>de.ax.powermode</id>
     <name>Power Mode II</name>
     <version>2.2</version>
     <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
@@ -30,13 +30,13 @@
 
     <application-components>
         <component>
-            <implementation-class>com.bmesta.powermode.PowerMode</implementation-class>
+            <implementation-class>de.ax.powermode.PowerMode</implementation-class>
         </component>
     </application-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode" displayName="Power mode"
-                                 instance="com.bmesta.powermode.PowerModeConfigurable"/>
+        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode.ii" displayName="Power Mode II"
+                                 instance="de.ax.powermode.PowerModeConfigurable"/>
     </extensions>
 
     <actions>

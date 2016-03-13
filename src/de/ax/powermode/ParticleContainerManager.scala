@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.bmesta.powermode
+package de.ax.powermode
 
 import java.awt._
 import javax.swing._
