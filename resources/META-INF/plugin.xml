@@ -1,14 +1,13 @@
 <idea-plugin version="2">
     <id>com.bmesta.powermode</id>
-    <name>Power mode</name>
+    <name>Power Mode II</name>
     <version>2.2</version>
-    <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste
-        Mesta
+    <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
     </vendor>
 
     <description><![CDATA[
         <h1>Power Mode</h1>
-        <span>Based on the activate-power-mode atom plugin.</span>
+        <span>Based on the activate-power-mode atom plugin and forked from Baptiste Mesta on Github.</span>
         <h2>Features</h2>
         <ul>
             <li>Exploding falling particles</li>
