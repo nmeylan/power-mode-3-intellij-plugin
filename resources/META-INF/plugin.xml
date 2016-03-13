@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.bmesta.powermode</id>
     <name>Power mode</name>
-    <version>1.10</version>
+    <version>2.2</version>
     <vendor email="baptiste.mesta@gmail.com" url="https://github.com/baptistemesta/power-mode-intellij-plugin">Baptiste
         Mesta
     </vendor>

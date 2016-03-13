@@ -105,10 +105,12 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   }
 
   def colors: Seq[PowerColor] = Seq(
-    (56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f),
-    (116 / 255.0f, 80 / 255.0f, 0f, 0.95f),
-    (0 / 255.0f, 0 / 255.0f, 0f, 1f)
+    (getColorPart, getColorPart, getColorPart, 0.9f)
   )
+
+  def getColorPart: Float = {
+    ((Math.random()*192)/256).toFloat
+  }
 
   def powerMode: PowerMode = {
     PowerMode.getInstance
