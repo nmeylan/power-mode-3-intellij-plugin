@@ -16,7 +16,7 @@ object PowerFire {
 
   lazy val images = {
     val file = new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution")
-    println(s"IMAGEFOLDER: ${file.getAbsolutePath}")
+//    println(s"IMAGEFOLDER: ${file.getAbsolutePath}")
     val imageFiles = file.listFiles()
     val fileImages = imageFiles match {
       case null =>

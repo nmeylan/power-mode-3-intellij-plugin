@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull
 case class PowerParticle(var x: Float, var y: Float, dx: Float, var dy: Float, size: Float, val _life: Int, c: (Float, Float, Float, Float)) extends ElementOfPower {
   val life = System.currentTimeMillis() + _life
 
-  println(s"alife: $alive $this")
-  println(s"$life - ${System.currentTimeMillis()}= ${life - System.currentTimeMillis()}")
+//  println(s"alife: $alive $this")
+//  println(s"$life - ${System.currentTimeMillis()}= ${life - System.currentTimeMillis()}")
   def update: Boolean = {
     dy = dy + 0.075f
     x += dx
