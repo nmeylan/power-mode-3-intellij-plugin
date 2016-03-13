@@ -9,52 +9,59 @@ import javax.imageio.ImageIO
 import com.bmesta.powermode.PowerMode
 import com.intellij.util.PathUtil
 
-object PowerFire {
-
-  val resolution = 256
-  val frames = 25
-
-  lazy val images = {
-    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution")
-//    println(s"IMAGEFOLDER: ${file.getAbsolutePath}")
-    val imageFiles = file.listFiles()
-    val fileImages = imageFiles match {
-      case null =>
-
-        val imageUrls = (1 to frames).map(i => if (i > 9) s"$i" else s"0$i").map(i=>classOf[PowerFire].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
-        imageUrls.map(ImageIO.read)
-      case files => files.toList.filter(_.isFile).map { f =>
-        try {
-          ImageIO.read(f)
-        } catch {
-          case e =>
-            e.printStackTrace()
-            System.exit(1)
-            throw e
-        }
-      }
-    }
-    fileImages.map { img =>
-      val bi = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
-      val gi = bi.getGraphics
-      gi.drawImage(img, 0, 0, null)
-
-      val g = bi.createGraphics()
-      g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f))
-
-      val at = AffineTransform.getScaleInstance(resolution, resolution)
-      g.drawRenderedImage(bi, at)
-      bi
-    }
-  }
-
-}
-
-
 /**
   * Created by nyxos on 10.03.16.
   */
-case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int, up: Boolean, config: PowerMode) extends ElementOfPower {
+object PowerFire {
+
+  lazy val images = {
+    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution")
+    val imageFiles = file.listFiles()
+    val fileImages = imageFiles match {
+      case null =>
+        getBufferedImagesFromJar
+      case files =>
+        getBufferedImagesFromDebugDir(files)
+    }
+    fileImages.map { img =>
+      val bufferedImage = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
+      val graphics = bufferedImage.getGraphics
+      graphics.drawImage(img, 0, 0, null)
+
+      val graphics2D = bufferedImage.createGraphics()
+      graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f))
+
+      val at = AffineTransform.getScaleInstance(resolution, resolution)
+      graphics2D.drawRenderedImage(bufferedImage, at)
+      bufferedImage
+    }
+  }
+  val resolution = 256
+  val frames = 25
+
+  private def getBufferedImagesFromDebugDir(files: Array[File]): List[BufferedImage] = {
+    files.toList.filter(_.isFile).map { f =>
+      try {
+        ImageIO.read(f)
+      } catch {
+        case e =>
+          e.printStackTrace()
+          System.exit(1)
+          throw e
+      }
+    }
+  }
+
+  private def getBufferedImagesFromJar: IndexedSeq[BufferedImage] = {
+    val imageUrls = (1 to frames).map(i => if (i > 9) s"$i" else s"0$i")
+      .map(i => classOf[PowerFire].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
+    imageUrls.map(ImageIO.read)
+  }
+}
+
+
+case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean, powerMode: PowerMode)
+  extends ElementOfPower {
 
   val life = System.currentTimeMillis() + initLife
   var x = _x
@@ -67,7 +74,7 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
 
   override def update: Boolean = {
     if (alive) {
-      currentImage = PowerFire.images(i % 25)
+      currentImage = PowerFire.images(i % PowerFire.frames)
       i += 1
       x = _x - (0.5 * _width * lifeFactor).toInt
       if (up)
@@ -96,11 +103,5 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Int,
     }
   }
 
-  def alive: Boolean = {
-    life > System.currentTimeMillis() //&& width >= 0 && width <= _width
-  }
 
-  def lifeFactor: Float = {
-    1 - ((life - System.currentTimeMillis()) / initLife.toFloat) toFloat
-  }
 }

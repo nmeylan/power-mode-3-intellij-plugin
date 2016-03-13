@@ -43,21 +43,19 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
   myParent.add(this)
   this.setBounds(myParent.getBounds)
-  //  this.setBorder(BorderFactory.createLineBorder(JBColor.red))
   setVisible(true)
   myParent.addComponentListener(this)
-  val myShakeComponents = Seq(editor.getComponent, editor.getContentComponent)
 
-  def colors = Seq((56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f), (116 / 255.0f, 80 / 255.0f, 0f, 0.95f), (0 / 255.0f, 0 / 255.0f, 0f, 1f))
 
+  val shakeComponents = Seq(editor.getComponent, editor.getContentComponent)
   private val random = new Random()
-  var particles = Seq.empty[(ElementOfPower, (Int, Int))]
+  var elementsOfPower = Seq.empty[(ElementOfPower, (Int, Int))]
   var lastShake = System.currentTimeMillis()
-  var od = Option.empty[(Int, Int, Int, Int)]
+  var shakeData = Option.empty[(Int, Int, Int, Int)]
 
-  def updateParticles {
-    if (particles.nonEmpty) {
-      particles = particles.seq.filterNot(p => p._1.update)
+  def updateParticles() {
+    if (elementsOfPower.nonEmpty) {
+      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update)
       repaint()
     }
   }
@@ -66,26 +64,60 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
     this.setBounds(getMyBounds)
 
-    if (config.isParticlesEnabled) {
-      for (i <- 0 to (config.particleCount * config.valueFactor).toInt) {
-        addParticle(point.x, point.y)
-      }
+    if (powerMode.isParticlesEnabled) {
+      addParticles(point)
     }
-    if (config.isFlamesEnabled) {
-      val base = 0.3
-      val wh = (config.maxFlameSize * base + ((math.random * config.maxFlameSize * (1 - base)) * config.valueFactor)).toInt
-      val initLife = (config.maxFlameLife * config.valueFactor).toInt
-      if (initLife > 100) {
-        particles :+=(PowerFire(point.x + 5, point.y - 1, wh, wh, initLife, true, config), getxy)
-        particles :+=(PowerFire(point.x + 5, point.y + 15, wh, wh, initLife, false, config), getxy)
-      }
+    if (powerMode.isFlamesEnabled) {
+      addFlames(point)
     }
-    od = None
-    if (config.isShakeEnabled) {
-      doShake(myShakeComponents)
+    if (powerMode.isShakeEnabled) {
+      doShake(shakeComponents)
     }
     repaint()
   }
+
+  def addFlames(point: Point): Unit = {
+    val base = 0.3
+    val wh = (powerMode.maxFlameSize * base +
+      ((math.random * powerMode.maxFlameSize * (1 - base)) * powerMode.valueFactor)
+      ).toInt
+    val initLife = (powerMode.maxFlameLife * powerMode.valueFactor).toInt
+    if (initLife > 100) {
+      elementsOfPower :+=(PowerFire(point.x + 5, point.y - 1, wh, wh, initLife, true, powerMode), getScrollPosition)
+      elementsOfPower :+=(PowerFire(point.x + 5, point.y + 15, wh, wh, initLife, false, powerMode), getScrollPosition)
+    }
+  }
+
+  def addParticles(point: Point): Unit = {
+    for (i <- 0 to (powerMode.particleCount * powerMode.valueFactor).toInt) {
+      addParticle(point.x, point.y)
+    }
+  }
+
+  def addParticle(x: Int, y: Int) {
+    val dx = (Math.random * 2) * (if (Math.random > 0.5) -1 else 1)
+    val dy = (Math.random * -3) - 1
+    val size = ((Math.random * powerMode.particleSize) + 1).toInt
+    val life = Math.random() * powerMode.getParticleLife * powerMode.valueFactor
+    val powerColor = colors((Math.random() * colors.size).toInt)
+    val powerParticle = new PowerParticle(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor)
+    elementsOfPower :+=(powerParticle, getScrollPosition)
+  }
+
+  def colors: Seq[PowerColor] = Seq(
+    (56 / 255.0f, 255 / 255.0f, 0 / 255.0f, 0.9f),
+    (116 / 255.0f, 80 / 255.0f, 0f, 0.95f),
+    (0 / 255.0f, 0 / 255.0f, 0f, 1f)
+  )
+
+  def powerMode: PowerMode = {
+    PowerMode.getInstance
+  }
+
+  def getScrollPosition = (
+    editor.getScrollingModel.getHorizontalScrollOffset,
+    editor.getScrollingModel.getVerticalScrollOffset
+    )
 
   def doShake(myShakeComponents: Seq[JComponent]): Unit = {
     val editorOk = {
@@ -97,57 +129,33 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       })
     }
     if (editorOk) {
-      od = od match {
-        case Some((dx, dy, ox, oy)) =>
+      shakeData = shakeData match {
+        case Some((dx, dy, scrollX, scrollY)) =>
           myShakeComponents.foreach { myShakeComponent =>
             val bounds: Rectangle = myShakeComponent.getBounds
             myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
           }
-          editor.getScrollingModel.scrollHorizontally(ox - Math.abs(dx / 2))
-          editor.getScrollingModel.scrollVertically(oy - Math.abs(dy / 4).toInt)
+          editor.getScrollingModel.scrollHorizontally(scrollX - Math.abs(dx / 2))
+          editor.getScrollingModel.scrollVertically(scrollY - Math.abs(dy / 4))
           None
         case None =>
-          val dx = genD
-          val dy = genD
-          val offsetX = editor.getScrollingModel.getHorizontalScrollOffset
-          val offsetY = editor.getScrollingModel.getVerticalScrollOffset
+          val dx = generateShakeOffset
+          val dy = generateShakeOffset
+          val scrollX = editor.getScrollingModel.getHorizontalScrollOffset
+          val scrollY = editor.getScrollingModel.getVerticalScrollOffset
           myShakeComponents.foreach { myShakeComponent =>
             val bounds: Rectangle = myShakeComponent.getBounds
             myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
           }
-
-          Some((-dx, -dy, offsetX, offsetY))
+          Some((-dx, -dy, scrollX, scrollY))
       }
       lastShake = System.currentTimeMillis()
     }
   }
 
-  def genD: Int = {
-    val range = config.shakeRange * config.valueFactor
+  def generateShakeOffset: Int = {
+    val range = powerMode.shakeRange * powerMode.valueFactor
     (range - (Math.random * 2 * range)).toInt
-  }
-
-  def config: PowerMode = {
-    PowerMode.getInstance
-  }
-
-  def getxy = (editor.getScrollingModel.getHorizontalScrollOffset,
-    editor.getScrollingModel.getVerticalScrollOffset)
-
-  def addParticle(x: Int, y: Int) {
-    val dx = (Math.random * 2) * (if (Math.random > 0.5) -1 else 1)
-    val dy = ((Math.random * -3) - 1) //* (if (Math.random > 0.5) -1 else 1)
-    val size = ((Math.random * config.particleSize) + 1).toInt
-    val life = Math.random() * config.getParticleLife * config.valueFactor
-    val e = new PowerParticle(x, y, dx.toFloat, dy.toFloat, size, life.toInt, colors((Math.random() * (colors.size )).toInt))
-    particles :+=(e, getxy)
-  }
-
-  def getMyBounds: Rectangle = {
-    val bounds1: Rectangle = myParent.getBounds
-    val area = editor.getScrollingModel.getVisibleArea
-    val rectangle = new Rectangle(area.x, area.y, area.width, area.height)
-    rectangle
   }
 
   def componentResized(e: ComponentEvent) {
@@ -160,6 +168,12 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
     logger.debug("Moved")
   }
 
+  def getMyBounds: Rectangle = {
+    val area = editor.getScrollingModel.getVisibleArea
+    val rectangle = new Rectangle(area.x, area.y, area.width, area.height)
+    rectangle
+  }
+
   def componentShown(e: ComponentEvent) {
   }
 
@@ -167,7 +181,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   }
 
   protected override def paintComponent(@NotNull g: Graphics) {
-    if (od.isDefined && System.currentTimeMillis() - lastShake > 100) {
+    if (shakeData.isDefined && System.currentTimeMillis() - lastShake > 100) {
       doShake(Seq(editor.getComponent))
     }
     super.paintComponent(g)
@@ -177,10 +191,12 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   def renderParticles(@NotNull g: Graphics) {
 
     val scrollingModel: ScrollingModel = editor.getScrollingModel
-    val xyNew = (scrollingModel.getHorizontalScrollOffset,
-      scrollingModel.getVerticalScrollOffset)
+    val xyNew = (
+      scrollingModel.getHorizontalScrollOffset,
+      scrollingModel.getVerticalScrollOffset
+      )
 
-    particles.foreach { pp =>
+    elementsOfPower.foreach { pp =>
       val (p, (x, y)) = pp
       val dxx = x - xyNew._1
       val dyy = y - xyNew._2

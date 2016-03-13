@@ -9,8 +9,4 @@ How to use
 ---------
 
 Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
-
-
-
-                                           dfgadfgafdg        rgfasdfasdfasdfasdgasasdgadgasdfasdf
-                                           sadfsadfasdf
+ 

@@ -19,8 +19,8 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
-import com.intellij.openapi.editor.{Editor, EditorFactory}
 import com.intellij.openapi.editor.actionSystem.{EditorActionManager, TypedActionHandler}
+import com.intellij.openapi.editor.{Editor, EditorFactory}
 import com.intellij.util.xmlb.XmlSerializerUtil
 import org.apache.log4j._
 import org.jetbrains.annotations.{NotNull, Nullable}
@@ -61,11 +61,10 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   var particleLife = 2000
   var particleCount = 10
   var shakeRange = 10
+  var flamesEnabled: Boolean = true
   private var particleContainerManager = Option.empty[ParticleContainerManager]
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
-
-
 
   def updated {
     val ct = System.currentTimeMillis()
@@ -73,6 +72,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     logger.debug(s"valueFactor: $valueFactor")
     logger.debug(s"timeFactor: $timeFactor")
   }
+
+  def valueFactor = heatupFactor + ((1 - heatupFactor) * timeFactor)
 
   def timeFactor: Double = {
     val tf = Try {
@@ -85,8 +86,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     }.getOrElse(0.0)
     tf
   }
-
-  def valueFactor = heatupFactor + ((1 - heatupFactor) * timeFactor)
 
   def reduced: Unit = {
     val ct = System.currentTimeMillis()
@@ -200,8 +199,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     this.keyStrokesPerMinute = keyStrokesPerMinute
   }
 
-  var flamesEnabled: Boolean = true
-
   def isFlamesEnabled: Boolean = {
     return flamesEnabled
   }
@@ -210,12 +207,12 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     this.flamesEnabled = flamesEnabled
   }
 
-  def setParticlesEnabled(particlesEnabled: Boolean) {
-    this.particlesEnabled = particlesEnabled
-  }
-
   def isParticlesEnabled: Boolean = {
     return particlesEnabled
+  }
+
+  def setParticlesEnabled(particlesEnabled: Boolean) {
+    this.particlesEnabled = particlesEnabled
   }
 
   def getParticleSize: Int = {

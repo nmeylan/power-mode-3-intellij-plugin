@@ -30,7 +30,7 @@ import scala.collection.mutable
 class ParticleContainerManager extends EditorFactoryAdapter {
   val particleContainers = mutable.Map.empty[Editor, ParticleContainer]
 
-  val thread = new Thread(new Runnable() {
+  val particleContainerUpdateThread = new Thread(new Runnable() {
     def run {
       while (true) {
         PowerMode.getInstance.reduced
@@ -45,8 +45,7 @@ class ParticleContainerManager extends EditorFactoryAdapter {
       }
     }
   })
-  thread.start()
-  private var lastUpdate: Long = 0L
+  particleContainerUpdateThread.start()
 
   override def editorCreated(@NotNull event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
@@ -59,7 +58,7 @@ class ParticleContainerManager extends EditorFactoryAdapter {
 
   def update(@NotNull editor: Editor) {
 
-    if (PowerMode.getInstance.isEnabled ) {
+    if (PowerMode.getInstance.isEnabled) {
       PowerMode.getInstance.updated
       SwingUtilities.invokeLater(new Runnable() {
         def run {
@@ -70,15 +69,19 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   }
 
   private def updateInUI(@NotNull editor: Editor) {
+    val caretPosition = getCaretPosition(editor)
+    particleContainers.get(editor).foreach(_.update(caretPosition))
+  }
+
+  def getCaretPosition(editor: Editor): Point = {
     val p: Point = editor.visualPositionToXY(editor.getCaretModel.getVisualPosition)
     val location = editor.getScrollingModel.getVisibleArea.getLocation
     p.translate(-location.x, -location.y)
-
-    particleContainers.get(editor).foreach(_.update(p))
+    p
   }
 
   def dispose {
-    thread.interrupt()
+    particleContainerUpdateThread.interrupt()
     particleContainers.clear
   }
 }

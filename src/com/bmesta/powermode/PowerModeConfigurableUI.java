@@ -46,27 +46,26 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         FLAMESCheckBox.addChangeListener(e -> powerMode.setFlamesEnabled(FLAMESCheckBox.isSelected()));
         PARTICLESCheckBox.setSelected(powerMode.isParticlesEnabled());
         PARTICLESCheckBox.addChangeListener(e -> powerMode.setParticlesEnabled(PARTICLESCheckBox.isSelected()));
-        initValues(powerMode.getParticleCount(), particleCount, particleCountValue, powerMode, slider -> powerMode.setParticleCount(slider.getValue()));
-        initValues(powerMode.getParticleSize(), particleSize, particleSizeValue, powerMode, slider -> powerMode.setParticleSize(slider.getValue()));
-        initValues(powerMode.getParticleLife(), particleLife, particleLifeValue, powerMode, slider -> powerMode.setParticleLife(slider.getValue()));
-        initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, powerMode, slider -> powerMode.setShakeRange(slider.getValue()));
-        initValues(powerMode.getHeatup(), heatup, heatupValue, powerMode, slider -> powerMode.setHeatup(slider.getValue()));
-        initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, powerMode, slider -> powerMode.setHeatupTime(slider.getValue()));
-        initValues(powerMode.getFlameLife(), flameLife, flameLifeValue, powerMode, slider -> powerMode.setFlameLife(slider.getValue()));
-        initValues(powerMode.getmaxFlameSize(), maxFlameSize, maxFlameSizeValue, powerMode, slider -> powerMode.setmaxFlameSize(slider.getValue()));
-        initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, powerMode, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
+        initValues(powerMode.getParticleCount(), particleCount, particleCountValue, slider -> powerMode.setParticleCount(slider.getValue()));
+        initValues(powerMode.getParticleSize(), particleSize, particleSizeValue, slider -> powerMode.setParticleSize(slider.getValue()));
+        initValues(powerMode.getParticleLife(), particleLife, particleLifeValue, slider -> powerMode.setParticleLife(slider.getValue()));
+        initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, slider -> powerMode.setShakeRange(slider.getValue()));
+        initValues(powerMode.getHeatup(), heatup, heatupValue, slider -> powerMode.setHeatup(slider.getValue()));
+        initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, slider -> powerMode.setHeatupTime(slider.getValue()));
+        initValues(powerMode.getFlameLife(), flameLife, flameLifeValue, slider -> powerMode.setFlameLife(slider.getValue()));
+        initValues(powerMode.getmaxFlameSize(), maxFlameSize, maxFlameSizeValue, slider -> powerMode.setmaxFlameSize(slider.getValue()));
+        initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
 
 
     }
 
-    private void initValues(int n, @NotNull JSlider ht, @NotNull JLabel htv, PowerMode powerMode, ValueSettable valueSettable) {
-        ht.setValue(n);
-        htv.setText(String.valueOf(n));
-        ValueSettable vs = valueSettable;
-        ht.addChangeListener(new MyChangeListener(powerMode, ht, htv) {
+    private void initValues(int initValue, @NotNull JSlider slider, @NotNull JLabel sliderValueLabel, ValueSettable valueSettable) {
+        slider.setValue(initValue);
+        sliderValueLabel.setText(String.valueOf(initValue));
+        slider.addChangeListener(new MyChangeListener(slider, sliderValueLabel) {
             @Override
             public void setValue(JSlider slider) {
-                vs.setValue(slider);
+                valueSettable.setValue(slider);
             }
         });
     }
@@ -93,12 +92,10 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     }
 
     private abstract class MyChangeListener implements ChangeListener, ValueSettable {
-        private final PowerMode powerMode;
         private JSlider slider;
         private JLabel jLabel;
 
-        public MyChangeListener(PowerMode powerMode, JSlider slider, JLabel jLabel) {
-            this.powerMode = powerMode;
+        public MyChangeListener(JSlider slider, JLabel jLabel) {
             this.slider = slider;
             this.jLabel = jLabel;
         }

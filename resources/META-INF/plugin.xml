@@ -6,22 +6,24 @@
         Mesta
     </vendor>
 
-    <description><![CDATA[<h1>Power Mode</h1>
-<span>Based on the activate-power-mode atom plugin.</span>
-<h2>Features</h2>
-<ul>
-    <li>Exploding falling particles</li>
-    <li>Editor shaking</li>
-    <li>Flames</li>
-    <li>Heatup based on typing speed. The more you type the more happens.</li>
-    <li>Everything is configurable</li>
-</ul>
-<h2>Usage</h2>
-<ol>
-    <li>Install the plugin</li>
-    <li>ENTER POWER MODE in Preferences > Appearance > Power mode</li>
-    <li>CHANGE THE SLIDERS and options to your liking</li>
-</ol> ]]></description>
+    <description><![CDATA[
+        <h1>Power Mode</h1>
+        <span>Based on the activate-power-mode atom plugin.</span>
+        <h2>Features</h2>
+        <ul>
+            <li>Exploding falling particles</li>
+            <li>Editor shaking</li>
+            <li>Flames</li>
+            <li>Heatup based on typing speed. The more you type the more happens.</li>
+            <li>Everything is configurable</li>
+        </ul>
+        <h2>Usage</h2>
+        <ol>
+            <li>Install the plugin</li>
+            <li>ENTER POWER MODE in Preferences > Appearance > Power mode</li>
+            <li>CHANGE THE SLIDERS and options to your liking</li>
+        </ol>
+        ]]></description>
 
     <idea-version since-build="143.0"/>
 
