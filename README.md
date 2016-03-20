@@ -24,7 +24,7 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
 
 * `PowerMode` is the settings instance which is used by `PowerModeConfigurable` to populate the UI Settings dialog.
                    `PowerModeConfigurableUI` manages the settings dialog to change the settings in `PowerMode`.
-*  `PowerMode` is stored/loaded by xml serializer and annotation magic.
+*  `PowerMode` is stored/loaded by xml serializer and annotation magic by Intellij.  
 *  `PowerMode` starts up the `ParticleContainerManager`. The `ParticleContainerManager` creates a `ParticleContainer` for each editor.
 * The `ParticleContainer` creates the `ElementOfPower` (`PowerParticle, PowerFire`) and manages their animation and lifecycle. 
 
