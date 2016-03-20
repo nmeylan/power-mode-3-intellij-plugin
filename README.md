@@ -10,3 +10,16 @@ How to use
 
 Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
  
+## Architecture
+
+* `PowerMode` is the settings instance which is used by `PowerModeConfigurable` to populate the UI Settings dialog.
+                   `PowerModeConfigurableUI` manages the settings dialog to change the settings.
+*  `PowerMode` is stored as POJO by xml serializer and annotation magic.
+*  `PowerMode` starts up the `ParticleContainerManager`. The `ParticleContainerManager` creates a `ParticleContainer` for each editor.
+* The `ParticleContainer` creates the `ElementOfPower` (`PowerParticle, PowerFire`) and manages their animation and lifecycle. 
+
+### heatup
+
+* heatup increases the lifetime and amount of Particles and Flames over time. The most values are multiplied with `ElementOfPower.valueFactor` to simulate this heatup.
+`ElementOfPower.valueFactor` is composed of `heatupFactor` (how much of all animation doesn't dempend on heatup) and `timeFactor` (how much heatup do we currently have).
+* The heatup itself is calculated by `keyStrokesPerMinute` and the amount ob keystrokes within `heatupTime`.
