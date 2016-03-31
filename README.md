@@ -13,7 +13,7 @@ How to use
 Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
 
 ## Features
-* Exploding falling particles
+* Exploding falling sparks
 * Editor shaking
 * Flames
 * Heatup based on typing speed. The more you type the more happens.
@@ -25,11 +25,11 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
 * `PowerMode` is the settings instance which is used by `PowerModeConfigurable` to populate the UI Settings dialog.
                    `PowerModeConfigurableUI` manages the settings dialog to change the settings in `PowerMode`.
 *  `PowerMode` is stored/loaded by xml serializer and annotation magic by Intellij.  
-*  `PowerMode` starts up the `ParticleContainerManager`. The `ParticleContainerManager` creates a `ParticleContainer` for each editor.
-* The `ParticleContainer` creates the `ElementOfPower` (`PowerParticle, PowerFire`) and manages their animation and lifecycle. 
+*  `PowerMode` starts up the `SparkContainerManager`. The `SparkContainerManager` creates a `SparkContainer` for each editor.
+* The `SparkContainer` creates the `ElementOfPower` (`PowerSpark, PowerFlame`) and manages their animation and lifecycle. 
 
 ### heatup
 
-* heatup increases the lifetime and amount of Particles and Flames over time. The most values are multiplied with `ElementOfPower.valueFactor` to simulate this heatup.
+* heatup increases the lifetime and amount of Sparks and Flames over time. The most values are multiplied with `ElementOfPower.valueFactor` to simulate this heatup.
 `ElementOfPower.valueFactor` is composed of `heatupFactor` (how much of all animation doesn't dempend on heatup) and `timeFactor` (how much heatup do we currently have).
 * The heatup itself is calculated by `keyStrokesPerMinute` and the amount of keystrokes within `heatupTime`.

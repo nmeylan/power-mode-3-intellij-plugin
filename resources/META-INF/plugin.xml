@@ -10,7 +10,7 @@
         <span>Based on the activate-power-mode atom plugin and forked from Baptiste Mesta on Github.</span>
         <h2>Features</h2>
         <ul>
-            <li>Exploding falling particles</li>
+            <li>Exploding falling sparks</li>
             <li>Editor shaking</li>
             <li>Flames</li>
             <li>Heatup based on typing speed. The more you type the more happens.</li>

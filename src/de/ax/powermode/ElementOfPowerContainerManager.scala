@@ -27,14 +27,14 @@ import scala.collection.mutable
 /**
   * @author Baptiste Mesta
   */
-class ParticleContainerManager extends EditorFactoryAdapter {
-  val particleContainers = mutable.Map.empty[Editor, ParticleContainer]
+class ElementOfPowerContainerManager extends EditorFactoryAdapter {
+  val sparkContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
 
-  val particleContainerUpdateThread = new Thread(new Runnable() {
+  val sparkContainerUpdateThread = new Thread(new Runnable() {
     def run {
       while (true) {
         PowerMode.getInstance.reduced
-        particleContainers.values.foreach(_.updateParticles)
+        sparkContainers.values.foreach(_.updateSparks)
         try {
           Thread.sleep(1000 / 60)
         }
@@ -45,15 +45,15 @@ class ParticleContainerManager extends EditorFactoryAdapter {
       }
     }
   })
-  particleContainerUpdateThread.start()
+  sparkContainerUpdateThread.start()
 
   override def editorCreated(@NotNull event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
-    particleContainers.put(editor, new ParticleContainer(editor))
+    sparkContainers.put(editor, new ElementOfPowerContainer(editor))
   }
 
   override def editorReleased(@NotNull event: EditorFactoryEvent) {
-    particleContainers.remove(event.getEditor)
+    sparkContainers.remove(event.getEditor)
   }
 
   def update(@NotNull editor: Editor) {
@@ -70,7 +70,7 @@ class ParticleContainerManager extends EditorFactoryAdapter {
 
   private def updateInUI(@NotNull editor: Editor) {
     val caretPosition = getCaretPosition(editor)
-    particleContainers.get(editor).foreach(_.update(caretPosition))
+    sparkContainers.get(editor).foreach(_.update(caretPosition))
   }
 
   def getCaretPosition(editor: Editor): Point = {
@@ -81,7 +81,7 @@ class ParticleContainerManager extends EditorFactoryAdapter {
   }
 
   def dispose {
-    particleContainerUpdateThread.interrupt()
-    particleContainers.clear
+    sparkContainerUpdateThread.interrupt()
+    sparkContainers.clear
   }
 }

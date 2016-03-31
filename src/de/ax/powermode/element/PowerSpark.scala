@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull
 /**
   * @author Baptiste Mesta
   */
-case class PowerParticle(var x: Float, var y: Float, dx: Float, var dy: Float, size: Float, val initLife: Long, color: PowerColor) extends ElementOfPower {
+case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size: Float, val initLife: Long, color: PowerColor) extends ElementOfPower {
   val life = System.currentTimeMillis() + initLife
 
   def update: Boolean = {

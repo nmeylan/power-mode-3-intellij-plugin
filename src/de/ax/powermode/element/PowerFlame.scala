@@ -12,10 +12,10 @@ import de.ax.powermode.{PowerMode, ElementOfPower}
 /**
   * Created by nyxos on 10.03.16.
   */
-object PowerFire {
+object PowerFlame {
 
   lazy val images = {
-    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFire]), s"fire/animated/$resolution")
+    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), s"fire/animated/$resolution")
     val imageFiles = file.listFiles()
     val fileImages = imageFiles match {
       case null =>
@@ -54,13 +54,13 @@ object PowerFire {
 
   private def getBufferedImagesFromJar: IndexedSeq[BufferedImage] = {
     val imageUrls = (1 to frames).map(i => if (i > 9) s"$i" else s"0$i")
-      .map(i => classOf[PowerFire].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
+      .map(i => classOf[PowerFlame].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
     imageUrls.map(ImageIO.read)
   }
 }
 
 
-case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean, powerMode: PowerMode)
+case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean, powerMode: PowerMode)
   extends ElementOfPower {
 
   val life = System.currentTimeMillis() + initLife
@@ -74,7 +74,7 @@ case class PowerFire(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long
 
   override def update: Boolean = {
     if (alive) {
-      currentImage = PowerFire.images(i % PowerFire.frames)
+      currentImage = PowerFlame.images(i % PowerFlame.frames)
       i += 1
       x = _x - (0.5 * _width * lifeFactor).toInt
       if (up)

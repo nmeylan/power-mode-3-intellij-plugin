@@ -17,13 +17,13 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JPanel mainPanel;
     private JCheckBox powerModeEnabled;
     private JCheckBox shakeEnabled;
-    private JSlider particleCount;
-    private JSlider particleLife;
+    private JSlider sparkCount;
+    private JSlider sparkLife;
     private JSlider shakeRange;
     private JSlider heatup;
     private JSlider heatupTime;
-    private JLabel particleCountValue;
-    private JLabel particleLifeValue;
+    private JLabel sparkCountValue;
+    private JLabel sparkLifeValue;
     private JLabel shakeRangeValue;
     private JLabel heatupValue;
     private JLabel heatupTimeValue;
@@ -35,8 +35,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JLabel keyStrokesPerMinuteValue;
     private JCheckBox FLAMESCheckBox;
     private JCheckBox PARTICLESCheckBox;
-    private JSlider particleSize;
-    private JLabel particleSizeValue;
+    private JSlider sparkSize;
+    private JLabel sparkSizeValue;
 
     public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
@@ -44,11 +44,11 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         shakeEnabled.addChangeListener(e -> powerMode.setShakeEnabled(shakeEnabled.isSelected()));
         FLAMESCheckBox.setSelected(powerMode.isFlamesEnabled());
         FLAMESCheckBox.addChangeListener(e -> powerMode.setFlamesEnabled(FLAMESCheckBox.isSelected()));
-        PARTICLESCheckBox.setSelected(powerMode.isParticlesEnabled());
-        PARTICLESCheckBox.addChangeListener(e -> powerMode.setParticlesEnabled(PARTICLESCheckBox.isSelected()));
-        initValues(powerMode.getParticleCount(), particleCount, particleCountValue, slider -> powerMode.setParticleCount(slider.getValue()));
-        initValues(powerMode.getParticleSize(), particleSize, particleSizeValue, slider -> powerMode.setParticleSize(slider.getValue()));
-        initValues(powerMode.getParticleLife(), particleLife, particleLifeValue, slider -> powerMode.setParticleLife(slider.getValue()));
+        PARTICLESCheckBox.setSelected(powerMode.isSparksEnabled());
+        PARTICLESCheckBox.addChangeListener(e -> powerMode.setSparksEnabled(PARTICLESCheckBox.isSelected()));
+        initValues(powerMode.getSparkCount(), sparkCount, sparkCountValue, slider -> powerMode.setSparkCount(slider.getValue()));
+        initValues(powerMode.getSparkSize(), sparkSize, sparkSizeValue, slider -> powerMode.setSparkSize(slider.getValue()));
+        initValues(powerMode.getSparkLife(), sparkLife, sparkLifeValue, slider -> powerMode.setSparkLife(slider.getValue()));
         initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, slider -> powerMode.setShakeRange(slider.getValue()));
         initValues(powerMode.getHeatup(), heatup, heatupValue, slider -> powerMode.setHeatup(slider.getValue()));
         initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, slider -> powerMode.setHeatupTime(slider.getValue()));

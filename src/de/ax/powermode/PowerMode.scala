@@ -41,9 +41,9 @@ object PowerMode {
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
-  var particleSize = 3
+  var sparkSize = 3
 
-  var particlesEnabled = true
+  var sparksEnabled = true
 
 
   import PowerMode.logger
@@ -58,11 +58,11 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   var keyStrokesPerMinute = 300
   var heatupFactor = 0.3
-  var particleLife = 2000
-  var particleCount = 10
+  var sparkLife = 2000
+  var sparkCount = 10
   var shakeRange = 10
   var flamesEnabled: Boolean = true
-  private var particleContainerManager = Option.empty[ParticleContainerManager]
+  private var sparkContainerManager = Option.empty[ElementOfPowerContainerManager]
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
 
@@ -94,8 +94,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   def initComponent {
     val editorFactory = EditorFactory.getInstance
-    particleContainerManager = Some(new ParticleContainerManager)
-    particleContainerManager.foreach(editorFactory.addEditorFactoryListener(_, new Disposable() {
+    sparkContainerManager = Some(new ElementOfPowerContainerManager)
+    sparkContainerManager.foreach(editorFactory.addEditorFactoryListener(_, new Disposable() {
       def dispose {
       }
     }))
@@ -109,12 +109,12 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   private def updateEditor(@NotNull editor: Editor) {
-    particleContainerManager.foreach(_.update(editor))
+    sparkContainerManager.foreach(_.update(editor))
   }
 
   def disposeComponent {
-    particleContainerManager.foreach(_.dispose)
-    particleContainerManager = null
+    sparkContainerManager.foreach(_.dispose)
+    sparkContainerManager = null
   }
 
   @NotNull def getComponentName: String = {
@@ -145,16 +145,16 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     this.shakeEnabled = shakeEnabled
   }
 
-  def getParticleCount = particleCount
+  def getSparkCount = sparkCount
 
-  def setParticleCount(particleCount: Int) {
-    this.particleCount = particleCount
+  def setSparkCount(sparkCount: Int) {
+    this.sparkCount = sparkCount
   }
 
-  def getParticleLife = particleLife
+  def getSparkLife = sparkLife
 
-  def setParticleLife(particleRange: Int) {
-    this.particleLife = particleRange
+  def setSparkLife(sparkRange: Int) {
+    this.sparkLife = sparkRange
   }
 
   def getShakeRange = shakeRange
@@ -207,19 +207,19 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     this.flamesEnabled = flamesEnabled
   }
 
-  def isParticlesEnabled: Boolean = {
-    return particlesEnabled
+  def isSparksEnabled: Boolean = {
+    return sparksEnabled
   }
 
-  def setParticlesEnabled(particlesEnabled: Boolean) {
-    this.particlesEnabled = particlesEnabled
+  def setSparksEnabled(sparksEnabled: Boolean) {
+    this.sparksEnabled = sparksEnabled
   }
 
-  def getParticleSize: Int = {
-    return particleSize
+  def getSparkSize: Int = {
+    return sparkSize
   }
 
-  def setParticleSize(particleSize: Int) {
-    this.particleSize = particleSize
+  def setSparkSize(sparkSize: Int) {
+    this.sparkSize = sparkSize
   }
 }

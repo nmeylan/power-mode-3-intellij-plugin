@@ -22,21 +22,21 @@ import javax.swing._
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Editor, ScrollingModel}
-import de.ax.powermode.element.{PowerFire, PowerParticle}
+import de.ax.powermode.element.{PowerFlame, PowerSpark}
 import org.jetbrains.annotations.NotNull
 
 import scala.util.Random
 
-object ParticleContainer {
+object ElementOfPowerContainer {
   private val logger = Logger.getInstance(this.getClass)
 }
 
 /**
   * @author Baptiste Mesta
   */
-class ParticleContainer(@NotNull editor: Editor) extends JComponent with ComponentListener {
+class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with ComponentListener {
 
-  import ParticleContainer._
+  import ElementOfPowerContainer._
 
 
   val myParent = editor.getContentComponent
@@ -53,7 +53,7 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
   var lastShake = System.currentTimeMillis()
   var shakeData = Option.empty[(Int, Int, Int, Int)]
 
-  def updateParticles() {
+  def updateSparks() {
     if (elementsOfPower.nonEmpty) {
       elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update)
       repaint()
@@ -64,8 +64,8 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
 
     this.setBounds(getMyBounds)
 
-    if (powerMode.isParticlesEnabled) {
-      addParticles(point)
+    if (powerMode.isSparksEnabled) {
+      addSparks(point)
     }
     if (powerMode.isFlamesEnabled) {
       addFlames(point)
@@ -83,25 +83,25 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       ).toInt
     val initLife = (powerMode.maxFlameLife * powerMode.valueFactor).toInt
     if (initLife > 100) {
-      elementsOfPower :+=(PowerFire(point.x + 5, point.y - 1, wh, wh, initLife, true, powerMode), getScrollPosition)
-      elementsOfPower :+=(PowerFire(point.x + 5, point.y + 15, wh, wh, initLife, false, powerMode), getScrollPosition)
+      elementsOfPower :+=(PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, true, powerMode), getScrollPosition)
+      elementsOfPower :+=(PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, false, powerMode), getScrollPosition)
     }
   }
 
-  def addParticles(point: Point): Unit = {
-    for (i <- 0 to (powerMode.particleCount * powerMode.valueFactor).toInt) {
-      addParticle(point.x, point.y)
+  def addSparks(point: Point): Unit = {
+    for (i <- 0 to (powerMode.sparkCount * powerMode.valueFactor).toInt) {
+      addSpark(point.x, point.y)
     }
   }
 
-  def addParticle(x: Int, y: Int) {
+  def addSpark(x: Int, y: Int) {
     val dx = (Math.random * 2) * (if (Math.random > 0.5) -1 else 1)
     val dy = (Math.random * -3) - 1
-    val size = ((Math.random * powerMode.particleSize) + 1).toInt
-    val life = Math.random() * powerMode.getParticleLife * powerMode.valueFactor
+    val size = ((Math.random * powerMode.sparkSize) + 1).toInt
+    val life = Math.random() * powerMode.getSparkLife * powerMode.valueFactor
     val powerColor = colors((Math.random() * colors.size).toInt)
-    val powerParticle = PowerParticle(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor)
-    elementsOfPower :+=(powerParticle, getScrollPosition)
+    val powerSpark = PowerSpark(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor)
+    elementsOfPower :+=(powerSpark, getScrollPosition)
   }
 
   def colors: Seq[PowerColor] = Seq(
@@ -187,10 +187,10 @@ class ParticleContainer(@NotNull editor: Editor) extends JComponent with Compone
       doShake(Seq(editor.getComponent))
     }
     super.paintComponent(g)
-    renderParticles(g)
+    renderSparks(g)
   }
 
-  def renderParticles(@NotNull g: Graphics) {
+  def renderSparks(@NotNull g: Graphics) {
 
     val scrollingModel: ScrollingModel = editor.getScrollingModel
     val xyNew = (
