@@ -18,7 +18,7 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
 * Flames
 * Heatup based on typing speed. The more you type the more happens.
 * Everything is configurable
-* keyboard shortcut to toggle power mode [shift ctrl alt O]
+* Keyboard shortcut to toggle power mode [shift ctrl alt O]
 
  
 ## Architecture
