@@ -40,6 +40,12 @@
     </extensions>
 
     <actions>
+
+        <action id="togglePowerModeII" class="de.ax.powermode.TogglePowerMode" text="Toggle Power Mode II"
+                description="Toggle Power Mode II">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt O"/>
+        </action>
     </actions>
 
 </idea-plugin>
