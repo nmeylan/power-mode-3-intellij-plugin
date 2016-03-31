@@ -15,6 +15,7 @@
             <li>Flames</li>
             <li>Heatup based on typing speed. The more you type the more happens.</li>
             <li>Everything is configurable</li>
+            <li>Keyboard shortcut to toggle power mode [shift ctrl alt O]</li>
         </ul>
         <h2>Usage</h2>
         <ol>
