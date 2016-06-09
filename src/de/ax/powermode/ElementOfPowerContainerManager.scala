@@ -34,9 +34,9 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
     def run {
       while (true) {
         PowerMode.getInstance.reduced
-        sparkContainers.values.foreach(_.updateSparks)
+        sparkContainers.values.foreach(_.updateElementsOfPower())
         try {
-          Thread.sleep(1000 / 60)
+          Thread.sleep(1000/PowerMode.getInstance.frameRate)
         }
         catch {
           case ignored: InterruptedException => {

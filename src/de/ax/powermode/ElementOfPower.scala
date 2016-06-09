@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull
   */
 trait ElementOfPower {
 
-  def update: Boolean
+  def update(delta:Float): Boolean
 
   def render(@NotNull g: Graphics, dxx: Int, dyy: Int)
 

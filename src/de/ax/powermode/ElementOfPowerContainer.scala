@@ -53,9 +53,16 @@ class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with C
   var lastShake = System.currentTimeMillis()
   var shakeData = Option.empty[(Int, Int, Int, Int)]
 
-  def updateSparks() {
+  var lastUpdate = System.currentTimeMillis()
+
+  def updateElementsOfPower() {
+    var delta = System.currentTimeMillis() - lastUpdate
+    if (delta > (1000.0/powerMode.frameRate)*2)
+      delta = 16
+    lastUpdate = System.currentTimeMillis()
+    val db: Double =1000.0/16
     if (elementsOfPower.nonEmpty) {
-      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update)
+      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update(( (delta / db)).toFloat))
       repaint()
     }
   }
@@ -95,12 +102,12 @@ class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with C
   }
 
   def addSpark(x: Int, y: Int) {
-    val dx = (Math.random * 2) * (if (Math.random > 0.5) -1 else 1)
-    val dy = (Math.random * -3) - 1
+    val dx: Double = (Math.random * 2) * (if (Math.random > 0.5) -1 else 1) * powerMode.sparkVelocityFactor
+    val dy: Double = ((Math.random * -3) - 1) * powerMode.sparkVelocityFactor
     val size = ((Math.random * powerMode.sparkSize) + 1).toInt
     val life = Math.random() * powerMode.getSparkLife * powerMode.valueFactor
     val powerColor = colors((Math.random() * colors.size).toInt)
-    val powerSpark = PowerSpark(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor)
+    val powerSpark = PowerSpark(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor, powerMode.gravityFactor.toFloat)
     elementsOfPower :+=(powerSpark, getScrollPosition)
   }
 

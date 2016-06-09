@@ -37,6 +37,12 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JCheckBox PARTICLESCheckBox;
     private JSlider sparkSize;
     private JLabel sparkSizeValue;
+    private JLabel velocityFactorValue;
+    private JLabel gravityFactorValue;
+    private JSlider velocityFactor;
+    private JSlider gravityFactor;
+    private JLabel frameRateValue;
+    private JSlider frameRate;
 
     public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
@@ -49,12 +55,15 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         initValues(powerMode.getSparkCount(), sparkCount, sparkCountValue, slider -> powerMode.setSparkCount(slider.getValue()));
         initValues(powerMode.getSparkSize(), sparkSize, sparkSizeValue, slider -> powerMode.setSparkSize(slider.getValue()));
         initValues(powerMode.getSparkLife(), sparkLife, sparkLifeValue, slider -> powerMode.setSparkLife(slider.getValue()));
+        initValues(Double.valueOf((powerMode.getSparkVelocityFactor() * 100.0)).intValue(), velocityFactor, velocityFactorValue, slider -> powerMode.setSparkVelocityFactor(slider.getValue() / 100.0));
+        initValues(Double.valueOf(powerMode.getGravityFactor() * 100.0).intValue(), gravityFactor, gravityFactorValue, slider -> powerMode.setGravityFactor(slider.getValue() / 100.0));
         initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, slider -> powerMode.setShakeRange(slider.getValue()));
         initValues(powerMode.getHeatup(), heatup, heatupValue, slider -> powerMode.setHeatup(slider.getValue()));
         initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, slider -> powerMode.setHeatupTime(slider.getValue()));
         initValues(powerMode.getFlameLife(), flameLife, flameLifeValue, slider -> powerMode.setFlameLife(slider.getValue()));
         initValues(powerMode.getmaxFlameSize(), maxFlameSize, maxFlameSizeValue, slider -> powerMode.setmaxFlameSize(slider.getValue()));
         initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
+        initValues(powerMode.getFrameRate(), frameRate, frameRateValue, slider -> powerMode.setFrameRate(slider.getValue()));
 
 
     }

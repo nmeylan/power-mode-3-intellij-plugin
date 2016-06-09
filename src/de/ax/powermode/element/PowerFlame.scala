@@ -37,7 +37,7 @@ object PowerFlame {
     }
   }
   val resolution = 256
-  val frames = 25
+  val imageFrames = 25
 
   private def getBufferedImagesFromDebugDir(files: Array[File]): List[BufferedImage] = {
     files.toList.filter(_.isFile).map { f =>
@@ -53,7 +53,7 @@ object PowerFlame {
   }
 
   private def getBufferedImagesFromJar: IndexedSeq[BufferedImage] = {
-    val imageUrls = (1 to frames).map(i => if (i > 9) s"$i" else s"0$i")
+    val imageUrls = (1 to imageFrames).map(i => if (i > 9) s"$i" else s"0$i")
       .map(i => classOf[PowerFlame].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
     imageUrls.map(ImageIO.read)
   }
@@ -72,17 +72,17 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
   var i = 0
   var currentImage: BufferedImage = null
 
-  override def update: Boolean = {
+  override def update(delta:Float): Boolean = {
     if (alive) {
-      currentImage = PowerFlame.images(i % PowerFlame.frames)
+      currentImage = PowerFlame.images(i % PowerFlame.imageFrames)
       i += 1
-      x = _x - (0.5 * _width * lifeFactor).toInt
+      x = _x - (0.5 * _width * lifeFactor ).toInt
       if (up)
-        y = _y - (1.1 * _height * lifeFactor).toInt
+        y = _y - (1.1 * _height * lifeFactor ).toInt
       else
-        y = _y + (0.25 * _height * lifeFactor).toInt
-      width = (_width * lifeFactor).toInt
-      height = (_height * lifeFactor).toInt
+        y = _y + (0.25 * _height * lifeFactor ).toInt
+      width = (_width * lifeFactor ).toInt
+      height = (_height * lifeFactor ).toInt
     }
     !alive
   }

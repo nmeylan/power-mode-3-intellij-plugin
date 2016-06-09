@@ -41,10 +41,23 @@ object PowerMode {
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+
+
+  var gravityFactor: Double = 1
+
+  var sparkVelocityFactor: Double = 1
+
   var sparkSize = 3
 
   var sparksEnabled = true
 
+  var frameRate: Int = 30
+
+  def setFrameRate(f: Int) {
+    frameRate = f
+  }
+
+  def getFrameRate() = frameRate
 
   import PowerMode.logger
 
@@ -222,4 +235,18 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def setSparkSize(sparkSize: Int) {
     this.sparkSize = sparkSize
   }
+
+  def getGravityFactor(): Double = gravityFactor
+
+  def setGravityFactor(f: Double) {
+    gravityFactor = f
+  }
+
+  def getSparkVelocityFactor(): Double = sparkVelocityFactor
+
+  def setSparkVelocityFactor(f: Double) {
+    sparkVelocityFactor = f
+  }
+
+
 }

@@ -17,20 +17,19 @@ package de.ax.powermode.element
 
 import java.awt._
 
-
 import de.ax.powermode.{ElementOfPower, PowerColor}
 import org.jetbrains.annotations.NotNull
 
 /**
   * @author Baptiste Mesta
   */
-case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size: Float, val initLife: Long, color: PowerColor) extends ElementOfPower {
+case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size: Float, val initLife: Long, color: PowerColor, gravityFactor: Float) extends ElementOfPower {
   val life = System.currentTimeMillis() + initLife
 
-  def update: Boolean = {
-    dy = dy + 0.075f
-    x += dx
-    y += dy
+  def update(delta: Float): Boolean = {
+    dy += (0.07f * gravityFactor) * delta
+    x += dx * delta
+    y += dy * delta
     !alive
   }
 
