@@ -284,8 +284,8 @@
           <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <maximum value="500"/>
-          <minimum value="-500"/>
+          <maximum value="10000"/>
+          <minimum value="-10000"/>
           <value value="100"/>
         </properties>
       </component>
@@ -311,8 +311,8 @@
           <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <maximum value="500"/>
-          <minimum value="-500"/>
+          <maximum value="10000"/>
+          <minimum value="-10000"/>
           <value value="100"/>
         </properties>
       </component>
