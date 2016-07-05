@@ -56,9 +56,9 @@ object PowerMode {
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
 
-  var gravityFactor: Double = 1
+  var gravityFactor: Double = 21.21
 
-  var sparkVelocityFactor: Double = 1
+  var sparkVelocityFactor: Double = 4.36
 
   var sparkSize = 3
 
@@ -76,15 +76,15 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   var maxFlameLife = 2000
 
-  var heatupTime = 6000
+  var heatupTime = 10000
 
   var lastKeys: List[Long] = List.empty[Long]
 
   var keyStrokesPerMinute = 300
-  var heatupFactor = 0.3
-  var sparkLife = 2000
+  var heatupFactor = 1.0
+  var sparkLife = 3000
   var sparkCount = 10
-  var shakeRange = 10
+  var shakeRange = 4
   var flamesEnabled: Boolean = true
   private var sparkContainerManager = Option.empty[ElementOfPowerContainerManager]
   private var enabled: Boolean = true
@@ -259,7 +259,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     sparkVelocityFactor = f
   }
 
-  var redFrom: Int = 0
+  var redFrom: Int = 200
 
   def getRedFrom: Int = {
     redFrom
@@ -289,13 +289,13 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     return blueFrom
   }
 
-  var blueTo: Int = 255
+  var blueTo: Int = 103
 
   def getBlueTo: Int = {
     return blueTo
   }
 
-  var colorAlpha: Int = 100
+  var colorAlpha: Int = 164
 
   def getColorAlpha: Int = {
     return colorAlpha
