@@ -13,7 +13,7 @@ public class ColorViewController {
     int dir = 1;
 
     public double genX() {
-        return dir * ((powerMode.getColorBlueTo() - powerMode.getColorBlueFrom()) / 5000.0) * f;
+        return dir * ((powerMode.getBlueTo() - powerMode.getBlueFrom()) / 5000.0) * f;
     }
 
     public ColorViewController(MultiGradientPanel colorView, PowerMode powerMode) {
@@ -23,13 +23,13 @@ public class ColorViewController {
             public void run() {
                 while (colorView.isVisible()) {
                     long t0 = System.currentTimeMillis();
-                    c = Math.max(Math.min((c + genX()), powerMode.colorBlueTo()), powerMode.colorBlueFrom());
-                    if (c >= powerMode.colorBlueTo()) {
-                        c = powerMode.colorBlueTo();
+                    c = Math.max(Math.min((c + genX()), powerMode.blueTo()), powerMode.blueFrom());
+                    if (c >= powerMode.blueTo()) {
+                        c = powerMode.blueTo();
                         dir *= -1;
                     }
-                    if (c <= powerMode.colorBlueFrom()) {
-                        c = powerMode.colorBlueFrom();
+                    if (c <= powerMode.blueFrom()) {
+                        c = powerMode.blueFrom();
                         dir *= -1;
                     }
                     colorView.doUpdate(c);

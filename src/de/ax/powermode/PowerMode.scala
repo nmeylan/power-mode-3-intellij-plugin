@@ -38,12 +38,23 @@ object PowerMode {
   @Nullable def getInstance: PowerMode = {
     ApplicationManager.getApplication.getComponent(classOf[PowerMode])
   }
+
+  def obtainColorEdges(pm: PowerMode): ColorEdges = {
+    import pm._
+    val edges = new ColorEdges()
+    edges.setAlpha(getColorAlpha)
+    edges.setRedFrom(getRedFrom)
+    edges.setRedTo(getRedTo)
+    edges.setGreenFrom(getGreenFrom)
+    edges.setGreenTo(getGreenTo)
+    edges.setBlueFrom(getBlueFrom)
+    edges.setBlueTo(getBlueTo)
+    edges
+  }
 }
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
-
-  import PowerMode._
 
   var gravityFactor: Double = 1
 
@@ -82,8 +93,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def updated {
     val ct = System.currentTimeMillis()
     lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
-    logger.debug(s"valueFactor: $valueFactor")
-    logger.debug(s"timeFactor: $timeFactor")
+    PowerMode.logger.debug(s"valueFactor: $valueFactor")
+    PowerMode.logger.debug(s"timeFactor: $timeFactor")
   }
 
   def valueFactor = heatupFactor + ((1 - heatupFactor) * timeFactor)
@@ -248,40 +259,40 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     sparkVelocityFactor = f
   }
 
-  var colorRedFrom: Int = 0
+  var redFrom: Int = 0
 
-  def getColorRedFrom: Int = {
-    colorRedFrom
+  def getRedFrom: Int = {
+    redFrom
   }
 
-  var colorRedTo: Int = 255
+  var redTo: Int = 255
 
-  def getColorRedTo: Int = {
-    return colorRedTo
+  def getRedTo: Int = {
+    return redTo
   }
 
-  var colorGreenTo: Int = 255
+  var greenTo: Int = 255
 
-  def getColorGreenTo: Int = {
-    return colorGreenTo
+  def getGreenTo: Int = {
+    return greenTo
   }
 
-  var colorGreenFrom: Int = 0
+  var greenFrom: Int = 0
 
-  def getColorGreenFrom: Int = {
-    return colorGreenFrom
+  def getGreenFrom: Int = {
+    return greenFrom
   }
 
-  var colorBlueFrom: Int = 0
+  var blueFrom: Int = 0
 
-  def getColorBlueFrom: Int = {
-    return colorBlueFrom
+  def getBlueFrom: Int = {
+    return blueFrom
   }
 
-  var colorBlueTo: Int = 255
+  var blueTo: Int = 255
 
-  def getColorBlueTo: Int = {
-    return colorBlueTo
+  def getBlueTo: Int = {
+    return blueTo
   }
 
   var colorAlpha: Int = 100
@@ -291,50 +302,38 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   def setRedFrom(redFrom: Int) {
-    if (redFrom <= colorRedTo)
-      colorRedFrom = redFrom
+    if (redFrom <= redTo)
+      this.redFrom = redFrom
   }
 
   def setRedTo(redTo: Int) {
-    if (redTo >= colorRedFrom)
-      colorRedTo = redTo
+    if (redTo >= redFrom)
+      this.redTo = redTo
   }
 
-  def setGreenFrom(greenFrom: Int) {
-    if (greenFrom <= colorGreenTo)
-      colorGreenFrom = greenFrom
+  def setGreenFrom(gf: Int) {
+    if (gf <= greenTo)
+      greenFrom = gf
   }
 
   def setGreenTo(greenTo: Int) {
-    if (greenTo >= colorGreenFrom)
-      colorGreenTo = greenTo
+    if (greenTo >= greenFrom)
+      this.greenTo = greenTo
   }
 
-  def setBlueFrom(blueFrom: Int) {
-    if (blueFrom <= colorBlueTo)
-      colorBlueFrom = blueFrom
+  def setBlueFrom(bf: Int) {
+    if (bf <= blueTo)
+      blueFrom = bf
   }
 
   def setBlueTo(blueTo: Int) {
-    if (blueTo >= getColorBlueFrom)
-      colorBlueTo = blueTo
+    if (blueTo >= getBlueFrom)
+      this.blueTo = blueTo
   }
 
-  def setAlpha(alpha: Int) {
+  def setColorAlpha(alpha: Int) {
     colorAlpha = alpha
   }
 
-
-  def getColorEdges: ColorEdges = {
-    val edges = new ColorEdges()
-    edges.setAlpha(getColorAlpha)
-    edges.setRedFrom(getColorRedFrom)
-    edges.setRedTo(getColorRedTo)
-    edges.setGreenFrom(getColorGreenFrom)
-    edges.setGreenTo(getColorGreenTo)
-    edges.setBlueFrom(getColorBlueFrom)
-    edges.setBlueTo(getColorBlueTo)
-    edges
-  }
 
 }

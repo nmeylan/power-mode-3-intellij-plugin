@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>de.ax.powermode</id>
     <name>Power Mode II</name>
-    <version>2.4.2</version>
+    <version>2.6.4</version>
     <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
     </vendor>
 
@@ -16,6 +16,7 @@
             <li>Heatup based on typing speed. The more you type the more happens.</li>
             <li>Everything is configurable</li>
             <li>Keyboard shortcut to toggle power mode [shift ctrl alt O]</li>
+            <li>choose particle colors</li>
         </ul>
         <h2>Usage</h2>
         <ol>

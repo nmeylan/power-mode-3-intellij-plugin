@@ -113,7 +113,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   def colors: Seq[PowerColor] = Seq(
-    (getColorPart(powerMode.getColorRedFrom, powerMode.getColorRedTo), getColorPart(powerMode.getColorGreenFrom, powerMode.getColorGreenTo), getColorPart(powerMode.getColorBlueFrom, powerMode.getColorBlueTo), powerMode.getColorAlpha / 255f)
+    (getColorPart(powerMode.getRedFrom, powerMode.getRedTo), getColorPart(powerMode.getGreenFrom, powerMode.getGreenTo), getColorPart(powerMode.getBlueFrom, powerMode.getBlueTo), powerMode.getColorAlpha / 255f)
   )
 
   def getColorPart(from: Int, to: Int): Float = {

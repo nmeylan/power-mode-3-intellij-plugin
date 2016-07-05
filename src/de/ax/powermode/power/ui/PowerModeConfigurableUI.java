@@ -63,7 +63,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
-        ((MultiGradientPanel) colorView).setColorEdges(powerMode.getColorEdges());
+        ((MultiGradientPanel) colorView).setColorEdges(PowerMode.obtainColorEdges(powerMode));
         new ColorViewController((MultiGradientPanel) colorView, powerMode);
         powerModeEnabled.setSelected(powerMode.isEnabled());
         shakeEnabled.setSelected(powerMode.isShakeEnabled());
@@ -85,19 +85,19 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
         initValues(powerMode.getFrameRate(), frameRate, frameRateValue, slider -> powerMode.setFrameRate(slider.getValue()));
 
-        initValuesColor(powerMode.getColorRedFrom(), sparkColorRedFrom, sparkColorRedFromValue, powerMode, slider -> powerMode.setRedFrom(slider.getValue()));
-        initValuesColor(powerMode.getColorRedTo(), sparkColorRedTo, sparkColorRedToValue, powerMode, slider -> powerMode.setRedTo(slider.getValue()));
+        initValuesColor(powerMode.getRedFrom(), sparkColorRedFrom, sparkColorRedFromValue, powerMode, slider -> powerMode.setRedFrom(slider.getValue()));
+        initValuesColor(powerMode.getRedTo(), sparkColorRedTo, sparkColorRedToValue, powerMode, slider -> powerMode.setRedTo(slider.getValue()));
         bindSlieders(sparkColorRedFrom, sparkColorRedTo);
 
-        initValuesColor(powerMode.getColorGreenFrom(), sparkColorGreenFrom, sparkColorGreenFromValue, powerMode, slider -> powerMode.setGreenFrom(slider.getValue()));
-        initValuesColor(powerMode.getColorGreenTo(), sparkColorGreenTo, sparkColorGreenToValue, powerMode, slider -> powerMode.setGreenTo(slider.getValue()));
+        initValuesColor(powerMode.getGreenFrom(), sparkColorGreenFrom, sparkColorGreenFromValue, powerMode, slider -> powerMode.setGreenFrom(slider.getValue()));
+        initValuesColor(powerMode.getGreenTo(), sparkColorGreenTo, sparkColorGreenToValue, powerMode, slider -> powerMode.setGreenTo(slider.getValue()));
         bindSlieders(sparkColorGreenFrom, sparkColorGreenTo);
 
-        initValuesColor(powerMode.getColorBlueFrom(), sparkColorBlueFrom, sparkColorBlueFromValue, powerMode, slider -> powerMode.setBlueFrom(slider.getValue()));
-        initValuesColor(powerMode.getColorBlueTo(), sparkColorBlueTo, sparkColorBlueToValue, powerMode, slider -> powerMode.setBlueTo(slider.getValue()));
+        initValuesColor(powerMode.getBlueFrom(), sparkColorBlueFrom, sparkColorBlueFromValue, powerMode, slider -> powerMode.setBlueFrom(slider.getValue()));
+        initValuesColor(powerMode.getBlueTo(), sparkColorBlueTo, sparkColorBlueToValue, powerMode, slider -> powerMode.setBlueTo(slider.getValue()));
         bindSlieders(sparkColorBlueFrom, sparkColorBlueTo);
 
-        initValuesColor(powerMode.getColorAlpha(), sparkColorAlpha, sparkColorAlphaValue, powerMode, slider -> powerMode.setAlpha(slider.getValue()));
+        initValuesColor(powerMode.getColorAlpha(), sparkColorAlpha, sparkColorAlphaValue, powerMode, slider -> powerMode.setColorAlpha(slider.getValue()));
 
     }
 
@@ -123,7 +123,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private void initValuesColor(int initValue, JSlider slider, JLabel sliderValueLabel, PowerMode powerMode, ValueColorSettable valueSettable) {
         initValues(initValue, slider, sliderValueLabel, slider1 -> {
             valueSettable.setValue(slider1);
-            ((MultiGradientPanel) colorView).setColorEdges(powerMode.getColorEdges());
+            ((MultiGradientPanel) colorView).setColorEdges(PowerMode.obtainColorEdges(powerMode));
         });
 
     }
