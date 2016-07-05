@@ -22,8 +22,9 @@ import com.intellij.openapi.components.{ApplicationComponent, PersistentStateCom
 import com.intellij.openapi.editor.actionSystem.{EditorActionManager, TypedActionHandler}
 import com.intellij.openapi.editor.{Editor, EditorFactory}
 import com.intellij.util.xmlb.XmlSerializerUtil
+import de.ax.powermode.power.management.ElementOfPowerContainerManager
 import org.apache.log4j._
-import org.jetbrains.annotations.{NotNull, Nullable}
+import org.jetbrains.annotations.Nullable
 
 import scala.util.Try
 
@@ -42,6 +43,7 @@ object PowerMode {
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
 
+  import PowerMode._
 
   var gravityFactor: Double = 1
 
@@ -58,8 +60,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   def getFrameRate() = frameRate
-
-  import PowerMode.logger
 
   var maxFlameSize = 100
 
@@ -114,14 +114,14 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     }))
     val rawHandler = EditorActionManager.getInstance.getTypedAction.getRawHandler
     EditorActionManager.getInstance.getTypedAction.setupRawHandler(new TypedActionHandler() {
-      def execute(@NotNull editor: Editor, c: Char, @NotNull dataContext: DataContext) {
+      def execute(editor: Editor, c: Char, dataContext: DataContext) {
         updateEditor(editor)
         rawHandler.execute(editor, c, dataContext)
       }
     })
   }
 
-  private def updateEditor(@NotNull editor: Editor) {
+  private def updateEditor(editor: Editor) {
     sparkContainerManager.foreach(_.update(editor))
   }
 
@@ -130,15 +130,15 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     sparkContainerManager = null
   }
 
-  @NotNull def getComponentName: String = {
+  def getComponentName: String = {
     return "PowerModeII"
   }
 
-  @Nullable def getState: PowerMode = {
+  def getState: PowerMode = {
     return this
   }
 
-  def loadState(@NotNull state: PowerMode) {
+  def loadState(state: PowerMode) {
     XmlSerializerUtil.copyBean(state, this)
   }
 
@@ -248,5 +248,93 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     sparkVelocityFactor = f
   }
 
+  var colorRedFrom: Int = 0
+
+  def getColorRedFrom: Int = {
+    colorRedFrom
+  }
+
+  var colorRedTo: Int = 255
+
+  def getColorRedTo: Int = {
+    return colorRedTo
+  }
+
+  var colorGreenTo: Int = 255
+
+  def getColorGreenTo: Int = {
+    return colorGreenTo
+  }
+
+  var colorGreenFrom: Int = 0
+
+  def getColorGreenFrom: Int = {
+    return colorGreenFrom
+  }
+
+  var colorBlueFrom: Int = 0
+
+  def getColorBlueFrom: Int = {
+    return colorBlueFrom
+  }
+
+  var colorBlueTo: Int = 255
+
+  def getColorBlueTo: Int = {
+    return colorBlueTo
+  }
+
+  var colorAlpha: Int = 100
+
+  def getColorAlpha: Int = {
+    return colorAlpha
+  }
+
+  def setRedFrom(redFrom: Int) {
+    if (redFrom <= colorRedTo)
+      colorRedFrom = redFrom
+  }
+
+  def setRedTo(redTo: Int) {
+    if (redTo >= colorRedFrom)
+      colorRedTo = redTo
+  }
+
+  def setGreenFrom(greenFrom: Int) {
+    if (greenFrom <= colorGreenTo)
+      colorGreenFrom = greenFrom
+  }
+
+  def setGreenTo(greenTo: Int) {
+    if (greenTo >= colorGreenFrom)
+      colorGreenTo = greenTo
+  }
+
+  def setBlueFrom(blueFrom: Int) {
+    if (blueFrom <= colorBlueTo)
+      colorBlueFrom = blueFrom
+  }
+
+  def setBlueTo(blueTo: Int) {
+    if (blueTo >= getColorBlueFrom)
+      colorBlueTo = blueTo
+  }
+
+  def setAlpha(alpha: Int) {
+    colorAlpha = alpha
+  }
+
+
+  def getColorEdges: ColorEdges = {
+    val edges = new ColorEdges()
+    edges.setAlpha(getColorAlpha)
+    edges.setRedFrom(getColorRedFrom)
+    edges.setRedTo(getColorRedTo)
+    edges.setGreenFrom(getColorGreenFrom)
+    edges.setGreenTo(getColorGreenTo)
+    edges.setBlueFrom(getColorBlueFrom)
+    edges.setBlueTo(getColorBlueTo)
+    edges
+  }
 
 }

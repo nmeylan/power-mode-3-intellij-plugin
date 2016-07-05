@@ -1,4 +1,4 @@
-package de.ax.powermode.element
+package de.ax.powermode.power.element
 
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
@@ -7,7 +7,8 @@ import java.io.File
 import javax.imageio.ImageIO
 
 import com.intellij.util.PathUtil
-import de.ax.powermode.{PowerMode, ElementOfPower}
+import de.ax.powermode.PowerMode
+import de.ax.powermode.power.ElementOfPower
 
 /**
   * Created by nyxos on 10.03.16.

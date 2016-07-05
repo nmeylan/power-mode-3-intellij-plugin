@@ -1,4 +1,4 @@
-package de.ax.powermode;
+package de.ax.powermode.power.ui;
 
 import javax.swing.*;
 

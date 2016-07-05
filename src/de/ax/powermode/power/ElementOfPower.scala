@@ -1,8 +1,6 @@
-package de.ax.powermode
+package de.ax.powermode.power
 
 import java.awt.Graphics
-
-import org.jetbrains.annotations.NotNull
 
 /**
   * Created by nyxos on 10.03.16.
@@ -11,7 +9,7 @@ trait ElementOfPower {
 
   def update(delta:Float): Boolean
 
-  def render(@NotNull g: Graphics, dxx: Int, dyy: Int)
+  def render( g: Graphics, dxx: Int, dyy: Int)
 
   def life: Long
 

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.ax.powermode.element
+package de.ax.powermode.power.element
 
 import java.awt._
 
-import de.ax.powermode.{ElementOfPower, PowerColor}
+import de.ax.powermode.PowerColor
+import de.ax.powermode.power.ElementOfPower
 import org.jetbrains.annotations.NotNull
 
 /**
@@ -33,7 +34,7 @@ case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size
     !alive
   }
 
-  def render(@NotNull g: Graphics, dxx: Int, dyy: Int) {
+  def render( g: Graphics, dxx: Int, dyy: Int) {
     if (alive) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
       g2d.setColor(new Color(color._1, color._2, color._3, color._4))

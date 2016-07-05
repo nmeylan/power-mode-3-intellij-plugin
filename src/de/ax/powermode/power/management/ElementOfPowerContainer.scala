@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.ax.powermode
+package de.ax.powermode.power.management
 
 import java.awt._
 import java.awt.event.{ComponentEvent, ComponentListener}
@@ -22,8 +22,9 @@ import javax.swing._
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Editor, ScrollingModel}
-import de.ax.powermode.element.{PowerFlame, PowerSpark}
-import org.jetbrains.annotations.NotNull
+import de.ax.powermode._
+import de.ax.powermode.power.ElementOfPower
+import de.ax.powermode.power.element.{PowerFlame, PowerSpark}
 
 import scala.util.Random
 
@@ -34,7 +35,7 @@ object ElementOfPowerContainer {
 /**
   * @author Baptiste Mesta
   */
-class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with ComponentListener {
+class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentListener {
 
   import ElementOfPowerContainer._
 
@@ -57,17 +58,17 @@ class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with C
 
   def updateElementsOfPower() {
     var delta = System.currentTimeMillis() - lastUpdate
-    if (delta > (1000.0/powerMode.frameRate)*2)
+    if (delta > (1000.0 / powerMode.frameRate) * 2)
       delta = 16
     lastUpdate = System.currentTimeMillis()
-    val db: Double =1000.0/16
+    val db: Double = 1000.0 / 16
     if (elementsOfPower.nonEmpty) {
-      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update(( (delta / db)).toFloat))
+      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update(((delta / db)).toFloat))
       repaint()
     }
   }
 
-  def update(@NotNull point: Point) {
+  def update(point: Point) {
 
     this.setBounds(getMyBounds)
 
@@ -112,11 +113,11 @@ class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with C
   }
 
   def colors: Seq[PowerColor] = Seq(
-    (getColorPart, getColorPart, getColorPart, 0.9f)
+    (getColorPart(powerMode.getColorRedFrom, powerMode.getColorRedTo), getColorPart(powerMode.getColorGreenFrom, powerMode.getColorGreenTo), getColorPart(powerMode.getColorBlueFrom, powerMode.getColorBlueTo), powerMode.getColorAlpha / 255f)
   )
 
-  def getColorPart: Float = {
-    ((Math.random() * 192) / 256).toFloat
+  def getColorPart(from: Int, to: Int): Float = {
+    (((Math.random() * (to - from)) + from) / 255).toFloat
   }
 
   def powerMode: PowerMode = {
@@ -189,7 +190,7 @@ class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with C
   def componentHidden(e: ComponentEvent) {
   }
 
-  protected override def paintComponent(@NotNull g: Graphics) {
+  protected override def paintComponent(g: Graphics) {
     if (shakeData.isDefined && System.currentTimeMillis() - lastShake > 100) {
       doShake(Seq(editor.getComponent))
     }
@@ -197,7 +198,7 @@ class ElementOfPowerContainer(@NotNull editor: Editor) extends JComponent with C
     renderSparks(g)
   }
 
-  def renderSparks(@NotNull g: Graphics) {
+  def renderSparks(g: Graphics) {
 
     val scrollingModel: ScrollingModel = editor.getScrollingModel
     val xyNew = (

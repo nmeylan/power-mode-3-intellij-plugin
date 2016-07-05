@@ -1,8 +1,10 @@
-package de.ax.powermode;
+package de.ax.powermode.power.ui;
 
 import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.openapi.options.ConfigurationException;
-import org.jetbrains.annotations.NotNull;
+import de.ax.powermode.PowerMode;
+import de.ax.powermode.power.color.ColorViewController;
+import de.ax.powermode.power.color.MultiGradientPanel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -43,8 +45,26 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JSlider gravityFactor;
     private JLabel frameRateValue;
     private JSlider frameRate;
+    private JSlider sparkColorRedTo;
+    private JSlider sparkColorRedFrom;
+    private JSlider sparkColorGreenFrom;
+    private JSlider sparkColorGreenTo;
+    private JSlider sparkColorBlueFrom;
+    private JSlider sparkColorBlueTo;
+    private JLabel sparkColorRedFromValue;
+    private JLabel sparkColorRedToValue;
+    private JLabel sparkColorGreenFromValue;
+    private JLabel sparkColorGreenToValue;
+    private JLabel sparkColorBlueFromValue;
+    private JLabel sparkColorBlueToValue;
+    private JLabel sparkColorAlphaValue;
+    private JSlider sparkColorAlpha;
+    private JPanel colorView;
 
-    public PowerModeConfigurableUI(@NotNull PowerMode powerMode) {
+
+    public PowerModeConfigurableUI(PowerMode powerMode) {
+        ((MultiGradientPanel) colorView).setColorEdges(powerMode.getColorEdges());
+        new ColorViewController((MultiGradientPanel) colorView, powerMode);
         powerModeEnabled.setSelected(powerMode.isEnabled());
         shakeEnabled.setSelected(powerMode.isShakeEnabled());
         shakeEnabled.addChangeListener(e -> powerMode.setShakeEnabled(shakeEnabled.isSelected()));
@@ -65,10 +85,29 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
         initValues(powerMode.getFrameRate(), frameRate, frameRateValue, slider -> powerMode.setFrameRate(slider.getValue()));
 
+        initValuesColor(powerMode.getColorRedFrom(), sparkColorRedFrom, sparkColorRedFromValue, powerMode, slider -> powerMode.setRedFrom(slider.getValue()));
+        initValuesColor(powerMode.getColorRedTo(), sparkColorRedTo, sparkColorRedToValue, powerMode, slider -> powerMode.setRedTo(slider.getValue()));
+
+        initValuesColor(powerMode.getColorGreenFrom(), sparkColorGreenFrom, sparkColorGreenFromValue, powerMode, slider -> powerMode.setGreenFrom(slider.getValue()));
+        initValuesColor(powerMode.getColorGreenTo(), sparkColorGreenTo, sparkColorGreenToValue, powerMode, slider -> powerMode.setGreenTo(slider.getValue()));
+
+
+        initValuesColor(powerMode.getColorBlueFrom(), sparkColorBlueFrom, sparkColorBlueFromValue, powerMode, slider -> powerMode.setBlueFrom(slider.getValue()));
+        initValuesColor(powerMode.getColorBlueTo(), sparkColorBlueTo, sparkColorBlueToValue, powerMode, slider -> powerMode.setBlueTo(slider.getValue()));
+
+        initValuesColor(powerMode.getColorAlpha(), sparkColorAlpha, sparkColorAlphaValue, powerMode, slider -> powerMode.setAlpha(slider.getValue()));
 
     }
 
-    private void initValues(int initValue, @NotNull JSlider slider, @NotNull JLabel sliderValueLabel, ValueSettable valueSettable) {
+    private void initValuesColor(int initValue, JSlider slider, JLabel sliderValueLabel, PowerMode powerMode, ValueColorSettable valueSettable) {
+        initValues(initValue, slider, sliderValueLabel, slider1 -> {
+            valueSettable.setValue(slider1);
+            ((MultiGradientPanel) colorView).setColorEdges(powerMode.getColorEdges());
+        });
+
+    }
+
+    private void initValues(int initValue, JSlider slider, JLabel sliderValueLabel, ValueSettable valueSettable) {
         slider.setValue(initValue);
         sliderValueLabel.setText(String.valueOf(initValue));
         slider.addChangeListener(new MyChangeListener(slider, sliderValueLabel) {
@@ -80,24 +119,30 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     }
 
     @Override
-    public void reset(@NotNull PowerMode powerMode) {
+    public void reset(PowerMode powerMode) {
         powerModeEnabled.setSelected(powerMode.isEnabled());
     }
 
     @Override
-    public boolean isModified(@NotNull PowerMode powerMode) {
+    public boolean isModified(PowerMode powerMode) {
         return powerModeEnabled.isSelected() != powerMode.isEnabled();
     }
 
     @Override
-    public void apply(@NotNull PowerMode powerMode) throws ConfigurationException {
+    public void apply(PowerMode powerMode) throws ConfigurationException {
         powerMode.setEnabled(powerModeEnabled.isSelected());
     }
 
-    @NotNull
+
     @Override
     public JComponent getComponent() {
         return mainPanel;
+    }
+
+    private void createUIComponents() {
+        colorView = new MultiGradientPanel(200, null);
+
+
     }
 
     private abstract class MyChangeListener implements ChangeListener, ValueSettable {
@@ -115,5 +160,9 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
             jLabel.setText(String.valueOf(slider.getValue()));
         }
 
+    }
+
+    private interface ValueColorSettable {
+        void setValue(JSlider slider);
     }
 }

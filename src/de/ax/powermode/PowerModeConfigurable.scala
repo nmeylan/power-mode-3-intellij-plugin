@@ -16,23 +16,24 @@
 package de.ax.powermode
 
 import com.intellij.openapi.options.ConfigurableBase
+import de.ax.powermode.power.ui.PowerModeConfigurableUI
 import org.jetbrains.annotations.NotNull
 
 /**
   * @author Baptiste Mesta
   */
-class PowerModeConfigurable(@NotNull settings: PowerMode = PowerMode.getInstance)
+class PowerModeConfigurable( settings: PowerMode = PowerMode.getInstance)
   extends ConfigurableBase[PowerModeConfigurableUI, PowerMode]("power.mode.II", "Power Mode II", "power.mode.II") {
 
 
-  @NotNull protected def getSettings: PowerMode = {
+   protected def getSettings: PowerMode = {
     if (settings == null) {
       throw new IllegalStateException("power mode is null")
     }
     settings
   }
 
-  @NotNull protected def createUi: PowerModeConfigurableUI = {
+   protected def createUi: PowerModeConfigurableUI = {
     new PowerModeConfigurableUI(settings)
   }
 }

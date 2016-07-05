@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.ax.powermode
+package de.ax.powermode.power.management
 
 import java.awt._
 import javax.swing._
 
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
-import org.jetbrains.annotations.NotNull
+import de.ax.powermode.PowerMode
 
 import scala.collection.mutable
 
@@ -47,16 +47,16 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
   })
   sparkContainerUpdateThread.start()
 
-  override def editorCreated(@NotNull event: EditorFactoryEvent) {
+  override def editorCreated( event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
     sparkContainers.put(editor, new ElementOfPowerContainer(editor))
   }
 
-  override def editorReleased(@NotNull event: EditorFactoryEvent) {
+  override def editorReleased( event: EditorFactoryEvent) {
     sparkContainers.remove(event.getEditor)
   }
 
-  def update(@NotNull editor: Editor) {
+  def update( editor: Editor) {
 
     if (PowerMode.getInstance.isEnabled) {
       PowerMode.getInstance.updated
@@ -68,7 +68,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
     }
   }
 
-  private def updateInUI(@NotNull editor: Editor) {
+  private def updateInUI( editor: Editor) {
     val caretPosition = getCaretPosition(editor)
     sparkContainers.get(editor).foreach(_.update(caretPosition))
   }
