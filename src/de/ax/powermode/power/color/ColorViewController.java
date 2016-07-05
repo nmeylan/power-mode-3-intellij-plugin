@@ -25,9 +25,11 @@ public class ColorViewController {
                     long t0 = System.currentTimeMillis();
                     c = Math.max(Math.min((c + genX()), powerMode.colorBlueTo()), powerMode.colorBlueFrom());
                     if (c >= powerMode.colorBlueTo()) {
+                        c = powerMode.colorBlueTo();
                         dir *= -1;
                     }
                     if (c <= powerMode.colorBlueFrom()) {
+                        c = powerMode.colorBlueFrom();
                         dir *= -1;
                     }
                     colorView.doUpdate(c);

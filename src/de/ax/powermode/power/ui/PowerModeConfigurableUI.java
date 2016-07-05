@@ -87,16 +87,37 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
 
         initValuesColor(powerMode.getColorRedFrom(), sparkColorRedFrom, sparkColorRedFromValue, powerMode, slider -> powerMode.setRedFrom(slider.getValue()));
         initValuesColor(powerMode.getColorRedTo(), sparkColorRedTo, sparkColorRedToValue, powerMode, slider -> powerMode.setRedTo(slider.getValue()));
+        bindSlieders(sparkColorRedFrom, sparkColorRedTo);
 
         initValuesColor(powerMode.getColorGreenFrom(), sparkColorGreenFrom, sparkColorGreenFromValue, powerMode, slider -> powerMode.setGreenFrom(slider.getValue()));
         initValuesColor(powerMode.getColorGreenTo(), sparkColorGreenTo, sparkColorGreenToValue, powerMode, slider -> powerMode.setGreenTo(slider.getValue()));
-
+        bindSlieders(sparkColorGreenFrom, sparkColorGreenTo);
 
         initValuesColor(powerMode.getColorBlueFrom(), sparkColorBlueFrom, sparkColorBlueFromValue, powerMode, slider -> powerMode.setBlueFrom(slider.getValue()));
         initValuesColor(powerMode.getColorBlueTo(), sparkColorBlueTo, sparkColorBlueToValue, powerMode, slider -> powerMode.setBlueTo(slider.getValue()));
+        bindSlieders(sparkColorBlueFrom, sparkColorBlueTo);
 
         initValuesColor(powerMode.getColorAlpha(), sparkColorAlpha, sparkColorAlphaValue, powerMode, slider -> powerMode.setAlpha(slider.getValue()));
 
+    }
+
+    private void bindSlieders(JSlider from, JSlider to) {
+        from.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (from.getValue() > to.getValue()) {
+                    to.setValue(from.getValue());
+                }
+            }
+        });
+        to.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (to.getValue() < from.getValue()) {
+                    from.setValue(to.getValue());
+                }
+            }
+        });
     }
 
     private void initValuesColor(int initValue, JSlider slider, JLabel sliderValueLabel, PowerMode powerMode, ValueColorSettable valueSettable) {
