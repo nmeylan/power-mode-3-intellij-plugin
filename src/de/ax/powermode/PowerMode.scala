@@ -20,9 +20,11 @@ import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
 import com.intellij.openapi.editor.actionSystem.{EditorActionManager, TypedActionHandler}
-import com.intellij.openapi.editor.{Editor, EditorFactory}
+import com.intellij.openapi.editor.event._
+import com.intellij.openapi.editor.{Caret, Editor, EditorFactory}
 import com.intellij.util.xmlb.XmlSerializerUtil
 import de.ax.powermode.power.management.ElementOfPowerContainerManager
+import org.apache.commons.lang.StringUtils
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
@@ -116,6 +118,9 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     lastKeys = lastKeys.filter(_ >= ct - heatupTime)
   }
 
+
+
+
   def initComponent {
     val editorFactory = EditorFactory.getInstance
     sparkContainerManager = Some(new ElementOfPowerContainerManager)
@@ -123,17 +128,31 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
       def dispose {
       }
     }))
-    val rawHandler = EditorActionManager.getInstance.getTypedAction.getRawHandler
-    EditorActionManager.getInstance.getTypedAction.setupRawHandler(new TypedActionHandler() {
-      def execute(editor: Editor, c: Char, dataContext: DataContext) {
-        updateEditor(editor)
-        rawHandler.execute(editor, c, dataContext)
+    val editorActionManager = EditorActionManager.getInstance
+    val myCaretListener: CaretListener = new CaretListener {
+      override def caretPositionChanged(caretEvent: CaretEvent): Unit = {
+        updateEditor(caretEvent.getCaret)
       }
-    })
+
+      override def caretRemoved(caretEvent: CaretEvent): Unit = {}
+
+      override def caretAdded(caretEvent: CaretEvent): Unit = {}
+    }
+    val multicaster: EditorEventMulticaster = EditorFactory.getInstance().getEventMulticaster
+    multicaster.addCaretListener(myCaretListener)
+
+//    val rawHandler = editorActionManager.getTypedAction.getRawHandler
+//    editorActionManager.getTypedAction.setupRawHandler(new TypedActionHandler() {
+//      def execute(editor: Editor, c: Char, dataContext: DataContext) {
+//
+////        updateEditor(editor)
+//        rawHandler.execute(editor, c, dataContext)
+//      }
+//    })
   }
 
-  private def updateEditor(editor: Editor) {
-    sparkContainerManager.foreach(_.update(editor))
+  private def updateEditor(caret: Caret) {
+    sparkContainerManager.foreach(_.update(caret))
   }
 
   def disposeComponent {

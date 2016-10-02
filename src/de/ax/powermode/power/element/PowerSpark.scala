@@ -17,7 +17,7 @@ package de.ax.powermode.power.element
 
 import java.awt._
 
-import de.ax.powermode.PowerColor
+import de.ax.powermode.{Util, PowerColor}
 import de.ax.powermode.power.ElementOfPower
 import org.jetbrains.annotations.NotNull
 
@@ -37,7 +37,7 @@ case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size
   def render( g: Graphics, dxx: Int, dyy: Int) {
     if (alive) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setColor(new Color(color._1, color._2, color._3, color._4))
+      g2d.setColor(new Color(color._1, color._2, color._3, Util.alpha(color._4)))
       g2d.fillOval((dxx + x - (size / 2)).toInt, (dyy + y - (size / 2)).toInt, size.toInt, size.toInt)
       g2d.dispose()
     }

@@ -7,7 +7,7 @@ import java.io.File
 import javax.imageio.ImageIO
 
 import com.intellij.util.PathUtil
-import de.ax.powermode.PowerMode
+import de.ax.powermode.{Util, PowerMode}
 import de.ax.powermode.power.ElementOfPower
 
 /**
@@ -92,7 +92,7 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
     if (alive) {
 
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f * (1 - lifeFactor)))
+      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Util.alpha(0.9f * (1 - lifeFactor))))
 
       if (up) {
         if (currentImage != null) g2d.drawImage(currentImage, x + dxx, y + dyy, width, height, null)

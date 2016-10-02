@@ -18,9 +18,9 @@ package de.ax.powermode.power.management
 import java.awt._
 import javax.swing._
 
-import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
-import de.ax.powermode.PowerMode
+import com.intellij.openapi.editor.{Caret, Editor}
+import de.ax.powermode.{PowerMode, Util}
 
 import scala.collection.mutable
 
@@ -28,15 +28,17 @@ import scala.collection.mutable
   * @author Baptiste Mesta
   */
 class ElementOfPowerContainerManager extends EditorFactoryAdapter {
-  val sparkContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
+
+
+  val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
 
   val sparkContainerUpdateThread = new Thread(new Runnable() {
     def run {
       while (true) {
         PowerMode.getInstance.reduced
-        sparkContainers.values.foreach(_.updateElementsOfPower())
+        elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
         try {
-          Thread.sleep(1000/PowerMode.getInstance.frameRate)
+          Thread.sleep(1000 / PowerMode.getInstance.frameRate)
         }
         catch {
           case ignored: InterruptedException => {
@@ -47,41 +49,41 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
   })
   sparkContainerUpdateThread.start()
 
-  override def editorCreated( event: EditorFactoryEvent) {
+  override def editorCreated(event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
-    sparkContainers.put(editor, new ElementOfPowerContainer(editor))
+
+    elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor))
   }
 
-  override def editorReleased( event: EditorFactoryEvent) {
-    sparkContainers.remove(event.getEditor)
+  override def editorReleased(event: EditorFactoryEvent) {
+    elementsOfPowerContainers.remove(event.getEditor)
   }
 
-  def update( editor: Editor) {
+  def update(caret: Caret) {
 
     if (PowerMode.getInstance.isEnabled) {
       PowerMode.getInstance.updated
       SwingUtilities.invokeLater(new Runnable() {
         def run {
-          updateInUI(editor)
+          updateInUI(caret)
         }
       })
     }
   }
 
-  private def updateInUI( editor: Editor) {
-    val caretPosition = getCaretPosition(editor)
-    sparkContainers.get(editor).foreach(_.update(caretPosition))
+  private def updateInUI(caret: Caret) {
+    val caretPosition: Point = getCaretPositions(caret)
+    elementsOfPowerContainers.get(caret.getEditor).foreach(_.update(caretPosition, caret))
   }
 
-  def getCaretPosition(editor: Editor): Point = {
-    val p: Point = editor.visualPositionToXY(editor.getCaretModel.getVisualPosition)
-    val location = editor.getScrollingModel.getVisibleArea.getLocation
-    p.translate(-location.x, -location.y)
-    p
+  def getCaretPositions(caret: Caret): Point = {
+
+
+    Util.getPoint(caret.getVisualPosition, caret.getEditor)
   }
 
   def dispose {
     sparkContainerUpdateThread.interrupt()
-    sparkContainers.clear
+    elementsOfPowerContainers.clear
   }
 }

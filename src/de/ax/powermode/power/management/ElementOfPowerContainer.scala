@@ -20,12 +20,14 @@ import java.awt.event.{ComponentEvent, ComponentListener}
 import javax.swing._
 
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.editor.event.{DocumentEvent, DocumentListener}
 import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.openapi.editor.{Editor, ScrollingModel}
+import com.intellij.openapi.editor.{Caret, Editor, ScrollingModel, VisualPosition}
 import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
 import de.ax.powermode.power.element.{PowerFlame, PowerSpark}
 
+import scala.collection.JavaConversions._
 import scala.util.Random
 
 object ElementOfPowerContainer {
@@ -56,6 +58,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
 
   var lastUpdate = System.currentTimeMillis()
 
+
   def updateElementsOfPower() {
     var delta = System.currentTimeMillis() - lastUpdate
     if (delta > (1000.0 / powerMode.frameRate) * 2)
@@ -63,12 +66,12 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     lastUpdate = System.currentTimeMillis()
     val db: Double = 1000.0 / 16
     if (elementsOfPower.nonEmpty) {
-      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update(((delta / db)).toFloat))
+      elementsOfPower = elementsOfPower.seq.filterNot(p => p._1.update((delta / db).toFloat))
       repaint()
     }
   }
 
-  def update(point: Point) {
+  def update(point: Point, caret: Caret) {
 
     this.setBounds(getMyBounds)
 
@@ -78,6 +81,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     if (powerMode.isFlamesEnabled) {
       addFlames(point)
     }
+
     if (powerMode.isShakeEnabled) {
       doShake(shakeComponents)
     }
@@ -195,10 +199,10 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       doShake(Seq(editor.getComponent))
     }
     super.paintComponent(g)
-    renderSparks(g)
+    renderElementsOfPower(g)
   }
 
-  def renderSparks(g: Graphics) {
+  def renderElementsOfPower(g: Graphics) {
 
     val scrollingModel: ScrollingModel = editor.getScrollingModel
     val xyNew = (
@@ -207,10 +211,10 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       )
 
     elementsOfPower.foreach { pp =>
-      val (p, (x, y)) = pp
+      val (elementOfPower, (x, y)) = pp
       val dxx = x - xyNew._1
       val dyy = y - xyNew._2
-      p.render(g, dxx, dyy)
+      elementOfPower.render(g, dxx, dyy)
     }
 
   }
