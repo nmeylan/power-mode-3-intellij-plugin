@@ -62,7 +62,6 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
   def update(caret: Caret) {
 
     if (PowerMode.getInstance.isEnabled) {
-      PowerMode.getInstance.updated
       SwingUtilities.invokeLater(new Runnable() {
         def run {
           updateInUI(caret)
