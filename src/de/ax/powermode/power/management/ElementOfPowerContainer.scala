@@ -20,14 +20,12 @@ import java.awt.event.{ComponentEvent, ComponentListener}
 import javax.swing._
 
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.editor.event.{DocumentEvent, DocumentListener}
 import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.openapi.editor.{Caret, Editor, ScrollingModel, VisualPosition}
+import com.intellij.openapi.editor.{Caret, Editor, ScrollingModel}
 import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
 import de.ax.powermode.power.element.{PowerFlame, PowerSpark}
 
-import scala.collection.JavaConversions._
 import scala.util.Random
 
 object ElementOfPowerContainer {
@@ -47,6 +45,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   myParent.add(this)
   this.setBounds(myParent.getBounds)
   setVisible(true)
+
   myParent.addComponentListener(this)
 
 
@@ -115,7 +114,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     elementsOfPower :+=(powerSpark, getScrollPosition)
   }
 
-  def genNextColor: PowerColor =(getColorPart(powerMode.getRedFrom, powerMode.getRedTo),
+  def genNextColor: PowerColor = (getColorPart(powerMode.getRedFrom, powerMode.getRedTo),
     getColorPart(powerMode.getGreenFrom, powerMode.getGreenTo),
     getColorPart(powerMode.getBlueFrom, powerMode.getBlueTo),
     powerMode.getColorAlpha / 255f)
@@ -199,7 +198,15 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       doShake(Seq(editor.getComponent))
     }
     super.paintComponent(g)
+    paintPowerBar(g)
     renderElementsOfPower(g)
+  }
+
+  def paintPowerBar(g: Graphics): Unit = {
+    g.setColor(new Color(1f, 0f, 0f, 0.6f))
+    g.fillRect(0, this.getHeight - 15, (this.getWidth * powerMode.valueFactor).toInt, 3)
+    g.setColor(new Color(1f, 1f, 1f, 0.6f))
+    g.fillRect(0, this.getHeight - 10, (this.getWidth * powerMode.valueFactor).toInt, 3)
   }
 
   def renderElementsOfPower(g: Graphics) {

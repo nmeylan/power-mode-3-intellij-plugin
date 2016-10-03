@@ -19,10 +19,12 @@ import java.awt._
 import javax.swing._
 
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
+import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Caret, Editor}
 import de.ax.powermode.{PowerMode, Util}
 
 import scala.collection.mutable
+import scala.util.Try
 
 /**
   * @author Baptiste Mesta
@@ -51,8 +53,17 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
 
   override def editorCreated(event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
-
-    elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor))
+    val isActualEditor = Try {
+      editor.getColorsScheme.getClass.getName.contains("EditorImpl")  && !(editor match {
+        case impl: EditorImpl =>
+          impl.getPreferredSize.height < 200 || impl.getPreferredSize.width < 200
+        case _ =>
+          false
+      })
+    }.getOrElse(false)
+    if (isActualEditor) {
+      elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor))
+    }
   }
 
   override def editorReleased(event: EditorFactoryEvent) {
