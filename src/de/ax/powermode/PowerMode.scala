@@ -15,6 +15,8 @@
  */
 package de.ax.powermode
 
+import javax.swing.JPanel
+
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
@@ -28,7 +30,7 @@ import org.apache.commons.lang.StringUtils
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
 /**
   * @author Baptiste Mesta
@@ -152,7 +154,14 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   private def updateEditor(caret: Caret) {
-    sparkContainerManager.foreach(_.update(caret))
+    val contains = Try{caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")}
+    contains match {
+      case Success(true) =>
+        sparkContainerManager.foreach(_.update(caret))
+      case _ =>
+
+    }
+
   }
 
   def disposeComponent {
