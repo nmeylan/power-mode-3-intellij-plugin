@@ -111,14 +111,14 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     val dy: Double = ((Math.random * -3) - 1) * powerMode.sparkVelocityFactor
     val size = ((Math.random * powerMode.sparkSize) + 1).toInt
     val life = Math.random() * powerMode.getSparkLife * powerMode.valueFactor
-    val powerColor = colors((Math.random() * colors.size).toInt)
-    val powerSpark = PowerSpark(x, y, dx.toFloat, dy.toFloat, size, life.toLong, powerColor, powerMode.gravityFactor.toFloat)
+    val powerSpark = PowerSpark(x, y, dx.toFloat, dy.toFloat, size, life.toLong, genNextColor, powerMode.gravityFactor.toFloat)
     elementsOfPower :+=(powerSpark, getScrollPosition)
   }
 
-  def colors: Seq[PowerColor] = Seq(
-    (getColorPart(powerMode.getRedFrom, powerMode.getRedTo), getColorPart(powerMode.getGreenFrom, powerMode.getGreenTo), getColorPart(powerMode.getBlueFrom, powerMode.getBlueTo), powerMode.getColorAlpha / 255f)
-  )
+  def genNextColor: PowerColor =(getColorPart(powerMode.getRedFrom, powerMode.getRedTo),
+    getColorPart(powerMode.getGreenFrom, powerMode.getGreenTo),
+    getColorPart(powerMode.getBlueFrom, powerMode.getBlueTo),
+    powerMode.getColorAlpha / 255f)
 
   def getColorPart(from: Int, to: Int): Float = {
     (((Math.random() * (to - from)) + from) / 255).toFloat

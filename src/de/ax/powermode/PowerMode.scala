@@ -15,22 +15,18 @@
  */
 package de.ax.powermode
 
-import javax.swing.JPanel
-
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
-import com.intellij.openapi.editor.actionSystem.{EditorActionManager, TypedActionHandler}
+import com.intellij.openapi.editor.actionSystem.EditorActionManager
 import com.intellij.openapi.editor.event._
-import com.intellij.openapi.editor.{Caret, Editor, EditorFactory}
+import com.intellij.openapi.editor.{Caret, EditorFactory}
 import com.intellij.util.xmlb.XmlSerializerUtil
 import de.ax.powermode.power.management.ElementOfPowerContainerManager
-import org.apache.commons.lang.StringUtils
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
-import scala.util.{Success, Try}
+import scala.util.Try
 
 /**
   * @author Baptiste Mesta
@@ -121,8 +117,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
 
-
-
   def initComponent {
     val editorFactory = EditorFactory.getInstance
     sparkContainerManager = Some(new ElementOfPowerContainerManager)
@@ -143,25 +137,23 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     val multicaster: EditorEventMulticaster = EditorFactory.getInstance().getEventMulticaster
     multicaster.addCaretListener(myCaretListener)
 
-//    val rawHandler = editorActionManager.getTypedAction.getRawHandler
-//    editorActionManager.getTypedAction.setupRawHandler(new TypedActionHandler() {
-//      def execute(editor: Editor, c: Char, dataContext: DataContext) {
-//
-////        updateEditor(editor)
-//        rawHandler.execute(editor, c, dataContext)
-//      }
-//    })
+    //    val rawHandler = editorActionManager.getTypedAction.getRawHandler
+    //    editorActionManager.getTypedAction.setupRawHandler(new TypedActionHandler() {
+    //      def execute(editor: Editor, c: Char, dataContext: DataContext) {
+    //
+    ////        updateEditor(editor)
+    //        rawHandler.execute(editor, c, dataContext)
+    //      }
+    //    })
   }
 
   private def updateEditor(caret: Caret) {
-    val contains = Try{caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")}
-    contains match {
-      case Success(true) =>
-        sparkContainerManager.foreach(_.update(caret))
-      case _ =>
-
+    val isActualEditor = Try {
+      caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")
+    }.getOrElse(false)
+    if (isActualEditor) {
+      sparkContainerManager.foreach(_.update(caret))
     }
-
   }
 
   def disposeComponent {
