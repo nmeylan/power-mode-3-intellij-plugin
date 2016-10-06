@@ -26,8 +26,6 @@ import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
 import de.ax.powermode.power.element.{PowerFlame, PowerSpark}
 
-import scala.util.Random
-
 object ElementOfPowerContainer {
   private val logger = Logger.getInstance(this.getClass)
 }
@@ -45,12 +43,10 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   myParent.add(this)
   this.setBounds(myParent.getBounds)
   setVisible(true)
-
   myParent.addComponentListener(this)
 
 
   val shakeComponents = Seq(editor.getComponent, editor.getContentComponent)
-  private val random = new Random()
   var elementsOfPower = Seq.empty[(ElementOfPower, (Int, Int))]
   var lastShake = System.currentTimeMillis()
   var shakeData = Option.empty[(Int, Int, Int, Int)]
@@ -148,8 +144,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
             val bounds: Rectangle = myShakeComponent.getBounds
             myShakeComponent.setBounds(bounds.x + dx, bounds.y + dy, bounds.width, bounds.height)
           }
-          editor.getScrollingModel.scrollHorizontally(scrollX - Math.abs(dx / 2))
-          editor.getScrollingModel.scrollVertically(scrollY - Math.abs(dy / 4))
           None
         case None =>
           val dx = generateShakeOffset
@@ -194,19 +188,15 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   protected override def paintComponent(g: Graphics) {
-    if (shakeData.isDefined && System.currentTimeMillis() - lastShake > 100) {
-      doShake(Seq(editor.getComponent))
-    }
     super.paintComponent(g)
-    paintPowerBar(g)
-    renderElementsOfPower(g)
-  }
-
-  def paintPowerBar(g: Graphics): Unit = {
-    g.setColor(new Color(1f, 0f, 0f, 0.6f))
-    g.fillRect(0, this.getHeight - 15, (this.getWidth * powerMode.valueFactor).toInt, 3)
-    g.setColor(new Color(1f, 1f, 1f, 0.6f))
-    g.fillRect(0, this.getHeight - 10, (this.getWidth * powerMode.valueFactor).toInt, 3)
+    if (powerMode.isEnabled) {
+      if (shakeData.isDefined &&
+        System.currentTimeMillis() - lastShake > 100 &&
+        shakeData.get._1.abs < 50 && shakeData.get._2.abs < 50) {
+        doShake(Seq(editor.getComponent))
+      }
+      renderElementsOfPower(g)
+    }
   }
 
   def renderElementsOfPower(g: Graphics) {

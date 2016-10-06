@@ -15,15 +15,15 @@
  */
 package de.ax.powermode
 
-import javax.swing.SwingUtilities
+import java.io.File
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
-import com.intellij.openapi.editor.actionSystem.{TypedActionHandler, EditorActionManager}
+import com.intellij.openapi.editor.actionSystem.{EditorActionManager, TypedActionHandler}
 import com.intellij.openapi.editor.event._
-import com.intellij.openapi.editor.{Editor, Caret, EditorFactory}
+import com.intellij.openapi.editor.{Caret, Editor, EditorFactory}
 import com.intellij.util.xmlb.XmlSerializerUtil
 import de.ax.powermode.power.management.ElementOfPowerContainerManager
 import org.apache.log4j._
@@ -58,6 +58,8 @@ object PowerMode {
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  def getSoundsFolder: File = new File("/home/nyxos/Downloads/sounds")
+
 
   var gravityFactor: Double = 21.21
 
@@ -128,26 +130,35 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     }))
     val editorActionManager = EditorActionManager.getInstance
     val myCaretListener: CaretListener = new CaretListener {
+      var modified = true
+
       override def caretPositionChanged(caretEvent: CaretEvent): Unit = {
-        updateEditor(caretEvent.getCaret)
+        if (!modified) {
+          updateEditor(caretEvent.getCaret)
+        }
+        modified = false
       }
 
-      override def caretRemoved(caretEvent: CaretEvent): Unit = {}
+      override def caretRemoved(caretEvent: CaretEvent): Unit = {
+        modified = true
+      }
 
-      override def caretAdded(caretEvent: CaretEvent): Unit = {}
+      override def caretAdded(caretEvent: CaretEvent): Unit = {
+        modified = true
+      }
     }
     val multicaster: EditorEventMulticaster = EditorFactory.getInstance().getEventMulticaster
     multicaster.addCaretListener(myCaretListener)
 
-        val rawHandler = editorActionManager.getTypedAction.getRawHandler
-        editorActionManager.getTypedAction.setupRawHandler(new TypedActionHandler() {
-          def execute(editor: Editor, c: Char, dataContext: DataContext) {
-            if (PowerMode.getInstance.isEnabled) {
-              PowerMode.getInstance.updated
-             }
-            rawHandler.execute(editor, c, dataContext)
-          }
-        })
+    val rawHandler = editorActionManager.getTypedAction.getRawHandler
+    editorActionManager.getTypedAction.setupRawHandler(new TypedActionHandler() {
+      def execute(editor: Editor, c: Char, dataContext: DataContext) {
+        if (PowerMode.getInstance.isEnabled) {
+          PowerMode.getInstance.updated
+        }
+        rawHandler.execute(editor, c, dataContext)
+      }
+    })
   }
 
   private def updateEditor(caret: Caret) {

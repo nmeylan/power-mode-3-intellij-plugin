@@ -21,6 +21,7 @@ import javax.swing._
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
 import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Caret, Editor}
+import de.ax.powermode.power.sound.PowerSound
 import de.ax.powermode.{PowerMode, Util}
 
 import scala.collection.mutable
@@ -33,28 +34,39 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
 
 
   val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
+  lazy val sound = new PowerSound({ PowerMode.getInstance.getSoundsFolder},{PowerMode.getInstance.valueFactor})
 
-  val sparkContainerUpdateThread = new Thread(new Runnable() {
+  val elementsOfPowerUpdateThread = new Thread(new Runnable() {
     def run {
       while (true) {
-        PowerMode.getInstance.reduced
-        elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
         try {
-          Thread.sleep(1000 / PowerMode.getInstance.frameRate)
-        }
-        catch {
-          case ignored: InterruptedException => {
+          PowerMode.getInstance.reduced
+          if (PowerMode.getInstance.isEnabled) {
+            sound.play()
+          } else {
+            sound.stop()
           }
+          sound.setVolume(PowerMode.getInstance.valueFactor)
+          elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
+          try {
+            Thread.sleep(1000 / PowerMode.getInstance.frameRate)
+          }
+          catch {
+            case ignored: InterruptedException => {
+            }
+          }
+        } catch {
+          case e => PowerMode.logger.error(e.getMessage,e)
         }
       }
     }
   })
-  sparkContainerUpdateThread.start()
+  elementsOfPowerUpdateThread.start()
 
   override def editorCreated(event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
     val isActualEditor = Try {
-      editor.getColorsScheme.getClass.getName.contains("EditorImpl")  && !(editor match {
+      editor.getColorsScheme.getClass.getName.contains("EditorImpl") && !(editor match {
         case impl: EditorImpl =>
           impl.getPreferredSize.height < 200 || impl.getPreferredSize.width < 200
         case _ =>
@@ -93,7 +105,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
   }
 
   def dispose {
-    sparkContainerUpdateThread.interrupt()
+    elementsOfPowerUpdateThread.interrupt()
     elementsOfPowerContainers.clear
   }
 }
