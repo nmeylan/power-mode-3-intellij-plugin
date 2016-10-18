@@ -34,14 +34,16 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
 
 
   val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
-  lazy val sound = new PowerSound({ PowerMode.getInstance.getSoundsFolder},{PowerMode.getInstance.valueFactor})
+  lazy val sound = new PowerSound(PowerMode.getInstance.soundsFolder, PowerMode.getInstance.valueFactor)
+
 
   val elementsOfPowerUpdateThread = new Thread(new Runnable() {
     def run {
       while (true) {
         try {
           PowerMode.getInstance.reduced
-          if (PowerMode.getInstance.isEnabled) {
+          if (PowerMode.getInstance.isEnabled &&
+            PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)) {
             sound.play()
           } else {
             sound.stop()
@@ -56,7 +58,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
             }
           }
         } catch {
-          case e => PowerMode.logger.error(e.getMessage,e)
+          case e => PowerMode.logger.error(e.getMessage, e)
         }
       }
     }

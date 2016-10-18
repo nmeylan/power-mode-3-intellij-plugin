@@ -56,9 +56,10 @@ object PowerMode {
   }
 }
 
+
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
-  def getSoundsFolder: File = new File("/home/nyxos/Downloads/sounds")
+  var soundsFolder = Option.empty[File]
 
 
   var gravityFactor: Double = 21.21
@@ -369,5 +370,10 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     colorAlpha = alpha
   }
 
+  def setSoundFolder(f: File) {
+    soundsFolder = Option(f)
+  }
+
+  def getSoundsFolder() = soundsFolder.orNull
 
 }

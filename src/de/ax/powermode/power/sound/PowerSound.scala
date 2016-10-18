@@ -10,12 +10,12 @@ import de.ax.powermode.PowerMode
   * Created by nyxos on 03.10.16.
   */
 
-class PowerSound(folder: => File, valueFactor: => Double) {
+class PowerSound(folder: => Option[File], valueFactor: => Double) {
   val ResetPlaying: Runnable = new Runnable {
     override def run(): Unit = playing = false
   }
 
-  def files = Option(folder.listFiles()).getOrElse(Array.empty[File]).filter(_.isFile)
+  def files = folder.flatMap(f => Option(f.listFiles())).getOrElse(Array.empty[File]).filter(f => f.isFile && f.exists)
 
   var playing = false
 
@@ -23,7 +23,7 @@ class PowerSound(folder: => File, valueFactor: => Double) {
 
 
   def setVolume(v: Double) = {
-    mediaPlayer.foreach(_.setVolume((0.75*v*v)+(0.25*v)))
+    mediaPlayer.foreach(_.setVolume((0.75 * v * v) + (0.25 * v)))
   }
 
   def stop() = {
@@ -35,13 +35,20 @@ class PowerSound(folder: => File, valueFactor: => Double) {
 
   var index = 0
 
+  var lastFolder = folder
+
   def play() = {
+    if (lastFolder.map(_.getAbsolutePath) != folder.map(_.getAbsolutePath)) {
+      mediaPlayer.foreach(_.stop())
+      playing = false
+    }
+
     if (!playing && files != null && !files.isEmpty) {
+      val f = files(index)
       try {
         playing = true
         index = (Math.random() * (200 * files.length)).toInt % files.length
         new JFXPanel
-        val f = files(index)
         val hit = new Media(f.toURI.toString)
         mediaPlayer = Some {
           val mediaPlayer = new MediaPlayer(hit)
@@ -54,7 +61,7 @@ class PowerSound(folder: => File, valueFactor: => Double) {
         }
       } catch {
         case e =>
-          PowerMode.logger.error(e.getMessage, e)
+          PowerMode.logger.error(s"error playing file $f: ${e.getMessage}", e)
           playing = false
       }
     }
