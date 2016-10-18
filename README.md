@@ -21,7 +21,7 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
 * Keyboard shortcut to toggle power mode [shift ctrl alt O]
 
  
-## Architecture
+## "Architecture"
 
 * `PowerMode` is the settings instance which is used by `PowerModeConfigurable` to populate the UI Settings dialog.
                    `PowerModeConfigurableUI` manages the settings dialog to change the settings in `PowerMode`.
@@ -32,5 +32,5 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
 ### heatup
 
 * heatup increases the lifetime and amount of Sparks and Flames over time. The most values are multiplied with `ElementOfPower.valueFactor` to simulate this heatup.
-`ElementOfPower.valueFactor` is composed of `heatupFactor` (how much of all animation doesn't dempend on heatup) and `timeFactor` (how much heatup do we currently have).
+`ElementOfPower.valueFactor` is composed of `heatupFactor` (how much of all animation doesn't depend on heatup) and `timeFactor` (how much heatup do we currently have).
 * The heatup itself is calculated by `keyStrokesPerMinute` and the amount of keystrokes within `heatupTime`.
