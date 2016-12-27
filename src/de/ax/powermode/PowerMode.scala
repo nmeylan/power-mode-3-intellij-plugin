@@ -60,6 +60,8 @@ object PowerMode {
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  var isSoundsPlaying = false
+
   var soundsFolder = Option.empty[File]
 
 
@@ -399,11 +401,12 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     colorAlpha = alpha
   }
 
-  def setSoundFolder(f: File) {
-    soundsFolder = Option(f)
+  def setSoundsFolder(file:String) {
+    soundsFolder = Option(new File(file))
+    System.out.println(file)
   }
 
-  def getSoundsFolder() = soundsFolder.orNull
+  def getSoundsFolder = soundsFolder.map(_.getAbsolutePath).getOrElse("")
 
   def isCaretAction: Boolean = {
     caretAction
@@ -412,4 +415,11 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def setIsCaretAction(isCaretAction: Boolean) {
     this.caretAction = isCaretAction
   }
+
+  def setIsSoundsPlaying(isSoundsPlaying: Boolean) {
+    this.isSoundsPlaying = isSoundsPlaying
+  }
+
+  def getIsSoundsPlaying=isSoundsPlaying
+
 }

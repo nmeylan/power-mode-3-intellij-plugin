@@ -42,13 +42,19 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
       while (true) {
         try {
           PowerMode.getInstance.reduced
-          if (PowerMode.getInstance.isEnabled &&
-            PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)) {
-            sound.play()
-          } else {
-            sound.stop()
+          try {
+            if (PowerMode.getInstance.isEnabled &&
+              PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)
+              && PowerMode.getInstance.isSoundsPlaying) {
+              sound.play()
+            } else {
+              sound.stop()
+            }
+            sound.setVolume(PowerMode.getInstance.valueFactor)
+          } catch {
+            case e: Exception =>
+              e.printStackTrace()
           }
-          sound.setVolume(PowerMode.getInstance.valueFactor)
           elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
           try {
             Thread.sleep(1000 / PowerMode.getInstance.frameRate)

@@ -9,6 +9,10 @@ import de.ax.powermode.power.color.MultiGradientPanel;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Baptiste Mesta
@@ -61,6 +65,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JSlider sparkColorAlpha;
     private JPanel colorView;
     private JCheckBox visualizeEveryCaretMovementCheckBox;
+    private JCheckBox PLAYMUSICCheckBox;
+    private JTextField soundsFolder;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -75,7 +81,27 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         PARTICLESCheckBox.addChangeListener(e -> powerMode.setSparksEnabled(PARTICLESCheckBox.isSelected()));
         visualizeEveryCaretMovementCheckBox.setSelected(powerMode.isCaretAction());
         visualizeEveryCaretMovementCheckBox.addChangeListener(e -> powerMode.setIsCaretAction(visualizeEveryCaretMovementCheckBox.isSelected()));
+        PLAYMUSICCheckBox.setSelected(powerMode.isSoundsPlaying());
+        PLAYMUSICCheckBox.addChangeListener(e -> powerMode.setIsSoundsPlaying(PLAYMUSICCheckBox.isSelected()));
 
+        soundsFolder.setText(powerMode.getSoundsFolder());
+
+        soundsFolder.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                powerMode.setSoundsFolder(soundsFolder.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                powerMode.setSoundsFolder(soundsFolder.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                powerMode.setSoundsFolder(soundsFolder.getText());
+            }
+        });
         initValues(powerMode.getSparkCount(), sparkCount, sparkCountValue, slider -> powerMode.setSparkCount(slider.getValue()));
         initValues(powerMode.getSparkSize(), sparkSize, sparkSizeValue, slider -> powerMode.setSparkSize(slider.getValue()));
         initValues(powerMode.getSparkLife(), sparkLife, sparkLifeValue, slider -> powerMode.setSparkLife(slider.getValue()));
