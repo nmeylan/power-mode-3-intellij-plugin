@@ -11,6 +11,13 @@ import de.ax.powermode.PowerMode
   */
 
 class PowerSound(folder: => Option[File], valueFactor: => Double) {
+  def next(): Unit = {
+    this.synchronized {
+      stop()
+      play()
+    }
+  }
+
   val ResetPlaying: Runnable = new Runnable {
     override def run(): Unit = playing = false
   }
@@ -27,8 +34,10 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
   }
 
   def stop() = {
-    mediaPlayer.foreach(_.stop())
-    playing = false
+    synchronized {
+      mediaPlayer.foreach(_.stop())
+      playing = false
+    }
   }
 
   var mediaPlayer = Option.empty[MediaPlayer]

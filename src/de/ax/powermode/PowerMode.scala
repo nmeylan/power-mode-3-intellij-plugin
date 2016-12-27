@@ -95,7 +95,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   var sparkCount = 10
   var shakeRange = 4
   var flamesEnabled: Boolean = true
-  private var maybeElementOfPowerContainerManager = Option.empty[ElementOfPowerContainerManager]
+  var maybeElementOfPowerContainerManager = Option.empty[ElementOfPowerContainerManager]
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
 
@@ -401,9 +401,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     colorAlpha = alpha
   }
 
-  def setSoundsFolder(file:String) {
+  def setSoundsFolder(file: String) {
     soundsFolder = Option(new File(file))
-    System.out.println(file)
   }
 
   def getSoundsFolder = soundsFolder.map(_.getAbsolutePath).getOrElse("")
@@ -420,6 +419,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     this.isSoundsPlaying = isSoundsPlaying
   }
 
-  def getIsSoundsPlaying=isSoundsPlaying
+  def getIsSoundsPlaying = isSoundsPlaying
 
 }

@@ -46,9 +46,15 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
             if (PowerMode.getInstance.isEnabled &&
               PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)
               && PowerMode.getInstance.isSoundsPlaying) {
-              sound.play()
+
+              sound.synchronized {
+                sound.play()
+              }
             } else {
-              sound.stop()
+              sound.synchronized {
+                sound.stop()
+              }
+
             }
             sound.setVolume(PowerMode.getInstance.valueFactor)
           } catch {
