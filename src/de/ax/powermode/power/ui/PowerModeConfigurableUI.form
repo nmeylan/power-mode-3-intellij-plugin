@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="de.ax.powermode.power.ui.PowerModeConfigurableUI">
-  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="17" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="18" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="716"/>
+      <xy x="20" y="20" width="511" height="765"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
       <component id="2632e" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -21,7 +21,7 @@
       </component>
       <component id="90a0" class="javax.swing.JSlider" binding="sparkCount">
         <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="100"/>
@@ -29,7 +29,7 @@
       </component>
       <component id="cd69f" class="javax.swing.JLabel">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -40,7 +40,7 @@
       </component>
       <component id="4f7ba" class="javax.swing.JSlider" binding="sparkLife">
         <constraints>
-          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="10000"/>
@@ -48,7 +48,7 @@
       </component>
       <component id="2456b" class="javax.swing.JLabel">
         <constraints>
-          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -59,13 +59,13 @@
       </component>
       <component id="d66bd" class="javax.swing.JSlider" binding="shakeRange">
         <constraints>
-          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="11" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
       </component>
       <component id="81202" class="javax.swing.JLabel">
         <constraints>
-          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -76,13 +76,13 @@
       </component>
       <component id="50558" class="javax.swing.JSlider" binding="heatup">
         <constraints>
-          <grid row="11" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
       </component>
       <component id="4cf47" class="javax.swing.JLabel">
         <constraints>
-          <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -93,7 +93,7 @@
       </component>
       <component id="266a0" class="javax.swing.JSlider" binding="heatupTime">
         <constraints>
-          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="60000"/>
@@ -101,7 +101,7 @@
       </component>
       <component id="3b9ad" class="javax.swing.JLabel" binding="sparkCountValue">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -109,7 +109,7 @@
       </component>
       <component id="f5c2a" class="javax.swing.JLabel" binding="sparkLifeValue">
         <constraints>
-          <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -117,7 +117,7 @@
       </component>
       <component id="a35ff" class="javax.swing.JLabel" binding="shakeRangeValue">
         <constraints>
-          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -125,7 +125,7 @@
       </component>
       <component id="bc55" class="javax.swing.JLabel" binding="heatupValue">
         <constraints>
-          <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -133,7 +133,7 @@
       </component>
       <component id="addf7" class="javax.swing.JLabel" binding="heatupTimeValue">
         <constraints>
-          <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -141,7 +141,7 @@
       </component>
       <component id="72e7" class="javax.swing.JLabel">
         <constraints>
-          <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -152,7 +152,7 @@
       </component>
       <component id="afddc" class="javax.swing.JLabel" binding="maxFlameSizeValue">
         <constraints>
-          <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -160,7 +160,7 @@
       </component>
       <component id="acbf8" class="javax.swing.JSlider" binding="maxFlameSize">
         <constraints>
-          <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="500"/>
@@ -168,7 +168,7 @@
       </component>
       <component id="74982" class="javax.swing.JLabel">
         <constraints>
-          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -179,7 +179,7 @@
       </component>
       <component id="badbb" class="javax.swing.JLabel" binding="flameLifeValue">
         <constraints>
-          <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -187,7 +187,7 @@
       </component>
       <component id="321e2" class="javax.swing.JSlider" binding="flameLife">
         <constraints>
-          <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="15" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="10000"/>
@@ -195,7 +195,7 @@
       </component>
       <component id="e564c" class="javax.swing.JLabel">
         <constraints>
-          <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -206,7 +206,7 @@
       </component>
       <component id="7cba5" class="javax.swing.JLabel" binding="keyStrokesPerMinuteValue">
         <constraints>
-          <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -214,7 +214,7 @@
       </component>
       <component id="5af3" class="javax.swing.JSlider" binding="keyStrokesPerMinute">
         <constraints>
-          <grid row="15" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="16" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="3000"/>
@@ -223,7 +223,7 @@
       </component>
       <component id="1b40f" class="javax.swing.JLabel">
         <constraints>
-          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -234,7 +234,7 @@
       </component>
       <component id="b1591" class="javax.swing.JLabel" binding="sparkSizeValue">
         <constraints>
-          <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -242,7 +242,7 @@
       </component>
       <component id="ded61" class="javax.swing.JSlider" binding="sparkSize">
         <constraints>
-          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="10"/>
@@ -250,7 +250,7 @@
       </component>
       <component id="c5412" class="javax.swing.JLabel">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -261,7 +261,7 @@
       </component>
       <component id="c7259" class="javax.swing.JLabel" binding="velocityFactorValue">
         <constraints>
-          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -269,7 +269,7 @@
       </component>
       <component id="efd58" class="javax.swing.JSlider" binding="velocityFactor">
         <constraints>
-          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="10000"/>
@@ -279,7 +279,7 @@
       </component>
       <component id="3a93a" class="javax.swing.JLabel">
         <constraints>
-          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -290,7 +290,7 @@
       </component>
       <component id="5b27f" class="javax.swing.JLabel" binding="gravityFactorValue">
         <constraints>
-          <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -298,7 +298,7 @@
       </component>
       <component id="108ab" class="javax.swing.JSlider" binding="gravityFactor">
         <constraints>
-          <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="10000"/>
@@ -308,7 +308,7 @@
       </component>
       <component id="c1982" class="javax.swing.JLabel">
         <constraints>
-          <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+          <grid row="17" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="176" height="15"/>
           </grid>
         </constraints>
@@ -319,7 +319,7 @@
       </component>
       <component id="43211" class="javax.swing.JLabel" binding="frameRateValue">
         <constraints>
-          <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="17" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Label"/>
@@ -327,7 +327,7 @@
       </component>
       <component id="ddd7e" class="javax.swing.JSlider" binding="frameRate">
         <constraints>
-          <grid row="16" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="17" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <maximum value="120"/>
@@ -367,7 +367,16 @@
           <text value="FLAMES!"/>
         </properties>
       </component>
-      <grid id="82a76" layout-manager="GridLayoutManager" row-count="11" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <component id="97367" class="javax.swing.JCheckBox" binding="visualizeEveryCaretMovementCheckBox" default-binding="true">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="VISUALIZE EVERY CARET MOVEMENT!"/>
+          <toolTipText value="When disabled: only typing of letters will cause effects.&#10;When enabled: every caret movement will cause effects." noi18n="true"/>
+        </properties>
+      </component>
+      <grid id="40358" layout-manager="GridLayoutManager" row-count="11" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -377,7 +386,7 @@
         <properties/>
         <border type="none" title="Spark Colors"/>
         <children>
-          <component id="f8c2b" class="javax.swing.JLabel" binding="sparkColorRedFromValue">
+          <component id="f3691" class="javax.swing.JLabel" binding="sparkColorRedFromValue">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -385,7 +394,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="afd6b" class="javax.swing.JSlider" binding="sparkColorRedFrom">
+          <component id="31348" class="javax.swing.JSlider" binding="sparkColorRedFrom">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -393,7 +402,7 @@
               <maximum value="255"/>
             </properties>
           </component>
-          <grid id="4e161" binding="colorView" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="true" same-size-vertically="true" hgap="-1" vgap="-1">
+          <grid id="d0f3a" binding="colorView" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="true" same-size-vertically="true" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="1" column="0" row-span="10" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -406,7 +415,7 @@
             <border type="none"/>
             <children/>
           </grid>
-          <component id="850f7" class="javax.swing.JLabel">
+          <component id="d622e" class="javax.swing.JLabel">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="136" height="14"/>
@@ -417,7 +426,7 @@
               <toolTipText value="how many sparks should appear?"/>
             </properties>
           </component>
-          <component id="78abe" class="javax.swing.JLabel" binding="sparkColorRedToValue">
+          <component id="941fc" class="javax.swing.JLabel" binding="sparkColorRedToValue">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -425,7 +434,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="cf1d4" class="javax.swing.JSlider" binding="sparkColorRedTo">
+          <component id="786cb" class="javax.swing.JSlider" binding="sparkColorRedTo">
             <constraints>
               <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -433,7 +442,7 @@
               <maximum value="255"/>
             </properties>
           </component>
-          <component id="ceea7" class="javax.swing.JLabel">
+          <component id="21559" class="javax.swing.JLabel">
             <constraints>
               <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -442,7 +451,7 @@
               <toolTipText value="how many sparks should appear?"/>
             </properties>
           </component>
-          <component id="815e0" class="javax.swing.JLabel" binding="sparkColorGreenFromValue">
+          <component id="e4b78" class="javax.swing.JLabel" binding="sparkColorGreenFromValue">
             <constraints>
               <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -450,7 +459,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="d5aa3" class="javax.swing.JSlider" binding="sparkColorGreenFrom">
+          <component id="81e87" class="javax.swing.JSlider" binding="sparkColorGreenFrom">
             <constraints>
               <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -458,7 +467,7 @@
               <maximum value="255"/>
             </properties>
           </component>
-          <component id="25c7b" class="javax.swing.JLabel" binding="sparkColorGreenToValue">
+          <component id="b5faf" class="javax.swing.JLabel" binding="sparkColorGreenToValue">
             <constraints>
               <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -466,7 +475,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="b7eda" class="javax.swing.JSlider" binding="sparkColorGreenTo">
+          <component id="ddc3c" class="javax.swing.JSlider" binding="sparkColorGreenTo">
             <constraints>
               <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -474,7 +483,7 @@
               <maximum value="255"/>
             </properties>
           </component>
-          <component id="98a02" class="javax.swing.JLabel">
+          <component id="3e35c" class="javax.swing.JLabel">
             <constraints>
               <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -483,7 +492,7 @@
               <toolTipText value="how many sparks should appear?"/>
             </properties>
           </component>
-          <component id="55ab3" class="javax.swing.JLabel" binding="sparkColorBlueFromValue">
+          <component id="30786" class="javax.swing.JLabel" binding="sparkColorBlueFromValue">
             <constraints>
               <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -491,7 +500,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="c257c" class="javax.swing.JSlider" binding="sparkColorBlueFrom">
+          <component id="cbe45" class="javax.swing.JSlider" binding="sparkColorBlueFrom">
             <constraints>
               <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -499,7 +508,7 @@
               <maximum value="255"/>
             </properties>
           </component>
-          <component id="89092" class="javax.swing.JLabel" binding="sparkColorBlueToValue">
+          <component id="d73f" class="javax.swing.JLabel" binding="sparkColorBlueToValue">
             <constraints>
               <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -507,7 +516,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="c66fd" class="javax.swing.JSlider" binding="sparkColorBlueTo">
+          <component id="91c" class="javax.swing.JSlider" binding="sparkColorBlueTo">
             <constraints>
               <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -515,7 +524,7 @@
               <maximum value="255"/>
             </properties>
           </component>
-          <component id="3202f" class="javax.swing.JLabel">
+          <component id="6e81a" class="javax.swing.JLabel">
             <constraints>
               <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -523,7 +532,7 @@
               <text value="alpha"/>
             </properties>
           </component>
-          <component id="24d6b" class="javax.swing.JLabel" binding="sparkColorAlphaValue">
+          <component id="f8276" class="javax.swing.JLabel" binding="sparkColorAlphaValue">
             <constraints>
               <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -531,7 +540,7 @@
               <text value="Label"/>
             </properties>
           </component>
-          <component id="fcd30" class="javax.swing.JSlider" binding="sparkColorAlpha">
+          <component id="5402" class="javax.swing.JSlider" binding="sparkColorAlpha">
             <constraints>
               <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

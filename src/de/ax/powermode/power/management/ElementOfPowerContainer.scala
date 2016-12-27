@@ -66,7 +66,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     }
   }
 
-  def update(point: Point, caret: Caret) {
+  def update(point: Point ) {
 
     this.setBounds(getMyBounds)
 

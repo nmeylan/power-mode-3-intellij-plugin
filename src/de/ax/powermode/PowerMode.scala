@@ -15,6 +15,7 @@
  */
 package de.ax.powermode
 
+import java.awt.Point
 import java.io.File
 
 import com.intellij.openapi.Disposable
@@ -29,6 +30,7 @@ import de.ax.powermode.power.management.ElementOfPowerContainerManager
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
+import scala.collection.JavaConversions._
 import scala.util.Try
 
 /**
@@ -55,7 +57,6 @@ object PowerMode {
     edges
   }
 }
-
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
@@ -121,6 +122,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     lastKeys = lastKeys.filter(_ >= ct - heatupTime)
   }
 
+  var caretAction: Boolean = true
 
   def initComponent {
     val editorFactory = EditorFactory.getInstance
@@ -134,8 +136,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
       var modified = true
 
       override def caretPositionChanged(caretEvent: CaretEvent): Unit = {
-        if (!modified) {
-          updateEditor(caretEvent.getCaret)
+        if (!modified && caretAction) {
+          updateCaret(caretEvent.getCaret)
         }
         modified = false
       }
@@ -156,24 +158,51 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
       def execute(editor: Editor, c: Char, dataContext: DataContext) {
         if (PowerMode.getInstance.isEnabled) {
           PowerMode.getInstance.updated
+          if (!caretAction) {
+            updateEditor(editor)
+          }
         }
         rawHandler.execute(editor, c, dataContext)
       }
     })
   }
 
-  private def updateEditor(caret: Caret) {
+
+  def getEditorCaretPositions(editor: Editor): Seq[Point] = {
+    editor.getCaretModel.getAllCarets.map({ c =>
+      val p: Point = editor.visualPositionToXY(c.getVisualPosition)
+      val location = editor.getScrollingModel.getVisibleArea.getLocation
+      p.translate(-location.x, -location.y)
+      p
+    })
+  }
+
+  def updateEditor(editor: Editor): Unit = {
+    val isActualEditor = Try {
+      editor.getColorsScheme.getClass.getName.contains("EditorImpl")
+    }.getOrElse(false)
+    if (isActualEditor) {
+      maybeElementOfPowerContainerManager.foreach(cm =>
+        getEditorCaretPositions(editor).foreach(pos =>
+          cm.update(editor, pos)))
+    }
+  }
+
+  def getCaretPosition(caret: Caret): Point = {
+    Util.getPoint(caret.getVisualPosition, caret.getEditor)
+  }
+
+  private def updateCaret(caret: Caret) {
     val isActualEditor = Try {
       caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")
     }.getOrElse(false)
     if (isActualEditor) {
-      maybeElementOfPowerContainerManager.foreach(_.update(caret))
+      maybeElementOfPowerContainerManager.foreach(_.update(caret.getEditor, getCaretPosition(caret)))
     }
   }
 
   def disposeComponent {
     maybeElementOfPowerContainerManager.foreach(_.dispose)
-    maybeElementOfPowerContainerManager = null
   }
 
   def getComponentName: String = {
@@ -376,4 +405,11 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   def getSoundsFolder() = soundsFolder.orNull
 
+  def isCaretAction: Boolean = {
+    caretAction
+  }
+
+  def setIsCaretAction(isCaretAction: Boolean) {
+    this.caretAction = isCaretAction
+  }
 }

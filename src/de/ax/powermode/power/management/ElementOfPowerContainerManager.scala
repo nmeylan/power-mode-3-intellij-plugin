@@ -18,11 +18,11 @@ package de.ax.powermode.power.management
 import java.awt._
 import javax.swing._
 
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
 import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.openapi.editor.{Caret, Editor}
+import de.ax.powermode.PowerMode
 import de.ax.powermode.power.sound.PowerSound
-import de.ax.powermode.{PowerMode, Util}
 
 import scala.collection.mutable
 import scala.util.Try
@@ -84,27 +84,20 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
     elementsOfPowerContainers.remove(event.getEditor)
   }
 
-  def update(caret: Caret) {
-
+  def update(editor: Editor, pos: Point) {
     if (PowerMode.getInstance.isEnabled) {
       SwingUtilities.invokeLater(new Runnable() {
         def run {
-          updateInUI(caret)
+          updateInUI(editor, pos)
         }
       })
     }
   }
 
-  private def updateInUI(caret: Caret) {
-    val caretPosition: Point = getCaretPositions(caret)
-    elementsOfPowerContainers.get(caret.getEditor).foreach(_.update(caretPosition, caret))
+  private def updateInUI(editor: Editor, pos: Point) {
+    elementsOfPowerContainers.get(editor).foreach(_.update(pos))
   }
 
-  def getCaretPositions(caret: Caret): Point = {
-
-
-    Util.getPoint(caret.getVisualPosition, caret.getEditor)
-  }
 
   def dispose {
     elementsOfPowerUpdateThread.interrupt()

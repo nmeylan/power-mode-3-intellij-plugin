@@ -60,6 +60,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JLabel sparkColorAlphaValue;
     private JSlider sparkColorAlpha;
     private JPanel colorView;
+    private JCheckBox visualizeEveryCaretMovementCheckBox;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -72,6 +73,9 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         FLAMESCheckBox.addChangeListener(e -> powerMode.setFlamesEnabled(FLAMESCheckBox.isSelected()));
         PARTICLESCheckBox.setSelected(powerMode.isSparksEnabled());
         PARTICLESCheckBox.addChangeListener(e -> powerMode.setSparksEnabled(PARTICLESCheckBox.isSelected()));
+        visualizeEveryCaretMovementCheckBox.setSelected(powerMode.isCaretAction());
+        visualizeEveryCaretMovementCheckBox.addChangeListener(e -> powerMode.setIsCaretAction(visualizeEveryCaretMovementCheckBox.isSelected()));
+
         initValues(powerMode.getSparkCount(), sparkCount, sparkCountValue, slider -> powerMode.setSparkCount(slider.getValue()));
         initValues(powerMode.getSparkSize(), sparkSize, sparkSizeValue, slider -> powerMode.setSparkSize(slider.getValue()));
         initValues(powerMode.getSparkLife(), sparkLife, sparkLifeValue, slider -> powerMode.setSparkLife(slider.getValue()));
