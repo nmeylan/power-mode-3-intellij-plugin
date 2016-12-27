@@ -102,7 +102,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def updated {
     val ct = System.currentTimeMillis()
     lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
-
   }
 
   def valueFactor = heatupFactor + ((1 - heatupFactor) * timeFactor)

@@ -556,6 +556,7 @@
         </constraints>
         <properties>
           <text value="PLAY MUSIC"/>
+          <toolTipText value="next song: shift ctrl alt M"/>
         </properties>
       </component>
       <component id="d851e" class="javax.swing.JTextField" binding="soundsFolder">
