@@ -7,14 +7,15 @@ import java.io.File
 import javax.imageio.ImageIO
 
 import com.intellij.util.PathUtil
-import de.ax.powermode.{Util, PowerMode}
 import de.ax.powermode.power.ElementOfPower
+import de.ax.powermode.{PowerMode, Util}
 
 /**
   * Created by nyxos on 10.03.16.
   */
 object PowerFlame {
-
+  val resolution = 256
+  val imageFrames = 25
   lazy val images = {
     val file = new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), s"fire/animated/$resolution")
     val imageFiles = file.listFiles()
@@ -37,8 +38,7 @@ object PowerFlame {
       bufferedImage
     }
   }
-  val resolution = 256
-  val imageFrames = 25
+
 
   private def getBufferedImagesFromDebugDir(files: Array[File]): List[BufferedImage] = {
     files.toList.filter(_.isFile).map { f =>
@@ -73,17 +73,17 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
   var i = 0
   var currentImage: BufferedImage = null
 
-  override def update(delta:Float): Boolean = {
+  override def update(delta: Float): Boolean = {
     if (alive) {
-      currentImage = PowerFlame.images(i % PowerFlame.imageFrames)
+      currentImage = PowerFlame.images(i % PowerFlame.images.size)
       i += 1
-      x = _x - (0.5 * _width * lifeFactor ).toInt
+      x = _x - (0.5 * _width * lifeFactor).toInt
       if (up)
-        y = _y - (1.1 * _height * lifeFactor ).toInt
+        y = _y - (1.1 * _height * lifeFactor).toInt
       else
-        y = _y + (0.25 * _height * lifeFactor ).toInt
-      width = (_width * lifeFactor ).toInt
-      height = (_height * lifeFactor ).toInt
+        y = _y + (0.25 * _height * lifeFactor).toInt
+      width = (_width * lifeFactor).toInt
+      height = (_height * lifeFactor).toInt
     }
     !alive
   }

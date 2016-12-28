@@ -41,32 +41,34 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
     def run {
       while (true) {
         try {
-          PowerMode.getInstance.reduced
-          try {
-            if (PowerMode.getInstance.isEnabled &&
-              PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)
-              && PowerMode.getInstance.isSoundsPlaying) {
+          if (PowerMode.getInstance != null) {
+            PowerMode.getInstance.reduced
+            try {
+              if (PowerMode.getInstance.isEnabled &&
+                PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)
+                && PowerMode.getInstance.isSoundsPlaying) {
 
-              sound.synchronized {
-                sound.play()
-              }
-            } else {
-              sound.synchronized {
-                sound.stop()
-              }
+                sound.synchronized {
+                  sound.play()
+                }
+              } else {
+                sound.synchronized {
+                  sound.stop()
+                }
 
+              }
+              sound.setVolume(PowerMode.getInstance.valueFactor)
+            } catch {
+              case e: Exception =>
+                e.printStackTrace()
             }
-            sound.setVolume(PowerMode.getInstance.valueFactor)
-          } catch {
-            case e: Exception =>
-              e.printStackTrace()
-          }
-          elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
-          try {
-            Thread.sleep(1000 / PowerMode.getInstance.frameRate)
-          }
-          catch {
-            case ignored: InterruptedException => {
+            elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
+            try {
+              Thread.sleep(1000 / PowerMode.getInstance.frameRate)
+            }
+            catch {
+              case ignored: InterruptedException => {
+              }
             }
           }
         } catch {

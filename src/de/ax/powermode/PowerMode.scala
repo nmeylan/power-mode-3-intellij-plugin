@@ -41,7 +41,12 @@ object PowerMode {
   val logger = Logger.getLogger(classOf[PowerMode])
 
   @Nullable def getInstance: PowerMode = {
-    ApplicationManager.getApplication.getComponent(classOf[PowerMode])
+    try {
+      ApplicationManager.getApplication.getComponent(classOf[PowerMode])
+    } catch {
+      case e: Exception =>
+        null
+    }
   }
 
   def obtainColorEdges(pm: PowerMode): ColorEdges = {
@@ -168,14 +173,17 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     })
   }
 
-
   def getEditorCaretPositions(editor: Editor): Seq[Point] = {
     editor.getCaretModel.getAllCarets.map({ c =>
-      val p: Point = editor.visualPositionToXY(c.getVisualPosition)
-      val location = editor.getScrollingModel.getVisibleArea.getLocation
-      p.translate(-location.x, -location.y)
-      p
+      getCaretPosition(editor, c)
     })
+  }
+
+  def getCaretPosition(editor: Editor, c: Caret): Point = {
+    val p: Point = editor.visualPositionToXY(c.getVisualPosition)
+    val location = editor.getScrollingModel.getVisibleArea.getLocation
+    p.translate(-location.x, -location.y)
+    p
   }
 
   def initializeAnimationByTypedAction(editor: Editor): Unit = {

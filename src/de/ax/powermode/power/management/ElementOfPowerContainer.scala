@@ -15,16 +15,18 @@
  */
 package de.ax.powermode.power.management
 
-import java.awt._
 import java.awt.event.{ComponentEvent, ComponentListener}
+import java.awt.{Graphics, Point, Rectangle}
 import javax.swing._
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.openapi.editor.{Caret, Editor, ScrollingModel}
+import com.intellij.openapi.editor.{Editor, ScrollingModel}
 import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
-import de.ax.powermode.power.element.{PowerFlame, PowerSpark}
+import de.ax.powermode.power.element.{PowerBam, PowerFlame, PowerSpark}
+
+import scala.collection.JavaConversions._
 
 object ElementOfPowerContainer {
   private val logger = Logger.getInstance(this.getClass)
@@ -35,8 +37,7 @@ object ElementOfPowerContainer {
   */
 class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentListener {
 
-  import ElementOfPowerContainer._
-
+  import ElementOfPowerContainer.logger
 
   val myParent = editor.getContentComponent
 
@@ -54,6 +55,67 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   var lastUpdate = System.currentTimeMillis()
 
 
+  var lastPositions = Seq.empty[(Point, Point)]
+  val myThread = new Thread(new Runnable {
+    override def run(): Unit = {
+
+      while (true) {
+        SwingUtilities.invokeAndWait(new Runnable {
+          override def run(): Unit = {
+            lastPositions = {
+
+              println(editor.getCaretModel.getAllCarets.map(_.hasSelection))
+              editor.getCaretModel.getAllCarets.filter(_.hasSelection).map(caret => {
+
+                println(caret.getSelectionStart)
+                println(caret.getSelectionEnd)
+                (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
+                  Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionEnd), caret.getEditor))
+              }
+              )
+            }
+            println(lastPositions)
+          }
+        })
+
+        Thread.sleep(1000)
+      }
+    }
+  })
+  //todo: make the deletion animation run
+  //  myThread.start()
+
+  /* editor.getDocument.addDocumentListener(new DocumentAdapter {
+
+
+     override def documentChanged(e: DocumentEvent): Unit = {
+       val shouldAnimate = e.getNewFragment.length() > 100 ||
+         e.getOldFragment.length() > 100 ||
+         e.getOldFragment.toString.contains("\n") ||
+         e.getNewFragment.toString.contains("\n")
+
+       if (lastPositions.nonEmpty && shouldAnimate) {
+         val myLastPositions = lastPositions
+         val currentPositions = getAllCaretPositions
+         SwingUtilities.invokeLater(new Runnable {
+           override def run(): Unit = {
+             initializeAnimations(myLastPositions)
+           }
+         })
+       }
+     }
+   })
+    */
+
+  def initializeAnimations(dimensions: Seq[(Point, Point)]): Unit = {
+    dimensions.foreach { case (a, b) => initializeAnimation(a, b) }
+    repaint()
+  }
+
+  def getAllCaretPositions: Seq[Point] = {
+    editor.getCaretModel.getAllCarets.map(caret => Util.getPoint(caret.getVisualPosition, caret.getEditor))
+  }
+
   def updateElementsOfPower() {
     var delta = System.currentTimeMillis() - lastUpdate
     if (delta > (1000.0 / powerMode.frameRate) * 2)
@@ -66,7 +128,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     }
   }
 
-  def initializeAnimation(point: Point ) {
+  def initializeAnimation(point: Point) {
 
     this.setBounds(getMyBounds)
 
@@ -81,6 +143,18 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       doShake(shakeComponents)
     }
     repaint()
+  }
+
+  def initializeAnimation(a: Point, b: Point): Unit = {
+    println("initializing")
+    println(a)
+    println(b)
+    val x = a.x
+    val y = a.y - 50
+    val width = math.max(b.x - x, 50)
+    val height = math.max(b.y - y, 50)
+    val dim = math.min(math.max(math.max(width, height), 50), 1000)
+    elementsOfPower :+=(PowerBam(x, y, dim, dim, 1000), getScrollPosition)
   }
 
   def addFlames(point: Point): Unit = {
