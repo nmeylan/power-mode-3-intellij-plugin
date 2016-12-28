@@ -96,18 +96,18 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
     elementsOfPowerContainers.remove(event.getEditor)
   }
 
-  def update(editor: Editor, pos: Point) {
+  def initializeAnimation(editor: Editor, pos: Point) {
     if (PowerMode.getInstance.isEnabled) {
       SwingUtilities.invokeLater(new Runnable() {
         def run {
-          updateInUI(editor, pos)
+          initializeInUI(editor, pos)
         }
       })
     }
   }
 
-  private def updateInUI(editor: Editor, pos: Point) {
-    elementsOfPowerContainers.get(editor).foreach(_.update(pos))
+  private def initializeInUI(editor: Editor, pos: Point) {
+    elementsOfPowerContainers.get(editor).foreach(_.initializeAnimation(pos))
   }
 
 

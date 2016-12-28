@@ -138,7 +138,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
       override def caretPositionChanged(caretEvent: CaretEvent): Unit = {
         if (!modified && caretAction) {
-          updateCaret(caretEvent.getCaret)
+          initializeAnimationByCaretEvent(caretEvent.getCaret)
         }
         modified = false
       }
@@ -160,7 +160,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
         if (PowerMode.getInstance.isEnabled) {
           PowerMode.getInstance.updated
           if (!caretAction) {
-            updateEditor(editor)
+            initializeAnimationByTypedAction(editor)
           }
         }
         rawHandler.execute(editor, c, dataContext)
@@ -178,14 +178,14 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     })
   }
 
-  def updateEditor(editor: Editor): Unit = {
+  def initializeAnimationByTypedAction(editor: Editor): Unit = {
     val isActualEditor = Try {
       editor.getColorsScheme.getClass.getName.contains("EditorImpl")
     }.getOrElse(false)
     if (isActualEditor) {
       maybeElementOfPowerContainerManager.foreach(cm =>
         getEditorCaretPositions(editor).foreach(pos =>
-          cm.update(editor, pos)))
+          cm.initializeAnimation(editor, pos)))
     }
   }
 
@@ -193,12 +193,12 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     Util.getPoint(caret.getVisualPosition, caret.getEditor)
   }
 
-  private def updateCaret(caret: Caret) {
+  private def initializeAnimationByCaretEvent(caret: Caret) {
     val isActualEditor = Try {
       caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")
     }.getOrElse(false)
     if (isActualEditor) {
-      maybeElementOfPowerContainerManager.foreach(_.update(caret.getEditor, getCaretPosition(caret)))
+      maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(caret.getEditor, getCaretPosition(caret)))
     }
   }
 
