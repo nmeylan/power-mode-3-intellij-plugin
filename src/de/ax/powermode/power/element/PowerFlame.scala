@@ -14,8 +14,7 @@ import de.ax.powermode.{PowerMode, Util}
   * Created by nyxos on 10.03.16.
   */
 object PowerFlame {
-  val resolution = 256
-  val imageFrames = 25
+
   lazy val images = {
     val file = new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), s"fire/animated/$resolution")
     val imageFiles = file.listFiles()
@@ -38,7 +37,8 @@ object PowerFlame {
       bufferedImage
     }
   }
-
+  val resolution = 256
+  val imageFrames = 25
 
   private def getBufferedImagesFromDebugDir(files: Array[File]): List[BufferedImage] = {
     files.toList.filter(_.isFile).map { f =>

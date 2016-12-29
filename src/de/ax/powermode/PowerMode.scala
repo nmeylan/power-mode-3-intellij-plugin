@@ -65,6 +65,10 @@ object PowerMode {
 
 @State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+  var bamLife: Long = 1000
+
+  var isBamEnabled: Boolean = true
+
   var isSoundsPlaying = false
 
   var soundsFolder = Option.empty[File]
@@ -427,5 +431,17 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
   def getIsSoundsPlaying = isSoundsPlaying
+
+  def getBamLife = bamLife
+
+  def setBamLife(l: Long) {
+    bamLife = l
+  }
+
+  def setIsBamEnabled(b: Boolean) {
+    isBamEnabled = b
+  }
+
+  def getIsBamEnabled = isBamEnabled
 
 }

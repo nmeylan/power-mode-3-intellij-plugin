@@ -65,24 +65,15 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
         SwingUtilities.invokeAndWait(new Runnable {
           override def run(): Unit = {
             lastEmptyPositions = editor.getCaretModel.getAllCarets.filterNot(_.hasSelection).map(caret => {
-              println(caret.getSelectionStart)
-              println(caret.getSelectionEnd)
               Util.getPoint(caret.getVisualPosition, caret.getEditor)
             }
             )
             lastPositions = {
-
-              println(editor.getCaretModel.getAllCarets.map(_.hasSelection))
               editor.getCaretModel.getAllCarets.filter(_.hasSelection).map(caret => {
-
-                println(caret.getSelectionStart)
-                println(caret.getSelectionEnd)
                 (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
                   Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionEnd), caret.getEditor))
-              }
-              )
+              })
             }
-            println(lastPositions)
           }
         })
 
@@ -94,48 +85,49 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
 
   editor.getDocument.addDocumentListener(new DocumentAdapter {
     override def documentChanged(e: DocumentEvent): Unit = {
-      val shouldAnimate = e.getNewFragment.length() > 100 ||
-        e.getOldFragment.length() > 100 ||
-        e.getOldFragment.toString.contains("\n") ||
-        e.getNewFragment.toString.contains("\n")
+      if (powerMode.isBamEnabled) {
+        val shouldAnimate = {
+          e.getNewFragment.length() > 100 ||
+            e.getOldFragment.length() > 100 ||
+            e.getOldFragment.toString.count('\n' == _) > 1 ||
+            e.getNewFragment.toString.count('\n' == _) > 1
 
-      if (lastPositions.nonEmpty && shouldAnimate) {
-        val myLastPositions = lastPositions
-        val currentPositions = getAllCaretPositions
-        SwingUtilities.invokeLater(new Runnable {
-          override def run(): Unit = {
-            initializeAnimations(myLastPositions)
-          }
-        })
-      }
-      if (lastEmptyPositions.nonEmpty && shouldAnimate) {
+        }
+
+        if (lastPositions.nonEmpty && shouldAnimate) {
+          val myLastPositions = lastPositions
+          val currentPositions = getAllCaretPositions
+          SwingUtilities.invokeLater(new Runnable {
+            override def run(): Unit = {
+              initializeAnimations(myLastPositions)
+            }
+          })
+        }
+        if (lastEmptyPositions.nonEmpty && shouldAnimate) {
 
 
-        val currentPositions = getAllCaretPositions
-        SwingUtilities.invokeLater(new Runnable {
-          override def run(): Unit = {
-            val count: Int = (e.getOldFragment.toString + e.getNewFragment.toString).count('\n' ==)
-            val myLastPositions: Seq[(Point, Point)] = {
-              println(editor.getCaretModel.getAllCarets.map(_.hasSelection))
-              val selectionCarets = editor.getCaretModel.getAllCarets.filter(_.hasSelection)
+          val currentPositions = getAllCaretPositions
+          SwingUtilities.invokeLater(new Runnable {
+            override def run(): Unit = {
+              val myLastPositions: Seq[(Point, Point)] = {
+                val selectionCarets = editor.getCaretModel.getAllCarets.filter(_.hasSelection)
 
                 selectionCarets.map(caret => {
-                  println(caret.getSelectionStart)
-                  println(caret.getSelectionEnd)
                   (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
                     Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionEnd), caret.getEditor))
                 })
-            }
-            if (myLastPositions.nonEmpty) {
-              myLastPositions.foreach { case (a, b) => initializeAnimation(a, b) }
-            } else {
-              getAllCaretPositions.foreach { p => initializeAnimation(p, new Point(p.x + 200, p.y + 10)) }
-            }
+              }
+              if (myLastPositions.nonEmpty) {
+                myLastPositions.foreach { case (a, b) => initializeAnimation(a, b) }
+              } else {
+                getAllCaretPositions.foreach { p => initializeAnimation(p, new Point(p.x + 200, p.y + 10)) }
+              }
 
-          }
-        })
+            }
+          })
+        }
+
       }
-
     }
   })
 
@@ -179,19 +171,15 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   def initializeAnimation(a: Point, b: Point): Unit = {
-    println("initializing")
-    println(a)
-    println(b)
     val x = a.x
     var y = a.y
     val width = math.max(b.x - x, 50)
     val height = math.max(b.y - y, 50)
-    val dim = math.max(math.max(width, height), 50)
+    val dim = (math.max(math.max(width, height), 50) * powerMode.valueFactor).toInt
     if (b.y - y.abs < dim) {
       y = y - dim / 2
     }
-
-    elementsOfPower :+=(PowerBam(x, y, dim, dim, 1000), getScrollPosition)
+    elementsOfPower :+=(PowerBam(x, y, dim, dim, powerMode.bamLife * powerMode.valueFactor toLong), getScrollPosition)
   }
 
   def addFlames(point: Point): Unit = {

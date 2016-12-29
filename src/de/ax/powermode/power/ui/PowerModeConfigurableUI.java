@@ -11,8 +11,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * @author Baptiste Mesta
@@ -67,6 +65,9 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JCheckBox visualizeEveryCaretMovementCheckBox;
     private JCheckBox PLAYMUSICCheckBox;
     private JTextField soundsFolder;
+    private JCheckBox BAMCheckBox;
+    private JLabel bamLifeValue;
+    private JSlider bamLife;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -79,6 +80,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         FLAMESCheckBox.addChangeListener(e -> powerMode.setFlamesEnabled(FLAMESCheckBox.isSelected()));
         PARTICLESCheckBox.setSelected(powerMode.isSparksEnabled());
         PARTICLESCheckBox.addChangeListener(e -> powerMode.setSparksEnabled(PARTICLESCheckBox.isSelected()));
+        BAMCheckBox.setSelected(powerMode.isBamEnabled());
+        BAMCheckBox.addChangeListener(e -> powerMode.setIsBamEnabled(BAMCheckBox.isSelected()));
         visualizeEveryCaretMovementCheckBox.setSelected(powerMode.isCaretAction());
         visualizeEveryCaretMovementCheckBox.addChangeListener(e -> powerMode.setIsCaretAction(visualizeEveryCaretMovementCheckBox.isSelected()));
         PLAYMUSICCheckBox.setSelected(powerMode.isSoundsPlaying());
@@ -111,6 +114,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         initValues(powerMode.getHeatup(), heatup, heatupValue, slider -> powerMode.setHeatup(slider.getValue()));
         initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, slider -> powerMode.setHeatupTime(slider.getValue()));
         initValues(powerMode.getFlameLife(), flameLife, flameLifeValue, slider -> powerMode.setFlameLife(slider.getValue()));
+        initValues((int) powerMode.getBamLife(), bamLife, bamLifeValue, slider -> powerMode.setBamLife(slider.getValue()));
         initValues(powerMode.getmaxFlameSize(), maxFlameSize, maxFlameSizeValue, slider -> powerMode.setmaxFlameSize(slider.getValue()));
         initValues(powerMode.getKeyStrokesPerMinute(), keyStrokesPerMinute, keyStrokesPerMinuteValue, slider -> powerMode.setKeyStrokesPerMinute(slider.getValue()));
         initValues(powerMode.getFrameRate(), frameRate, frameRateValue, slider -> powerMode.setFrameRate(slider.getValue()));
