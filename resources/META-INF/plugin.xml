@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>de.ax.powermode</id>
     <name>Power Mode II</name>
-    <version>2.6.8</version>
+    <version>2.8.6</version>
     <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
     </vendor>
 
@@ -14,11 +14,16 @@
             <li>Editor shaking</li>
             <li>Flames</li>
             <li>Heatup based on typing speed. The more you type the more happens.</li>
-            <li>Everything is configurable</li>
             <li>Keyboard shortcut to toggle power mode [shift ctrl alt O]</li>
-            <li>choose particle colors and transparency within a color space</li>
-            <li>adjust particle velocity and gravitation</li>
-            <li>modify the animation frame rate</li>
+            <li>Choose particle colors and transparency within a color space</li>
+            <li>Adjust particle velocity and gravitation</li>
+            <li>Modify the animation frame rate</li>
+            <li>Multi caret support</li>
+            <li>Animation on caret movement</li>
+            <li>Play music folder: volume based on heatup</li>
+            <li>Play next song action: [shift ctrl alt M]</li>
+            <li>Visualize bigger file editing with "BAM!"</li>
+            <li>Everything is configurable</li>
         </ul>
         <h2>Usage</h2>
         <ol>

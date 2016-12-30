@@ -13,13 +13,22 @@ How to use
 Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
 
 ## Features
-* Exploding falling sparks
-* Editor shaking
-* Flames
-* Heatup based on typing speed. The more you type the more happens.
-* Everything is configurable
-* Keyboard shortcut to toggle power mode [shift ctrl alt O]
-
+<ul>
+    <li>Exploding falling sparks</li>
+    <li>Editor shaking</li>
+    <li>Flames</li>
+    <li>Heatup based on typing speed. The more you type the more happens.</li>
+    <li>Keyboard shortcut to toggle power mode [shift ctrl alt O]</li>
+    <li>Choose particle colors and transparency within a color space</li>
+    <li>Adjust particle velocity and gravitation</li>
+    <li>Modify the animation frame rate</li>
+    <li>Multi caret support</li>
+    <li>Animation on caret movement</li>
+    <li>Play music folder: volume based on heatup</li>
+    <li>Play next song action: [shift ctrl alt M]</li>
+    <li>Visualize bigger file editing with "BAM!"</li>
+    <li>Everything is configurable</li>
+</ul>
  
 ## "Architecture"
 
