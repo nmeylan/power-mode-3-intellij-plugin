@@ -77,7 +77,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
           }
         })
 
-        Thread.sleep(1000)
+        Thread.sleep(1000 / PowerMode.getInstance.frameRate)
       }
     }
   })
