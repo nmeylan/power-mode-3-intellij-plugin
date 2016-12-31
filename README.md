@@ -3,13 +3,15 @@ Power Mode II Intellij plugin
 
 [![Join the chat at https://gitter.im/baptistemesta/power-mode-intellij-plugin](https://badges.gitter.im/baptistemesta/power-mode-intellij-plugin.svg)](https://gitter.im/baptistemesta/power-mode-intellij-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[Plugin available in Jetbrains plugin repositories](https://plugins.jetbrains.com/plugin/8251)
+
 
 ![Demo](/images/powerMode.gif)
 
 Installation
 --------------
 [Watch the Video](https://www.youtube.com/watch?v=aIWs7YQ9aMs)
+
+[Install from Jetbrains plugin repositories](https://plugins.jetbrains.com/plugin/8251)
 
 How to use
 ---------
