@@ -94,13 +94,20 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
 
         }
         if (shouldAnimate) {
-          val width = (((e.getOldFragment.toString + e.getNewFragment.toString).split("\n").maxBy(_.length).length) / 2.0) * editor.getLineHeight
+          val width = {
+            val l = (e.getOldFragment.toString + e.getNewFragment.toString).split("\n")
+            if (l.nonEmpty) {
+              (l.maxBy(_.length).length / 2.0) * editor.getLineHeight
+            } else {
+              0
+            }
+          }
           if (lastPositions.nonEmpty) {
             val myLastPositions = lastPositions
             val currentPositions = getAllCaretPositions
             SwingUtilities.invokeLater(new Runnable {
               override def run(): Unit = {
-                myLastPositions.foreach { case (a, b) => initializeAnimation(a, new Point(b.x toInt, b.y), width) }
+                myLastPositions.foreach { case (a, b) => initializeAnimation(a, new Point(b.x, b.y), width) }
               }
             })
           }
