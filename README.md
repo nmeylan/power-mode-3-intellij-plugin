@@ -16,7 +16,7 @@ Installation
 How to use
 ---------
 
-Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode
+Install the plugin then simply enable the sparkling in Preferences > Appearance > Power mode II
 
 ## Features
 <ul>
