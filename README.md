@@ -7,6 +7,10 @@ Power Mode II Intellij plugin
 
 ![Demo](/images/powerMode.gif)
 
+Installation
+--------------
+[Watch the Video](https://www.youtube.com/watch?v=aIWs7YQ9aMs)
+
 How to use
 ---------
 
