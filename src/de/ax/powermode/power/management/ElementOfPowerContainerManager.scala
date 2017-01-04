@@ -21,8 +21,8 @@ import javax.swing._
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
 import com.intellij.openapi.editor.impl.EditorImpl
-import de.ax.powermode.PowerMode
 import de.ax.powermode.power.sound.PowerSound
+import de.ax.powermode.{Power, PowerMode}
 
 import scala.collection.mutable
 import scala.util.Try
@@ -30,41 +30,23 @@ import scala.util.Try
 /**
   * @author Baptiste Mesta
   */
-class ElementOfPowerContainerManager extends EditorFactoryAdapter {
+class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
 
 
   val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
-  lazy val sound = new PowerSound(PowerMode.getInstance.soundsFolder, PowerMode.getInstance.valueFactor)
+  lazy val sound = new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
 
 
   val elementsOfPowerUpdateThread = new Thread(new Runnable() {
     def run {
       while (true) {
         try {
-          if (PowerMode.getInstance != null) {
-            PowerMode.getInstance.reduced
+          if (powerMode != null) {
+            powerMode.reduceHeatup
+            updateSound
+            updateContainers
             try {
-              if (PowerMode.getInstance.isEnabled &&
-                PowerMode.getInstance.soundsFolder.exists(f => f.exists() && f.isDirectory)
-                && PowerMode.getInstance.isSoundsPlaying) {
-
-                sound.synchronized {
-                  sound.play()
-                }
-              } else {
-                sound.synchronized {
-                  sound.stop()
-                }
-
-              }
-              sound.setVolume(PowerMode.getInstance.valueFactor)
-            } catch {
-              case e: Exception =>
-                e.printStackTrace()
-            }
-            elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
-            try {
-              Thread.sleep(1000 / PowerMode.getInstance.frameRate)
+              Thread.sleep(1000 / powerMode.frameRate)
             }
             catch {
               case ignored: InterruptedException => {
@@ -74,6 +56,26 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
         } catch {
           case e => PowerMode.logger.error(e.getMessage, e)
         }
+      }
+    }
+
+    def updateContainers: Unit = {
+      elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
+    }
+
+    def updateSound: Unit = {
+      try {
+        if (powerMode.isEnabled &&
+          powerMode.soundsFolder.exists(f => f.exists() && f.isDirectory)
+          && powerMode.isSoundsPlaying) {
+          sound.play()
+        } else {
+          sound.stop()
+        }
+        sound.setVolume(powerMode.valueFactor)
+      } catch {
+        case e: Exception =>
+          e.printStackTrace()
       }
     }
   })
@@ -99,7 +101,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter {
   }
 
   def initializeAnimation(editor: Editor, pos: Point) {
-    if (PowerMode.getInstance.isEnabled) {
+    if (powerMode.isEnabled) {
       SwingUtilities.invokeLater(new Runnable() {
         def run {
           initializeInUI(editor, pos)

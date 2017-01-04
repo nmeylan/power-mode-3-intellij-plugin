@@ -13,8 +13,8 @@ import de.ax.powermode.PowerMode
 class PowerSound(folder: => Option[File], valueFactor: => Double) {
   def next(): Unit = {
     this.synchronized {
-      stop()
-      play()
+      doStop()
+      doPlay()
     }
   }
 
@@ -33,7 +33,7 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
     mediaPlayer.foreach(_.setVolume((0.75 * v * v) + (0.25 * v)))
   }
 
-  def stop() = {
+  private def doStop() = {
     synchronized {
       mediaPlayer.foreach(_.stop())
       playing = false
@@ -46,7 +46,15 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
 
   var lastFolder = folder
 
-  def play() = {
+  def stop() = this.synchronized {
+    doStop()
+  }
+
+  def play() = this.synchronized {
+    doPlay()
+  }
+
+  private def doPlay() = {
     if (lastFolder.map(_.getAbsolutePath) != folder.map(_.getAbsolutePath)) {
       mediaPlayer.foreach(_.stop())
       playing = false

@@ -5,9 +5,9 @@ import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 /**
   * Created by nyxos on 27.12.16.
   */
-class NextSongAction extends AnAction {
+class NextSongAction extends AnAction with Power{
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
-    PowerMode.getInstance.maybeElementOfPowerContainerManager.foreach(cm => {
+    powerMode.maybeElementOfPowerContainerManager.foreach(cm => {
       cm.sound.next()
     })
   }

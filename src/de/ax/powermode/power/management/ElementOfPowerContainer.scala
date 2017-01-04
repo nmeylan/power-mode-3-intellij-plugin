@@ -36,7 +36,7 @@ object ElementOfPowerContainer {
 /**
   * @author Baptiste Mesta
   */
-class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentListener {
+class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentListener with Power{
 
   import ElementOfPowerContainer.logger
 
@@ -77,7 +77,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
           }
         })
 
-        Thread.sleep(1000 / PowerMode.getInstance.frameRate)
+        Thread.sleep(1000 / powerMode.frameRate)
       }
     }
   })
@@ -222,9 +222,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     (((Math.random() * (to - from)) + from) / 255).toFloat
   }
 
-  def powerMode: PowerMode = {
-    PowerMode.getInstance
-  }
+
 
   def getScrollPosition = (
     editor.getScrollingModel.getHorizontalScrollOffset,

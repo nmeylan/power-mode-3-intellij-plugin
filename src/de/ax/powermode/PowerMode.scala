@@ -15,22 +15,18 @@
  */
 package de.ax.powermode
 
-import java.awt.Point
 import java.io.File
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
-import com.intellij.openapi.editor.actionSystem.{EditorActionManager, TypedActionHandler}
-import com.intellij.openapi.editor.event._
-import com.intellij.openapi.editor.{Caret, Editor, EditorFactory}
+import com.intellij.openapi.editor.EditorFactory
+import com.intellij.openapi.editor.actionSystem.EditorActionManager
 import com.intellij.util.xmlb.XmlSerializerUtil
 import de.ax.powermode.power.management.ElementOfPowerContainerManager
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
-import scala.collection.JavaConversions._
 import scala.util.Try
 
 /**
@@ -108,7 +104,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
 
-  def updated {
+  def increaseHeatup {
     val ct = System.currentTimeMillis()
     lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
   }
@@ -127,7 +123,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     tf
   }
 
-  def reduced: Unit = {
+  def reduceHeatup: Unit = {
     val ct = System.currentTimeMillis()
     lastKeys = lastKeys.filter(_ >= ct - heatupTime)
   }
@@ -142,76 +138,10 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
       }
     }))
     val editorActionManager = EditorActionManager.getInstance
-    val myCaretListener: CaretListener = new CaretListener {
-      var modified = true
-
-      override def caretPositionChanged(caretEvent: CaretEvent): Unit = {
-        if (!modified && caretAction) {
-          initializeAnimationByCaretEvent(caretEvent.getCaret)
-        }
-        modified = false
-      }
-
-      override def caretRemoved(caretEvent: CaretEvent): Unit = {
-        modified = true
-      }
-
-      override def caretAdded(caretEvent: CaretEvent): Unit = {
-        modified = true
-      }
-    }
-    val multicaster: EditorEventMulticaster = EditorFactory.getInstance().getEventMulticaster
-    multicaster.addCaretListener(myCaretListener)
-
-    val rawHandler = editorActionManager.getTypedAction.getRawHandler
-    editorActionManager.getTypedAction.setupRawHandler(new TypedActionHandler() {
-      def execute(editor: Editor, c: Char, dataContext: DataContext) {
-        if (PowerMode.getInstance.isEnabled) {
-          PowerMode.getInstance.updated
-          if (!caretAction) {
-            initializeAnimationByTypedAction(editor)
-          }
-        }
-        rawHandler.execute(editor, c, dataContext)
-      }
-    })
-  }
-
-  def getEditorCaretPositions(editor: Editor): Seq[Point] = {
-    editor.getCaretModel.getAllCarets.map({ c =>
-      getCaretPosition(editor, c)
-    })
-  }
-
-  def getCaretPosition(editor: Editor, c: Caret): Point = {
-    val p: Point = editor.visualPositionToXY(c.getVisualPosition)
-    val location = editor.getScrollingModel.getVisibleArea.getLocation
-    p.translate(-location.x, -location.y)
-    p
-  }
-
-  def initializeAnimationByTypedAction(editor: Editor): Unit = {
-    val isActualEditor = Try {
-      editor.getColorsScheme.getClass.getName.contains("EditorImpl")
-    }.getOrElse(false)
-    if (isActualEditor) {
-      maybeElementOfPowerContainerManager.foreach(cm =>
-        getEditorCaretPositions(editor).foreach(pos =>
-          cm.initializeAnimation(editor, pos)))
-    }
-  }
-
-  def getCaretPosition(caret: Caret): Point = {
-    Util.getPoint(caret.getVisualPosition, caret.getEditor)
-  }
-
-  private def initializeAnimationByCaretEvent(caret: Caret) {
-    val isActualEditor = Try {
-      caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")
-    }.getOrElse(false)
-    if (isActualEditor) {
-      maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(caret.getEditor, getCaretPosition(caret)))
-    }
+    EditorFactory.getInstance().getEventMulticaster.addCaretListener(new MyCaretListener())
+    maybeElementOfPowerContainerManager.map(cm =>
+      editorActionManager.getTypedAction.setupRawHandler
+      (new MyTypedActionHandler(editorActionManager.getTypedAction.getRawHandler)))
   }
 
   def disposeComponent {
