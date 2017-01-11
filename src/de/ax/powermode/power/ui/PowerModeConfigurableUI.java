@@ -82,7 +82,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         PARTICLESCheckBox.addChangeListener(e -> powerMode.setSparksEnabled(PARTICLESCheckBox.isSelected()));
         BAMCheckBox.setSelected(powerMode.isBamEnabled());
         BAMCheckBox.addChangeListener(e -> powerMode.setIsBamEnabled(BAMCheckBox.isSelected()));
-        visualizeEveryCaretMovementCheckBox.setSelected(powerMode.isCaretAction());
+        visualizeEveryCaretMovementCheckBox.setSelected(powerMode.getIsCaretAction());
         visualizeEveryCaretMovementCheckBox.addChangeListener(e -> powerMode.setIsCaretAction(visualizeEveryCaretMovementCheckBox.isSelected()));
         PLAYMUSICCheckBox.setSelected(powerMode.isSoundsPlaying());
         PLAYMUSICCheckBox.addChangeListener(e -> powerMode.setIsSoundsPlaying(PLAYMUSICCheckBox.isSelected()));

@@ -348,7 +348,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   def getSoundsFolder = soundsFolder.map(_.getAbsolutePath).getOrElse("")
 
-  def isCaretAction: Boolean = {
+  def getIsCaretAction: Boolean = {
     caretAction
   }
 
