@@ -20,9 +20,8 @@ import javax.swing._
 
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
-import com.intellij.openapi.editor.impl.EditorImpl
 import de.ax.powermode.power.sound.PowerSound
-import de.ax.powermode.{Power, PowerMode}
+import de.ax.powermode.{Power, PowerMode, Util}
 
 import scala.collection.mutable
 import scala.util.Try
@@ -84,12 +83,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   override def editorCreated(event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
     val isActualEditor = Try {
-      editor.getColorsScheme.getClass.getName.contains("EditorImpl") && !(editor match {
-        case impl: EditorImpl =>
-          impl.getPreferredSize.height < 200 || impl.getPreferredSize.width < 200
-        case _ =>
-          false
-      })
+      editor.getColorsScheme.getClass.getName.contains("EditorImpl") && Util.editorOk(editor, 100)
     }.getOrElse(false)
     if (isActualEditor) {
       elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor))

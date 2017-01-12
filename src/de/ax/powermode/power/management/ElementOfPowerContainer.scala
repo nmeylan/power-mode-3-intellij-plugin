@@ -21,7 +21,6 @@ import javax.swing._
 
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.event.{DocumentAdapter, DocumentEvent}
-import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Editor, ScrollingModel}
 import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
@@ -36,7 +35,7 @@ object ElementOfPowerContainer {
 /**
   * @author Baptiste Mesta
   */
-class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentListener with Power{
+class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentListener with Power {
 
   import ElementOfPowerContainer.logger
 
@@ -223,22 +222,13 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
 
-
   def getScrollPosition = (
     editor.getScrollingModel.getHorizontalScrollOffset,
     editor.getScrollingModel.getVerticalScrollOffset
     )
 
   def doShake(myShakeComponents: Seq[JComponent]): Unit = {
-    val editorOk = {
-      !(editor match {
-        case impl: EditorImpl =>
-          impl.getPreferredSize.height < 100 || impl.getPreferredSize.width < 100
-        case _ =>
-          false
-      })
-    }
-    if (editorOk) {
+    if (Util.editorOk(editor, 100)) {
       shakeData = shakeData match {
         case Some((dx, dy, scrollX, scrollY)) =>
           myShakeComponents.foreach { myShakeComponent =>
@@ -260,6 +250,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       lastShake = System.currentTimeMillis()
     }
   }
+
 
   def generateShakeOffset: Int = {
     val range = powerMode.shakeRange * powerMode.valueFactor

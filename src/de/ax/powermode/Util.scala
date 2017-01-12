@@ -6,6 +6,7 @@ import java.awt.{AlphaComposite, Point}
 import java.io.File
 import javax.imageio.ImageIO
 
+import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Caret, Editor, VisualPosition}
 import com.intellij.util.PathUtil
 
@@ -21,6 +22,19 @@ object Util {
     } else {
       f
     }
+  }
+
+  def editorOk(editor: Editor, maxSize: Int): Boolean = {
+    !(editor match {
+      case impl: EditorImpl =>
+        try {
+          impl.getPreferredSize.height < maxSize || impl.getPreferredSize.width < maxSize
+        } catch {
+          case _ => true
+        }
+      case _ =>
+        false
+    })
   }
 
   lazy val powerBamImage = {
