@@ -35,6 +35,29 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     <li>Visualize bigger file editing with "BAM!"</li>
     <li>Everything is configurable</li>
 </ul>
+
+## Plugin Development Setup 
+### 1 [install scala 2.11](https://www.scala-lang.org/download/) and create a global scala SDK
+### 2 [download and install IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
+### 3 Add the Community Edition as global IntelliJ Platform Plugin SDK
+ ![Add the Community Edition as IntelliJ Platform Plugin SDK](/images/sdk1.png)
+### 4 Checkout power mode II Repository from github
+### 5 Create a project from existing sources but dont import the default module or libraries.
+ Then create a plugin module in the project root folder (the Power Mode II repo folder. don't create a subfolder).
+ Add the Scala SDK in Dependencies.
+ 
+![create a plugin project](/images/plugin1.png)           
+
+![create a plugin project](/images/plugin2.png)
+
+### 6 Add a plugin run configuration
+![Add a plugin run configuration](/images/run1.png)
+### 7 Press run button
+
+This should start a new IntelliJ CE Instance with PowerMode II plugin installed and independent sandbox configuration. 
+ 
+### 8 Build the installable plugin zip file
+ Hit `Build -> Prepare Plugin Module for Deployment`
  
 ## "Architecture"
 
