@@ -27,6 +27,7 @@ import de.ax.powermode.power.ElementOfPower
 import de.ax.powermode.power.element.{PowerBam, PowerFlame, PowerSpark}
 
 import scala.collection.JavaConversions._
+import scala.util.{Success, Try}
 
 object ElementOfPowerContainer {
   private val logger = Logger.getInstance(this.getClass)
@@ -63,10 +64,9 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       while (true) {
         SwingUtilities.invokeAndWait(new Runnable {
           override def run(): Unit = {
-            lastEmptyPositions = editor.getCaretModel.getAllCarets.filterNot(_.hasSelection).map(caret => {
+            lastEmptyPositions = editor.getCaretModel.getAllCarets.filterNot(_.hasSelection).map(caret => Try {
               Util.getPoint(caret.getVisualPosition, caret.getEditor)
-            }
-            )
+            }).map(_.toOption).filter(_.isEmpty).map(_.get)
             lastPositions = {
               editor.getCaretModel.getAllCarets.filter(_.hasSelection).map(caret => {
                 (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
@@ -103,7 +103,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
           }
           if (lastPositions.nonEmpty) {
             val myLastPositions = lastPositions
-            val currentPositions = getAllCaretPositions
             SwingUtilities.invokeLater(new Runnable {
               override def run(): Unit = {
                 myLastPositions.foreach { case (a, b) => initializeAnimation(a, new Point(b.x, b.y), width) }
@@ -113,7 +112,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
           if (lastEmptyPositions.nonEmpty) {
 
 
-            val currentPositions = getAllCaretPositions
             SwingUtilities.invokeLater(new Runnable {
               override def run(): Unit = {
                 val myLastPositions: Seq[(Point, Point)] = {
@@ -127,10 +125,8 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
                 if (myLastPositions.nonEmpty) {
                   myLastPositions.foreach { case (a, b) => initializeAnimation(a, new Point(b.x, b.y), width) }
                 } else {
-
-                  getAllCaretPositions.foreach { p => initializeAnimation(p, new Point(p.x + width toInt, p.y + 10), width) }
+                  Try(getAllCaretPositions).toOption.foreach(_.foreach { p => initializeAnimation(p, new Point(p.x + width toInt, p.y + 10), width) })
                 }
-
               }
             })
           }

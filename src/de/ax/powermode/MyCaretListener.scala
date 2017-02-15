@@ -32,7 +32,7 @@ class MyCaretListener extends CaretListener with Power {
       caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")
     }.getOrElse(false)
     if (isActualEditor) {
-      powerMode.maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(caret.getEditor, Util.getCaretPosition(caret)))
+      Util.getCaretPosition(caret).toOption.foreach(p => powerMode.maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(caret.getEditor, p)))
     }
   }
 }

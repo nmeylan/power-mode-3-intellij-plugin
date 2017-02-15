@@ -10,6 +10,8 @@ import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Caret, Editor, VisualPosition}
 import com.intellij.util.PathUtil
 
+import scala.util.Try
+
 /**
   * Created by nyxos on 30.09.16.
   */
@@ -63,11 +65,11 @@ object Util {
     p
   }
 
-  def getCaretPosition(caret: Caret): Point = {
+  def getCaretPosition(caret: Caret): Try[Point] = Try{
     getPoint(caret.getVisualPosition, caret.getEditor)
   }
 
-  def getCaretPosition(editor: Editor, c: Caret): Point = {
+  def getCaretPosition(editor: Editor, c: Caret): Try[Point] = Try{
     val p: Point = editor.visualPositionToXY(c.getVisualPosition)
     val location = editor.getScrollingModel.getVisibleArea.getLocation
     p.translate(-location.x, -location.y)

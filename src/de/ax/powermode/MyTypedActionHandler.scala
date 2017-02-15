@@ -27,7 +27,8 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends Typed
   def getEditorCaretPositions(editor: Editor): Seq[Point] = {
     editor.getCaretModel.getAllCarets.map({ c =>
       Util.getCaretPosition(editor, c)
-    })
+    }).filter(_.isFailure)
+      .map(_.get)
   }
 
   def initializeAnimationByTypedAction(editor: Editor): Unit = {
