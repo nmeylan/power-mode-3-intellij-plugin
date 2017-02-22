@@ -68,6 +68,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JCheckBox BAMCheckBox;
     private JLabel bamLifeValue;
     private JSlider bamLife;
+    private JLabel heatupThresholdValue;
+    private JSlider heatupThreshold;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -113,6 +115,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         initValues(powerMode.getShakeRange(), shakeRange, shakeRangeValue, slider -> powerMode.setShakeRange(slider.getValue()));
         initValues(powerMode.getHeatup(), heatup, heatupValue, slider -> powerMode.setHeatup(slider.getValue()));
         initValues(powerMode.getHeatupTime(), heatupTime, heatupTimeValue, slider -> powerMode.setHeatupTime(slider.getValue()));
+        initValues(powerMode.getHeatupThreshold(), heatupThreshold, heatupThresholdValue, slider -> powerMode.setHeatupThreshold(slider.getValue()));
         initValues(powerMode.getFlameLife(), flameLife, flameLifeValue, slider -> powerMode.setFlameLife(slider.getValue()));
         initValues((int) powerMode.getBamLife(), bamLife, bamLifeValue, slider -> powerMode.setBamLife(slider.getValue()));
         initValues(powerMode.getmaxFlameSize(), maxFlameSize, maxFlameSizeValue, slider -> powerMode.setmaxFlameSize(slider.getValue()));

@@ -109,7 +109,14 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
   }
 
-  def valueFactor = heatupFactor + ((1 - heatupFactor) * timeFactor)
+  def valueFactor: Double = {
+    val base = heatupFactor +
+      ((1 - heatupFactor) * timeFactor)
+    val max = Seq((base - heatupThreshold) / (1 - heatupThreshold), 0.0).max
+    assert(max <= 1)
+    assert(max >= 0)
+    max
+  }
 
   def timeFactor: Double = {
     val tf = Try {
@@ -374,4 +381,13 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   def getIsBamEnabled = isBamEnabled
 
+  var heatupThreshold: Double = 0.0
+
+  def getHeatupThreshold: Int = {
+    (heatupThreshold * 100.0).toInt
+  }
+
+  def setHeatupThreshold(t: Int) {
+    heatupThreshold = t / 100.0
+  }
 }

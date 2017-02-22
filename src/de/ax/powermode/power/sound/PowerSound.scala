@@ -2,9 +2,11 @@ package de.ax.powermode.power.sound
 
 import java.io.File
 import javafx.embed.swing.JFXPanel
-import javafx.scene.media.{Media, MediaPlayer}
+import javafx.scene.media.{MediaException, Media, MediaPlayer}
 
 import de.ax.powermode.PowerMode
+
+import scala.util.Try
 
 /**
   * Created by nyxos on 03.10.16.
@@ -77,6 +79,8 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
           mediaPlayer
         }
       } catch {
+        case e:MediaException =>
+          PowerMode.logger.error(s"error playing file $f. Solution probably available at https://github.com/axaluss/power-mode-intellij-plugin/issues/15 . error:  ${e.getMessage}", e)
         case e =>
           PowerMode.logger.error(s"error playing file $f: ${e.getMessage}", e)
           playing = false
