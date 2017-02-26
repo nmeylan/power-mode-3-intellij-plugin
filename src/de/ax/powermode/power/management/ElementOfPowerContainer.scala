@@ -24,10 +24,9 @@ import com.intellij.openapi.editor.event.{DocumentAdapter, DocumentEvent}
 import com.intellij.openapi.editor.{Editor, ScrollingModel}
 import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
-import de.ax.powermode.power.element.{PowerBam, PowerFlame, PowerSpark}
+import de.ax.powermode.power.element.{PowerBam, PowerFlame, PowerIndicator, PowerSpark}
 
 import scala.collection.JavaConversions._
-import scala.util.Try
 
 object ElementOfPowerContainer {
   private val logger = Logger.getInstance(this.getClass)
@@ -41,11 +40,11 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   import ElementOfPowerContainer.logger
 
   val myParent = editor.getContentComponent
-
   myParent.add(this)
   this.setBounds(myParent.getBounds)
   setVisible(true)
   myParent.addComponentListener(this)
+
 
 
   val shakeComponents = Seq(editor.getComponent, editor.getContentComponent)
@@ -126,6 +125,10 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     }
   }
 
+  def addPowerIndicator(): Unit = {
+    elementsOfPower :+=(PowerIndicator(getMyBounds.width - 200, 10, 200, 200, 1000,editor), getScrollPosition)
+  }
+
   def initializeAnimation(point: Point) {
 
     this.setBounds(getMyBounds)
@@ -140,6 +143,9 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     if (powerMode.isShakeEnabled) {
       doShake(shakeComponents)
     }
+
+    addPowerIndicator()
+
     repaint()
   }
 
@@ -262,7 +268,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   def renderElementsOfPower(g: Graphics) {
-
+//               println(myParent.isDoubleBuffered)
     val scrollingModel: ScrollingModel = editor.getScrollingModel
     val xyNew = (
       scrollingModel.getHorizontalScrollOffset,
@@ -274,6 +280,11 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       val dxx = x - xyNew._1
       val dyy = y - xyNew._2
       elementOfPower.render(g, dxx, dyy)
+//      if (elementOfPower.isInstanceOf[PowerIndicator]) {
+//        elementOfPower.render(g, xyNew._1, xyNew._1)
+//      } else {
+//
+//      }
     }
 
   }

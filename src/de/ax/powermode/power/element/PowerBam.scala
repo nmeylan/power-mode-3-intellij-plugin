@@ -2,8 +2,8 @@ package de.ax.powermode.power.element
 
 import java.awt.{AlphaComposite, Graphics, Graphics2D}
 
+import de.ax.powermode.Util
 import de.ax.powermode.power.ElementOfPower
-import de.ax.powermode.{PowerMode, Util}
 
 /**
   * Created by nyxos on 28.12.16.
