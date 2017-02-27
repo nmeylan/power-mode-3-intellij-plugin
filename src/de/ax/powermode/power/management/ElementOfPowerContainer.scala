@@ -84,7 +84,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
             e.getNewFragment.toString.count('\n' == _) > 1
 
         }
-        println(s"shouldanimate: $shouldAnimate")
         if (shouldAnimate) {
           val width = {
             val l = (e.getOldFragment.toString + e.getNewFragment.toString).split("\n")
