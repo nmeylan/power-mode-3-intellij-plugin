@@ -39,16 +39,18 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   lazy val sound = new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
 
   def showIndicator(dataContext: DataContext) {
-    val maybeProject: Seq[Project] = Seq(dataContext.getData(DataConstants.PROJECT), dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT))
-      .toStream.flatMap(o =>Option(o).map(_.asInstanceOf[Project]))
-    maybeProject.headOption.foreach(p => {
-      val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
-      SwingUtilities.invokeLater(new Runnable {
-        override def run() = {
-          elementsOfPowerContainers.get(textEditor).foreach(_.addPowerIndicator())
-        }
+    if (powerMode.powerIndicatorEnabled && powerMode.isEnabled) {
+      val maybeProject: Seq[Project] = Seq(dataContext.getData(DataConstants.PROJECT), dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT))
+        .toStream.flatMap(o => Option(o).map(_.asInstanceOf[Project]))
+      maybeProject.headOption.foreach(p => {
+        val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
+        SwingUtilities.invokeLater(new Runnable {
+          override def run() = {
+            elementsOfPowerContainers.get(textEditor).foreach(_.addPowerIndicator())
+          }
+        })
       })
-    })
+    }
   }
 
   val elementsOfPowerUpdateThread = new Thread(new Runnable() {

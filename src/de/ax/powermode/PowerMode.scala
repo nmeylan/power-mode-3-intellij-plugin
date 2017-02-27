@@ -68,10 +68,6 @@ object PowerMode {
 class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
   var bamLife: Long = 1000
 
-  var isBamEnabled: Boolean = true
-
-  var isSoundsPlaying = false
-
   var soundsFolder = Option.empty[File]
 
 
@@ -110,6 +106,9 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   var maybeElementOfPowerContainerManager = Option.empty[ElementOfPowerContainerManager]
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
+  var isBamEnabled: Boolean = true
+  var isSoundsPlaying = false
+  var powerIndicatorEnabled=true
 
   def increaseHeatup(dataContext: Option[DataContext]=Option.empty[DataContext], keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
     val ct = System.currentTimeMillis()
@@ -445,4 +444,13 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def setHeatupThreshold(t: Int) {
     heatupThreshold = t / 100.0
   }
+
+  def isPowerIndicatorEnabled: Boolean = {
+    return powerIndicatorEnabled
+  }
+
+  def setIsPowerIndicatorEnabled(enabled: Boolean) {
+    powerIndicatorEnabled = enabled
+  }
+
 }

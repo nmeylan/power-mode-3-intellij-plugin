@@ -56,7 +56,7 @@ object PowerIndicator {
     } else {
       ""
     }
-  } 
+  }
 }
 
 case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, initLife: Long, editor: Editor) extends ElementOfPower {
@@ -68,7 +68,7 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
   var height: Double = 0
   PowerIndicator.addIndicator(this)
   val life2 = System.currentTimeMillis() + initLife
-  val grand=PowerIndicator.genGrand
+  val grand = PowerIndicator.genGrand
 
   override def life = {
 
@@ -113,7 +113,7 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
       v
     }
 
-    if (alive) {
+    if (alive && powerMode.isEnabled && powerMode.powerIndicatorEnabled) {
       val Some((dxx, dyy)) = lastScrollPosition.map(lp => {
         val (nx, ny) = (editor.getScrollingModel.getHorizontalScrollOffset, editor.getScrollingModel.getVerticalScrollOffset)
         (lp._1 - nx, lp._2 - ny)
@@ -153,10 +153,10 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
 
     while (f > 0) {
       graphics.setColor(Color.white)
-      graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) -10 toInt , barHeight)
+      graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) - 10 toInt, barHeight)
       graphics.setColor(Color.black)
       graphics.setStroke(new BasicStroke(10))
-      graphics.drawRect(9, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) - 1 toInt, width * (if (f >= 1) 1 else f) - 1 -10 toInt, barHeight - 1)
+      graphics.drawRect(9, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) - 1 toInt, width * (if (f >= 1) 1 else f) - 1 - 10 toInt, barHeight - 1)
       f -= 1
     }
   }

@@ -70,6 +70,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JSlider bamLife;
     private JLabel heatupThresholdValue;
     private JSlider heatupThreshold;
+    private JCheckBox PowerIndicatorCheckBox;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -88,6 +89,9 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         visualizeEveryCaretMovementCheckBox.addChangeListener(e -> powerMode.setIsCaretAction(visualizeEveryCaretMovementCheckBox.isSelected()));
         PLAYMUSICCheckBox.setSelected(powerMode.isSoundsPlaying());
         PLAYMUSICCheckBox.addChangeListener(e -> powerMode.setIsSoundsPlaying(PLAYMUSICCheckBox.isSelected()));
+
+        PowerIndicatorCheckBox.setSelected(powerMode.isPowerIndicatorEnabled());
+        PowerIndicatorCheckBox.addChangeListener(e -> powerMode.setIsPowerIndicatorEnabled(PowerIndicatorCheckBox.isSelected()));
 
         soundsFolder.setText(powerMode.getSoundsFolder());
 
