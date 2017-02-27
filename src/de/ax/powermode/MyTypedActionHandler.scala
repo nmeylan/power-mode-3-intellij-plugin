@@ -12,11 +12,11 @@ import scala.util.Try
 /**
   * Created by nyxos on 04.01.17.
   */
-class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends TypedActionHandler with Power{
+class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends TypedActionHandler with Power {
 
   def execute(editor: Editor, c: Char, dataContext: DataContext) {
     if (powerMode.isEnabled) {
-      powerMode.increaseHeatup()
+      powerMode.increaseHeatup(dataContext = Some(dataContext))
       if (!powerMode.caretAction) {
         initializeAnimationByTypedAction(editor)
       }
@@ -27,17 +27,20 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends Typed
   def getEditorCaretPositions(editor: Editor): Seq[Point] = {
     editor.getCaretModel.getAllCarets.map({ c =>
       Util.getCaretPosition(editor, c)
-    }).filter(_.isFailure)
+    }).filter(_.isSuccess)
       .map(_.get)
   }
 
   def initializeAnimationByTypedAction(editor: Editor): Unit = {
-    val isActualEditor = Try {
+    val triedBoolean = Try {
       editor.getColorsScheme.getClass.getName.contains("EditorImpl")
-    }.getOrElse(false)
+    }
+    val isActualEditor = triedBoolean.getOrElse(false)
     if (isActualEditor) {
-      getEditorCaretPositions(editor).foreach(pos =>
-        powerMode.maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(editor, pos)))
+      val positions = getEditorCaretPositions(editor)
+      positions.foreach(pos => {
+        powerMode.maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(editor, pos))
+      })
     }
   }
 }
