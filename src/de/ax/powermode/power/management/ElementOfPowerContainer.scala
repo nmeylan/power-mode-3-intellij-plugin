@@ -46,7 +46,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   myParent.addComponentListener(this)
 
 
-
   val shakeComponents = Seq(editor.getComponent, editor.getContentComponent)
   var elementsOfPower = Seq.empty[(ElementOfPower, (Int, Int))]
   var lastShake = System.currentTimeMillis()
@@ -126,7 +125,8 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   def addPowerIndicator(): Unit = {
-    elementsOfPower :+=(PowerIndicator(getMyBounds.width - 200, 10, 200, 200, 1000,editor), getScrollPosition)
+    val indicatorWidth = 100
+    elementsOfPower :+= (PowerIndicator(getMyBounds.width - 20 - indicatorWidth, getMyBounds.height - 20 - indicatorWidth, indicatorWidth, indicatorWidth, 1000, editor), getScrollPosition)
   }
 
   def initializeAnimation(point: Point) {
@@ -155,7 +155,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     if (b.y - y.abs < dim) {
       y = y - dim / 2
     }
-    elementsOfPower :+=(PowerBam(x, y, dim, dim, powerMode.bamLife * powerMode.valueFactor toLong), getScrollPosition)
+    elementsOfPower :+= (PowerBam(x, y, dim, dim, powerMode.bamLife * powerMode.valueFactor toLong), getScrollPosition)
   }
 
   def addFlames(point: Point): Unit = {
@@ -165,8 +165,8 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       ).toInt
     val initLife = (powerMode.maxFlameLife * powerMode.valueFactor).toInt
     if (initLife > 100) {
-      elementsOfPower :+=(PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, true), getScrollPosition)
-      elementsOfPower :+=(PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, false), getScrollPosition)
+      elementsOfPower :+= (PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, true), getScrollPosition)
+      elementsOfPower :+= (PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, false), getScrollPosition)
     }
   }
 
@@ -182,7 +182,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     val size = ((Math.random * powerMode.sparkSize) + 1).toInt
     val life = Math.random() * powerMode.getSparkLife * powerMode.valueFactor
     val powerSpark = PowerSpark(x, y, dx.toFloat, dy.toFloat, size, life.toLong, genNextColor, powerMode.gravityFactor.toFloat)
-    elementsOfPower :+=(powerSpark, getScrollPosition)
+    elementsOfPower :+= (powerSpark, getScrollPosition)
   }
 
   def genNextColor: PowerColor = (getColorPart(powerMode.getRedFrom, powerMode.getRedTo),
@@ -198,7 +198,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   def getScrollPosition = (
     editor.getScrollingModel.getHorizontalScrollOffset,
     editor.getScrollingModel.getVerticalScrollOffset
-    )
+  )
 
   def doShake(myShakeComponents: Seq[JComponent]): Unit = {
     if (Util.editorOk(editor, 100)) {
@@ -265,23 +265,23 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   def renderElementsOfPower(g: Graphics) {
-//               println(myParent.isDoubleBuffered)
+    //               println(myParent.isDoubleBuffered)
     val scrollingModel: ScrollingModel = editor.getScrollingModel
     val xyNew = (
       scrollingModel.getHorizontalScrollOffset,
       scrollingModel.getVerticalScrollOffset
-      )
+    )
 
     elementsOfPower.foreach { pp =>
       val (elementOfPower, (x, y)) = pp
       val dxx = x - xyNew._1
       val dyy = y - xyNew._2
       elementOfPower.render(g, dxx, dyy)
-//      if (elementOfPower.isInstanceOf[PowerIndicator]) {
-//        elementOfPower.render(g, xyNew._1, xyNew._1)
-//      } else {
-//
-//      }
+      //      if (elementOfPower.isInstanceOf[PowerIndicator]) {
+      //        elementOfPower.render(g, xyNew._1, xyNew._1)
+      //      } else {
+      //
+      //      }
     }
 
   }

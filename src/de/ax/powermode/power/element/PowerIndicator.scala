@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.Editor
 import de.ax.powermode.power.ElementOfPower
 import de.ax.powermode.{PowerMode, Util}
 
+import scala.annotation.tailrec
 import scala.collection.mutable
 
 /**
@@ -22,6 +23,40 @@ object PowerIndicator {
       PowerIndicator.indicators = PowerIndicator.indicators.filter(i => i.alive)
     }
   }
+
+  val grands = Seq("perfect",
+    "excellent",
+    "superb",
+    "sublime",
+    "dominating",
+    "marvelous",
+    "splendid",
+    "majestic",
+    "unreal",
+    "fabulous",
+    "great")
+
+  var lastGrand = Option.empty[String]
+
+  def genGrand: String = {
+    @tailrec
+    def nextGrand(lastGrand: Option[String]): String = {
+      val grand = grands((Math.random() * 100023451).toInt % grands.length) + "!"
+      if (lastGrand.contains(grand)) {
+        nextGrand(lastGrand)
+      } else {
+        grand
+      }
+    }
+
+    if (math.random < Seq(0.01, 0.2 * PowerMode.getInstance.valueFactor).max) {
+      val grand = nextGrand(lastGrand)
+      lastGrand = Some(grand)
+      grand
+    } else {
+      ""
+    }
+  } 
 }
 
 case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, initLife: Long, editor: Editor) extends ElementOfPower {
@@ -33,11 +68,12 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
   var height: Double = 0
   PowerIndicator.addIndicator(this)
   val life2 = System.currentTimeMillis() + initLife
+  val grand=PowerIndicator.genGrand
 
   override def life = {
 
     if (isLast) {
-      math.max(life2, System.currentTimeMillis() + (initLife *0.75)) toLong
+      math.max(life2, System.currentTimeMillis() + (initLife * 0.75)) toLong
     } else {
       diffLife = Some(diffLife.getOrElse(System.currentTimeMillis() + (initLife * 0.75) toLong))
       diffLife.get
@@ -85,33 +121,42 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
       //val Some((dxx, dyy)) =Some((0,0))
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-        Util.alpha(0.9f * lifeFactor)))
+        Util.alpha(1f * (1 - lifeFactor) * (1 - lifeFactor))))
       //      println(s"${this.identifier} alife $alive last $isLast $x $y $width $height #### ${_width} ${_height}")
 
-      val bufferedImage = new BufferedImage(Util.powerBamImage.getWidth, Util.powerBamImage.getHeight, BufferedImage.TYPE_INT_ARGB)
+      val bufferedImage = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB)
       val graphics = bufferedImage.getGraphics
-      graphics.drawImage(Util.powerBamImage, 0, 0, null)
-      drawIndicator(graphics, bufferedImage.getWidth, bufferedImage.getHeight)
+      //      graphics.drawImage(Util.powerBamImage, 0, 0, null)
+      drawIndicator(graphics.asInstanceOf[Graphics2D], bufferedImage.getWidth, bufferedImage.getHeight)
       g2d.drawImage(bufferedImage, math.max(x, 0) - dxx toInt, math.max(y, 0) - dyy toInt, width toInt, height toInt, null)
       g2d.dispose()
       lastScrollPosition = Some((editor.getScrollingModel.getHorizontalScrollOffset, editor.getScrollingModel.getVerticalScrollOffset))
     }
   }
 
-  private def drawIndicator(graphics: Graphics, width: Int, height: Int) = {
-    graphics.setFont(new Font("Dialog", Font.PLAIN, 100))
-    graphics.drawString((powerMode.rawValueFactor * 100).toInt.toString + " %", 200, 100)
+  private def drawIndicator(graphics: Graphics2D, width: Int, height: Int) = {
+    graphics.setColor(Color.darkGray)
+    graphics.fillRect(10, 10, width - 10, 200)
     graphics.setColor(Color.white)
-    var f = powerMode.rawValueFactor
+    graphics.setFont(new Font("Dialog", Font.PLAIN, 100))
+    graphics.drawString((powerMode.rawValueFactor * 100).toInt.toString + " %", 10, 100)
+    graphics.setColor(Color.white)
+    graphics.drawString(grand, 10, 200)
+    graphics.setColor(Color.white)
+    var f = math.min(powerMode.rawValueFactor, 20 + (powerMode.rawValueFactor % 1))
     var max: Double = math.ceil(f)
     val maxLines = 8
 
     val maxYSpace = 30 * maxLines / max
-    var barHeight = math.min(50,0.75 * maxYSpace) toInt
-    var barSpace = math.min(17,0.25 * maxYSpace) toInt
+    var barHeight = math.min(50, 0.75 * maxYSpace) toInt
+    var barSpace = math.min(17, 0.25 * maxYSpace) toInt
 
     while (f > 0) {
+      graphics.setColor(Color.white)
       graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) toInt, barHeight)
+      graphics.setColor(Color.black)
+      graphics.setStroke(new BasicStroke(10))
+      graphics.drawRect(9, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) - 1 toInt, width * (if (f >= 1) 1 else f) - 1 toInt, barHeight - 1)
       f -= 1
     }
   }
