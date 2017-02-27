@@ -165,8 +165,8 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       ).toInt
     val initLife = (powerMode.maxFlameLife * powerMode.valueFactor).toInt
     if (initLife > 100) {
-      elementsOfPower :+=(PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, true, powerMode), getScrollPosition)
-      elementsOfPower :+=(PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, false, powerMode), getScrollPosition)
+      elementsOfPower :+=(PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, true), getScrollPosition)
+      elementsOfPower :+=(PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, false), getScrollPosition)
     }
   }
 

@@ -61,7 +61,7 @@ object PowerFlame {
 }
 
 
-case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean, powerMode: PowerMode)
+case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean)
   extends ElementOfPower {
 
   val life = System.currentTimeMillis() + initLife

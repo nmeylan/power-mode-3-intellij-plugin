@@ -18,8 +18,11 @@ package de.ax.powermode.power.management
 import java.awt._
 import javax.swing._
 
+import com.intellij.openapi.actionSystem.{DataConstants, DataContext, PlatformDataKeys}
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
+import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.project.Project
 import de.ax.powermode.power.sound.PowerSound
 import de.ax.powermode.{Power, PowerMode, Util}
 
@@ -35,11 +38,16 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
   lazy val sound = new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
 
-  def showIndicator {
-    SwingUtilities.invokeLater(new Runnable {
-      override def run() = {
-        elementsOfPowerContainers.keys.find(_.getContentComponent.isVisible).map(elementsOfPowerContainers).foreach(_.addPowerIndicator())
-      }
+  def showIndicator(dataContext: DataContext) {
+    val maybeProject: Seq[Project] = Seq(dataContext.getData(DataConstants.PROJECT), dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT))
+      .toStream.flatMap(o =>Option(o).map(_.asInstanceOf[Project]))
+    maybeProject.headOption.foreach(p => {
+      val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
+      SwingUtilities.invokeLater(new Runnable {
+        override def run() = {
+          elementsOfPowerContainers.get(textEditor).foreach(_.addPowerIndicator())
+        }
+      })
     })
   }
 

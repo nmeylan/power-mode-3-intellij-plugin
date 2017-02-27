@@ -4,36 +4,42 @@ import java.awt._
 import java.awt.event._
 import javax.swing._
 
+import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem._
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.keymap.KeymapManager
-import de.ax.powermode.PowerMode
+import de.ax.powermode.Power
 
 /**
   * Date: 04.09.2006
   * Time: 14:11:03
   */
-class HotkeyHeatupListener extends ApplicationComponent with AWTEventListener {
+class HotkeyHeatupListener extends ApplicationComponent with AWTEventListener with Power {
   lazy val allActionKeyStrokes: Set[KeyStroke] = actionsToKeyStrokes.values.flatten.toSet
 
-  override def eventDispatched(e: AWTEvent): Unit = {
-    e match {
-      case event: KeyEvent   => {
-        println(s"got key event ${ event.getID == KeyEvent.KEY_RELEASED} ${event.getModifiersEx} &  ${(InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)} = ${(event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))}")
-        println(s"EVENT: $event")
-        if ((event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) > 0) {
 
-          val eventKeyStroke = KeyStroke.getKeyStroke(event.getKeyCode, event.getModifiersEx)
-          val isHotkey = allActionKeyStrokes.contains(eventKeyStroke)
-          if (isHotkey) {
-            println(s"ISHOTKEY")
-            PowerMode.getInstance.increaseHeatup(Some(eventKeyStroke))
+  override def eventDispatched(e: AWTEvent): Unit = {
+    if (powerMode.isEnabled) {
+      e match {
+        case event: KeyEvent => {
+          //        println(s"got key event ${ event.getID == KeyEvent.KEY_RELEASED} ${event.getModifiersEx} &  ${(InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)} = ${(event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))}")
+          //        println(s"EVENT: $event")
+          if ((event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) > 0) {
+
+            val eventKeyStroke = KeyStroke.getKeyStroke(event.getKeyCode, event.getModifiersEx)
+            val isHotkey = allActionKeyStrokes.contains(eventKeyStroke)
+            if (isHotkey) {
+              //            println(s"ISHOTKEY")
+
+              powerMode.increaseHeatup(Some(DataManager.getInstance().getDataContext(event.getComponent)), Some(eventKeyStroke))
+            }
           }
         }
+        case _ =>
       }
-      case _ =>
     }
   }
+
 
   lazy val actionsToKeyStrokes = {
     Map(KeymapManager.getInstance.getActiveKeymap.getActionIds.seq.map(ActionManager.getInstance.getAction)

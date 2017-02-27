@@ -20,6 +20,7 @@ import java.io.File
 import javax.swing.KeyStroke
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
 import com.intellij.openapi.editor.EditorFactory
@@ -30,6 +31,7 @@ import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
 import scala.collection.immutable.Seq
+import scala.collection.immutable.Stream.Empty
 import scala.util.Try
 
 /**
@@ -109,10 +111,11 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
 
-  def increaseHeatup(keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
+  def increaseHeatup(dataContext: Option[DataContext]=Option.empty[DataContext], keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
     val ct = System.currentTimeMillis()
     lastKeys = (keyStroke, ct) :: filterLastKeys(ct)
-    maybeElementOfPowerContainerManager.map(_.showIndicator)
+    dataContext.foreach(dc=>maybeElementOfPowerContainerManager.foreach(_.showIndicator(dc)))
+
   }
 
 

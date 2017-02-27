@@ -100,9 +100,9 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
 
   private def drawIndicator(graphics: Graphics, width: Int, height: Int) = {
     graphics.setFont(new Font("Dialog", Font.PLAIN, 100))
-    graphics.drawString((PowerMode.getInstance.rawValueFactor * 100).toInt.toString + " %", 200, 100)
+    graphics.drawString((powerMode.rawValueFactor * 100).toInt.toString + " %", 200, 100)
     graphics.setColor(Color.white)
-    var f = PowerMode.getInstance.rawValueFactor
+    var f = powerMode.rawValueFactor
     var max: Double = math.ceil(f)
     val maxLines = 8
 
