@@ -153,10 +153,10 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
 
     while (f > 0) {
       graphics.setColor(Color.white)
-      graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) toInt, barHeight)
+      graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) -10 toInt , barHeight)
       graphics.setColor(Color.black)
       graphics.setStroke(new BasicStroke(10))
-      graphics.drawRect(9, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) - 1 toInt, width * (if (f >= 1) 1 else f) - 1 toInt, barHeight - 1)
+      graphics.drawRect(9, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) - 1 toInt, width * (if (f >= 1) 1 else f) - 1 -10 toInt, barHeight - 1)
       f -= 1
     }
   }
