@@ -41,6 +41,9 @@
         <component>
             <implementation-class>de.ax.powermode.PowerMode</implementation-class>
         </component>
+        <component>
+            <implementation-class>de.ax.powermode.power.hotkeys.HotkeyHeatupListener</implementation-class>
+        </component>
     </application-components>
 
     <extensions defaultExtensionNs="com.intellij">

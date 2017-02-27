@@ -16,7 +16,7 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends Typed
 
   def execute(editor: Editor, c: Char, dataContext: DataContext) {
     if (powerMode.isEnabled) {
-      powerMode.increaseHeatup
+      powerMode.increaseHeatup()
       if (!powerMode.caretAction) {
         initializeAnimationByTypedAction(editor)
       }

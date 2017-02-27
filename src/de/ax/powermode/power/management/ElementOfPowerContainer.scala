@@ -143,9 +143,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
     if (powerMode.isShakeEnabled) {
       doShake(shakeComponents)
     }
-
-    addPowerIndicator()
-
     repaint()
   }
 

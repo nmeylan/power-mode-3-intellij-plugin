@@ -35,6 +35,13 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
   lazy val sound = new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
 
+  def showIndicator {
+    SwingUtilities.invokeLater(new Runnable {
+      override def run() = {
+        elementsOfPowerContainers.keys.find(_.getContentComponent.isVisible).map(elementsOfPowerContainers).foreach(_.addPowerIndicator())
+      }
+    })
+  }
 
   val elementsOfPowerUpdateThread = new Thread(new Runnable() {
     def run {

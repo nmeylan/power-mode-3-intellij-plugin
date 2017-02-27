@@ -15,7 +15,9 @@
  */
 package de.ax.powermode
 
+import java.awt.event.InputEvent
 import java.io.File
+import javax.swing.KeyStroke
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
@@ -27,6 +29,7 @@ import de.ax.powermode.power.management.ElementOfPowerContainerManager
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
+import scala.collection.immutable.Seq
 import scala.util.Try
 
 /**
@@ -92,7 +95,9 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   var heatupTime = 10000
 
-  var lastKeys: List[Long] = List.empty[Long]
+  type HeatupKey = (Option[KeyStroke], Long)
+
+  var lastKeys = List.empty[HeatupKey]
 
   var keyStrokesPerMinute = 300
   var heatupFactor = 1.0
@@ -104,9 +109,21 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
 
-  def increaseHeatup {
+  def increaseHeatup(keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
     val ct = System.currentTimeMillis()
-    lastKeys = ct :: lastKeys.filter(_ >= ct - heatupTime)
+    lastKeys = (keyStroke, ct) :: filterLastKeys(ct)
+    maybeElementOfPowerContainerManager.map(_.showIndicator)
+  }
+
+
+  def reduceHeatup: Unit = {
+    val ct = System.currentTimeMillis()
+    lastKeys = filterLastKeys(ct)
+//    maybeElementOfPowerContainerManager.map(_.showIndicator)
+  }
+
+  private def filterLastKeys(ct: Long): List[HeatupKey] = {
+    lastKeys.filter(_._2 >= ct - heatupTime)
   }
 
   def rawValueFactor = {
@@ -127,17 +144,28 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     max
   }
 
+
+  var hotkeyWeight = keyStrokesPerMinute
+
   def rawTimeFactor: Double = {
     val tf = Try {
       if (heatupTime < 1000) {
         1
       } else {
         val d = heatupTime.toDouble / (60000.0 / keyStrokesPerMinute)
-        lastKeys.size / d
+        val keysWorth = lastKeys.map {
+          case (Some(ks), _) =>
+            val size = Seq(InputEvent.CTRL_DOWN_MASK, InputEvent.ALT_DOWN_MASK, InputEvent.SHIFT_DOWN_MASK).filter(m => (ks.getModifiers & m) > 0).size
+            val res = size * hotkeyWeight
+            res
+          case _ => 1
+        }.sum
+        keysWorth / d
       }
     }.getOrElse(0.0)
     tf
   }
+
 
   def timeFactor: Double = {
     val tf = Try {
@@ -145,16 +173,19 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
         1
       } else {
         val d = heatupTime.toDouble / (60000.0 / keyStrokesPerMinute)
-        math.min(lastKeys.size, d) / d
+        val keysWorth = lastKeys.map {
+          case (Some(ks), _) =>
+            val size = Seq(InputEvent.CTRL_DOWN_MASK, InputEvent.ALT_DOWN_MASK, InputEvent.SHIFT_DOWN_MASK).filter(m => (ks.getModifiers & m) > 0).size
+            val res = size * hotkeyWeight
+            res
+          case _ => 1
+        }.sum
+        math.min(keysWorth, d) / d
       }
     }.getOrElse(0.0)
     tf
   }
 
-  def reduceHeatup: Unit = {
-    val ct = System.currentTimeMillis()
-    lastKeys = lastKeys.filter(_ >= ct - heatupTime)
-  }
 
   var caretAction: Boolean = true
 

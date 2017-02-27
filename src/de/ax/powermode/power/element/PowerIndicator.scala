@@ -1,7 +1,7 @@
 package de.ax.powermode.power.element
 
+import java.awt._
 import java.awt.image.BufferedImage
-import java.awt.{AlphaComposite, Font, Graphics, Graphics2D}
 
 import com.intellij.openapi.editor.Editor
 import de.ax.powermode.power.ElementOfPower
@@ -37,9 +37,9 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
   override def life = {
 
     if (isLast) {
-      math.max(life2, System.currentTimeMillis() + (initLife / 2))
+      math.max(life2, System.currentTimeMillis() + (initLife *0.75)) toLong
     } else {
-      diffLife = Some(diffLife.getOrElse(System.currentTimeMillis() + (initLife / 2)))
+      diffLife = Some(diffLife.getOrElse(System.currentTimeMillis() + (initLife * 0.75) toLong))
       diffLife.get
     }
   }
@@ -86,17 +86,33 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
         Util.alpha(0.9f * lifeFactor)))
-//      println(s"${this.identifier} alife $alive last $isLast $x $y $width $height #### ${_width} ${_height}")
+      //      println(s"${this.identifier} alife $alive last $isLast $x $y $width $height #### ${_width} ${_height}")
 
       val bufferedImage = new BufferedImage(Util.powerBamImage.getWidth, Util.powerBamImage.getHeight, BufferedImage.TYPE_INT_ARGB)
       val graphics = bufferedImage.getGraphics
       graphics.drawImage(Util.powerBamImage, 0, 0, null)
-      graphics.setFont(new Font("Dialog", Font.PLAIN, 100))
-      graphics.drawString((PowerMode.getInstance.rawValueFactor * 100).toInt.toString, 200, 100)
+      drawIndicator(graphics, bufferedImage.getWidth, bufferedImage.getHeight)
       g2d.drawImage(bufferedImage, math.max(x, 0) - dxx toInt, math.max(y, 0) - dyy toInt, width toInt, height toInt, null)
-      g2d.setFont(new Font("Dialog", Font.PLAIN, 50))
       g2d.dispose()
       lastScrollPosition = Some((editor.getScrollingModel.getHorizontalScrollOffset, editor.getScrollingModel.getVerticalScrollOffset))
+    }
+  }
+
+  private def drawIndicator(graphics: Graphics, width: Int, height: Int) = {
+    graphics.setFont(new Font("Dialog", Font.PLAIN, 100))
+    graphics.drawString((PowerMode.getInstance.rawValueFactor * 100).toInt.toString + " %", 200, 100)
+    graphics.setColor(Color.white)
+    var f = PowerMode.getInstance.rawValueFactor
+    var max: Double = math.ceil(f)
+    val maxLines = 8
+
+    val maxYSpace = 30 * maxLines / max
+    var barHeight = math.min(50,0.75 * maxYSpace) toInt
+    var barSpace = math.min(17,0.25 * maxYSpace) toInt
+
+    while (f > 0) {
+      graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) toInt, barHeight)
+      f -= 1
     }
   }
 }
