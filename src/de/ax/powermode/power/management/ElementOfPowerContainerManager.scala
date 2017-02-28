@@ -27,7 +27,7 @@ import de.ax.powermode.power.sound.PowerSound
 import de.ax.powermode.{Power, PowerMode, Util}
 
 import scala.collection.mutable
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 /**
   * @author Baptiste Mesta
@@ -38,10 +38,24 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
   lazy val sound = new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
 
+  def ForceTry[X](f: => X): Try[X] = {
+    try {
+      Success(f)
+    } catch {
+      case e => Failure(e)
+    }
+  }
+
   def showIndicator(dataContext: DataContext) {
     if (powerMode.powerIndicatorEnabled && powerMode.isEnabled) {
-      val maybeProject: Seq[Project] = Seq(dataContext.getData(DataConstants.PROJECT), dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT))
-        .toStream.flatMap(o => Option(o).map(_.asInstanceOf[Project]))
+      val maybeProject: Seq[Project] = Seq(
+        ForceTry {
+          dataContext.getData(DataConstants.PROJECT)
+        },
+        ForceTry {
+          dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT)
+        })
+        .toStream.flatMap(o => o.toOption.map(_.asInstanceOf[Project]))
       maybeProject.headOption.foreach(p => {
         val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
         SwingUtilities.invokeLater(new Runnable {
