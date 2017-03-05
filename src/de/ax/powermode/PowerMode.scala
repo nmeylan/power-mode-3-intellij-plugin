@@ -445,7 +445,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     heatupThreshold = t / 100.0
   }
 
-  def isPowerIndicatorEnabled: Boolean = {
+  def getIsPowerIndicatorEnabled: Boolean = {
     return powerIndicatorEnabled
   }
 

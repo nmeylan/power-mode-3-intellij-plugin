@@ -90,7 +90,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         PLAYMUSICCheckBox.setSelected(powerMode.isSoundsPlaying());
         PLAYMUSICCheckBox.addChangeListener(e -> powerMode.setIsSoundsPlaying(PLAYMUSICCheckBox.isSelected()));
 
-        PowerIndicatorCheckBox.setSelected(powerMode.isPowerIndicatorEnabled());
+        PowerIndicatorCheckBox.setSelected(powerMode.getIsPowerIndicatorEnabled());
         PowerIndicatorCheckBox.addChangeListener(e -> powerMode.setIsPowerIndicatorEnabled(PowerIndicatorCheckBox.isSelected()));
 
         soundsFolder.setText(powerMode.getSoundsFolder());
