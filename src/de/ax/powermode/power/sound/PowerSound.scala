@@ -79,10 +79,7 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
           mediaPlayer
         }
       } catch {
-        case e:MediaException =>
-          PowerMode.logger.error(s"error playing file $f. Solution probably available at https://github.com/axaluss/power-mode-intellij-plugin/issues/15 . error:  ${e.getMessage}", e)
-        case e =>
-          PowerMode.logger.error(s"error playing file $f: ${e.getMessage}", e)
+        case e: Throwable =>
           playing = false
       }
     }

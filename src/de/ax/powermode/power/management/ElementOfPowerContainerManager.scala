@@ -33,18 +33,19 @@ import scala.util.{Failure, Success, Try}
   * @author Baptiste Mesta
   */
 class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
-
-
-  val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
-  lazy val sound = new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
-
   def ForceTry[X](f: => X): Try[X] = {
     try {
-      Success(f)
+      Success(f).filter(_ != null)
     } catch {
-      case e => Failure(e)
+      case e: Throwable => Failure(e)
     }
   }
+
+  val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
+  lazy val sound = ForceTry {
+    new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
+  }
+
 
   def showIndicator(dataContext: DataContext) {
     if (powerMode.powerIndicatorEnabled && powerMode.isEnabled) {
@@ -55,7 +56,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
         ForceTry {
           dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT)
         })
-        .toStream.flatMap(o => o.toOption.map(_.asInstanceOf[Project]))
+        .toStream.flatMap(o => o.toOption.flatMap(Option(_)).map(_.asInstanceOf[Project]))
       maybeProject.headOption.foreach(p => {
         val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
         SwingUtilities.invokeLater(new Runnable {
@@ -98,11 +99,11 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
         if (powerMode.isEnabled &&
           powerMode.soundsFolder.exists(f => f.exists() && f.isDirectory)
           && powerMode.isSoundsPlaying) {
-          sound.play()
+          sound.foreach(_.play())
         } else {
-          sound.stop()
+          sound.foreach(_.stop())
         }
-        sound.setVolume(powerMode.valueFactor)
+        sound.foreach(_.setVolume(powerMode.valueFactor))
       } catch {
         case e: Exception =>
           e.printStackTrace()

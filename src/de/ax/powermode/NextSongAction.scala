@@ -8,7 +8,7 @@ import com.intellij.openapi.actionSystem.{AnAction, AnActionEvent}
 class NextSongAction extends AnAction with Power{
   override def actionPerformed(anActionEvent: AnActionEvent): Unit = {
     powerMode.maybeElementOfPowerContainerManager.foreach(cm => {
-      cm.sound.next()
+      cm.sound.foreach(_.next())
     })
   }
 }
