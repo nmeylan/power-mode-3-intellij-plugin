@@ -20,15 +20,16 @@ case class PowerBam(_x: Float, _y: Float, _width: Float, _height: Float, initLif
 
   var i = 0
 
-  def bamImages = {
+  val bamImages = {
     ImageUtil.images(powerMode.bamImageFolder)
   }
+
   var currentImage: BufferedImage = null
 
   override def update(delta: Float): Boolean = {
     if (alive) {
       val bis = bamImages
-      currentImage = bis(i % bis.size)
+      currentImage = bis(i % bis.size)()
       i += 1
       x = _x + (0.5 * _width) - (0.5 * _width * lifeFactor)
       y = _y + (0.5 * _height) - (0.5 * _height * lifeFactor)

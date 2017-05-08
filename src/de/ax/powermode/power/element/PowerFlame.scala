@@ -30,7 +30,7 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
   override def update(delta: Float): Boolean = {
     if (alive) {
       val flameImages1 = flameImages
-      currentImage = flameImages1(i % flameImages1.size)
+      currentImage = flameImages1(i % flameImages1.size)()
       i += 1
       x = _x - (0.5 * _width * lifeFactor).toInt
       if (up)
@@ -43,7 +43,7 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
     !alive
   }
 
-  private def flameImages = {
+  val flameImages: List[() => BufferedImage] = {
     ImageUtil.images(powerMode.flameImageFolder)
   }
 

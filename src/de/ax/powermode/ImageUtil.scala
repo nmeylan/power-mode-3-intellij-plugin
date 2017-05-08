@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage
 import java.awt.{AlphaComposite, Point}
 import java.io.File
 import java.net.URL
+import java.net.URI
 import javax.imageio.ImageIO
 
 import de.ax.powermode.cache.Cache
@@ -23,32 +24,45 @@ import de.ax.powermode.cache.Cache
 
 object ImageUtil {
 
-  val imageCache: Cache[String, BufferedImage, Long] =
-    new Cache[String, BufferedImage, Long](
+  val imageCache =
+    new Cache[URI, BufferedImage, Long](
       fname => new File(fname).lastModified(),
       fname => !new File(fname).exists())
 
-  def images(imagesPath: String): List[BufferedImage] = {
+  def images(imagesPath: String): List[() => BufferedImage] = {
     val imageUrls = getImageUrls(imagesPath)
-    getImagesCached(imageUrls)
+    getImagesCached(imageUrls).map(img => { () => ImageUtil.deepCopy(img) })
   }
 
-  private def getImagesCached(imageUrls: List[URL]) = {
-    imageUrls.map(url => imageCache.getOrUpdate(url.toString) {
+  import java.awt.image.BufferedImage
+  import java.awt.image.ColorModel
+  import java.awt.image.WritableRaster
+
+  def deepCopy(bi: BufferedImage): BufferedImage = {
+    val cm = bi.getColorModel
+    val isAlphaPremultiplied = cm.isAlphaPremultiplied
+    val raster = bi.copyData(null)
+    new BufferedImage(cm, raster, isAlphaPremultiplied, null)
+  }
+
+  private def getImagesCached(imageUrls: List[URI]) = {
+    imageUrls.map(url => imageCache.getOrUpdate(url) {
       try {
-        val img = ImageIO.read(url)
+        val img = ImageIO.read(url.toURL)
         val bufferedImage = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
         val graphics = bufferedImage.getGraphics
         graphics.drawImage(img, 0, 0, null)
         Some(bufferedImage)
       } catch {
         case e: Exception =>
+//          println(s"ERROR: ${e.getMessage}")
+          e.printStackTrace()
           None
       }
     }).flatten
   }
 
-  private def getImageUrls(imagesPath: String): List[URL] = {
+  private def getImageUrls(imagesPath: String): List[URI] = {
     if (debugFolderExists(imagesPath)) {
       getImageUrlsFromDebugDir(imagesPath)
     } else {
@@ -62,9 +76,9 @@ object ImageUtil {
     file.exists()
   }
 
-  private def getImageUrlsFromDebugDir(imagesPath: String): List[URL] = {
+  private def getImageUrlsFromDebugDir(imagesPath: String): List[URI] = {
     Option(new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), imagesPath).listFiles())
-      .map(_.toList).toList.flatten.filter(_.isFile).map(_.toURI.toURL)
+      .map(_.toList).toList.flatten.filter(_.isFile).map(_.toURI)
   }
 
 
@@ -75,7 +89,7 @@ object ImageUtil {
     Option(new File(path).listFiles).map(_.toList.sortBy(_.getName)).getOrElse(List.empty)
   }
 
-  private def getImageUrlsFromResources(imagesFolder: String): List[URL] = {
-    getResourceFolderFiles(imagesFolder).filter(_.isFile).map(_.toURI.toURL)
+  private def getImageUrlsFromResources(imagesFolder: String): List[URI] = {
+    getResourceFolderFiles(imagesFolder).filter(_.isFile).map(_.toURI)
   }
 }
