@@ -55,7 +55,6 @@ object ImageUtil {
         Some(bufferedImage)
       } catch {
         case e: Exception =>
-//          println(s"ERROR: ${e.getMessage}")
           e.printStackTrace()
           None
       }
