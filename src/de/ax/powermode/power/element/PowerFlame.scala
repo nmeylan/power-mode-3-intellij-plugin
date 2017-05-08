@@ -4,61 +4,15 @@ import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import java.awt.{AlphaComposite, Graphics, Graphics2D}
 import java.io.File
+import java.net.URL
 import javax.imageio.ImageIO
+import de.ax.powermode.ImageUtil
 
 import com.intellij.util.PathUtil
 import de.ax.powermode.power.ElementOfPower
 import de.ax.powermode.{PowerMode, Util}
 
-/**
-  * Created by nyxos on 10.03.16.
-  */
-object PowerFlame {
-
-  lazy val images = {
-    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), s"fire/animated/$resolution")
-    val imageFiles = file.listFiles()
-    val fileImages = imageFiles match {
-      case null =>
-        getBufferedImagesFromJar
-      case files =>
-        getBufferedImagesFromDebugDir(files)
-    }
-    fileImages.map { img =>
-      val bufferedImage = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
-      val graphics = bufferedImage.getGraphics
-      graphics.drawImage(img, 0, 0, null)
-
-      val graphics2D = bufferedImage.createGraphics()
-      graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f))
-
-      val at = AffineTransform.getScaleInstance(resolution, resolution)
-      graphics2D.drawRenderedImage(bufferedImage, at)
-      bufferedImage
-    }
-  }
-  val resolution = 256
-  val imageFrames = 25
-
-  private def getBufferedImagesFromDebugDir(files: Array[File]): List[BufferedImage] = {
-    files.toList.filter(_.isFile).map { f =>
-      try {
-        ImageIO.read(f)
-      } catch {
-        case e =>
-          e.printStackTrace()
-          System.exit(1)
-          throw e
-      }
-    }
-  }
-
-  private def getBufferedImagesFromJar: IndexedSeq[BufferedImage] = {
-    val imageUrls = (1 to imageFrames).map(i => if (i > 9) s"$i" else s"0$i")
-      .map(i => classOf[PowerFlame].getResourceAsStream(s"/fire/animated/$resolution/fire1_ $i.png"))
-    imageUrls.map(ImageIO.read)
-  }
-}
+import scala.collection.immutable
 
 
 case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean)
@@ -75,7 +29,8 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
 
   override def update(delta: Float): Boolean = {
     if (alive) {
-      currentImage = PowerFlame.images(i % PowerFlame.images.size)
+      val flameImages1 = flameImages
+      currentImage = flameImages1(i % flameImages1.size)
       i += 1
       x = _x - (0.5 * _width * lifeFactor).toInt
       if (up)
@@ -86,6 +41,10 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
       height = (_height * lifeFactor).toInt
     }
     !alive
+  }
+
+  private def flameImages = {
+    ImageUtil.images(powerMode.flameImageFolder)
   }
 
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {

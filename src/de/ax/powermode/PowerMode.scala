@@ -39,16 +39,18 @@ import scala.util.Try
   */
 object PowerMode {
 
-  val logger = Logger.getLogger(classOf[PowerMode])
+  val logger: Logger = Logger.getLogger(classOf[PowerMode])
 
   @Nullable def getInstance: PowerMode = {
     try {
       ApplicationManager.getApplication.getComponent(classOf[PowerMode])
     } catch {
-      case e: Exception =>
+      case e: Throwable =>
+        logger.debug("error getting component: " + e.getMessage(), e)
         null
     }
   }
+
 
   def obtainColorEdges(pm: PowerMode): ColorEdges = {
     import pm._
@@ -108,12 +110,14 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   private var shakeEnabled: Boolean = true
   var isBamEnabled: Boolean = true
   var isSoundsPlaying = false
-  var powerIndicatorEnabled=true
+  var powerIndicatorEnabled = true
+  var flameImageFolder = "fire/animated/256"
+  var bamImageFolder = "bam"
 
-  def increaseHeatup(dataContext: Option[DataContext]=Option.empty[DataContext], keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
+  def increaseHeatup(dataContext: Option[DataContext] = Option.empty[DataContext], keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
     val ct = System.currentTimeMillis()
     lastKeys = (keyStroke, ct) :: filterLastKeys(ct)
-    dataContext.foreach(dc=>maybeElementOfPowerContainerManager.foreach(_.showIndicator(dc)))
+    dataContext.foreach(dc => maybeElementOfPowerContainerManager.foreach(_.showIndicator(dc)))
 
   }
 
@@ -121,7 +125,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def reduceHeatup: Unit = {
     val ct = System.currentTimeMillis()
     lastKeys = filterLastKeys(ct)
-//    maybeElementOfPowerContainerManager.map(_.showIndicator)
+    //    maybeElementOfPowerContainerManager.map(_.showIndicator)
   }
 
   private def filterLastKeys(ct: Long): List[HeatupKey] = {
@@ -147,7 +151,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   }
 
 
-  var hotkeyWeight: Double = keyStrokesPerMinute*0.05
+  var hotkeyWeight: Double = keyStrokesPerMinute * 0.05
 
   def rawTimeFactor: Double = {
     val tf = Try {
