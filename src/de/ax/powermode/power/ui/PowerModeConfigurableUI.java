@@ -71,6 +71,10 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JLabel heatupThresholdValue;
     private JSlider heatupThreshold;
     private JCheckBox PowerIndicatorCheckBox;
+    private JTextField flameImagesFolder;
+    private JTextField bamImagesFolder;
+    private JCheckBox customFlameImages;
+    private JCheckBox customBamImages;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -140,6 +144,52 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
 
         initValuesColor(powerMode.getColorAlpha(), sparkColorAlpha, sparkColorAlphaValue, powerMode, slider -> powerMode.setColorAlpha(slider.getValue()));
 
+        customFlameImages.setSelected(powerMode.isCustomFlameImages());
+        customFlameImages.addChangeListener(e -> powerMode.setCustomFlameImages(customFlameImages.isSelected()));
+        {
+            flameImagesFolder.setText(powerMode.getCustomFlameImageFolder());
+
+            flameImagesFolder.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    powerMode.setCustomFlameImageFolder(flameImagesFolder.getText());
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    powerMode.setCustomFlameImageFolder(flameImagesFolder.getText());
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    powerMode.setCustomFlameImageFolder(flameImagesFolder.getText());
+                }
+            });
+        }
+
+        customBamImages.setSelected(powerMode.isCustomBamImages());
+        customBamImages.addChangeListener(e -> powerMode.setCustomBamImages(customBamImages.isSelected()));
+
+        {
+            bamImagesFolder.setText(powerMode.getCustomBamImageFolder());
+
+            bamImagesFolder.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    powerMode.setCustomBamImageFolder(bamImagesFolder.getText());
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    powerMode.setCustomBamImageFolder(bamImagesFolder.getText());
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    powerMode.setCustomBamImageFolder(bamImagesFolder.getText());
+                }
+            });
+        }
     }
 
     private void bindSlieders(JSlider from, JSlider to) {

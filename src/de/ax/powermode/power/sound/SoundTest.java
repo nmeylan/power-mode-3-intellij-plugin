@@ -14,14 +14,12 @@ public class SoundTest {
         MediaPlayer mediaPlayer = new MediaPlayer(hit);
         mediaPlayer.setVolume(1.0);
         mediaPlayer.play();
-        System.out.println("playing");
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         mediaPlayer.stop();
-        System.out.println("stopping");
          mediaPlayer.dispose();
     }
 }

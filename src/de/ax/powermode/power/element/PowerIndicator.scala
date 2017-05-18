@@ -118,15 +118,12 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
         val (nx, ny) = (editor.getScrollingModel.getHorizontalScrollOffset, editor.getScrollingModel.getVerticalScrollOffset)
         (lp._1 - nx, lp._2 - ny)
       }).orElse(Some(0, 0)).map { case (x, y) => (limit(x, 100), limit(y, 100)) }
-      //val Some((dxx, dyy)) =Some((0,0))
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
         Util.alpha(1f * (1 - lifeFactor) * (1 - lifeFactor))))
-      //      println(s"${this.identifier} alife $alive last $isLast $x $y $width $height #### ${_width} ${_height}")
 
       val bufferedImage = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB)
       val graphics = bufferedImage.getGraphics
-      //      graphics.drawImage(Util.powerBamImage, 0, 0, null)
       drawIndicator(graphics.asInstanceOf[Graphics2D], bufferedImage.getWidth, bufferedImage.getHeight)
       g2d.drawImage(bufferedImage, math.max(x, 0) - dxx toInt, math.max(y, 0) - dyy toInt, width toInt, height toInt, null)
       g2d.dispose()

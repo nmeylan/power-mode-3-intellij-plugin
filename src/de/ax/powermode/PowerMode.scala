@@ -111,8 +111,14 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   var isBamEnabled: Boolean = true
   var isSoundsPlaying = false
   var powerIndicatorEnabled = true
-  var flameImageFolder = "fire/animated/256"
-  var bamImageFolder = "bam"
+
+  def flameImageFolder = {
+    if (!_isCustomFlameImages) Some(new File("fire/animated/256")) else customFlameImageFolder
+  }
+
+  def bamImageFolder = {
+    if (!_isCustomBamImages) Some(new File("bam")) else customBamImageFolder
+  }
 
   def increaseHeatup(dataContext: Option[DataContext] = Option.empty[DataContext], keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
     val ct = System.currentTimeMillis()
@@ -456,5 +462,38 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   def setIsPowerIndicatorEnabled(enabled: Boolean) {
     powerIndicatorEnabled = enabled
   }
+
+  var _isCustomFlameImages: Boolean = false
+
+  def isCustomFlameImages = _isCustomFlameImages
+
+  def setCustomFlameImages(s: Boolean) {
+    _isCustomFlameImages = s
+  }
+
+
+  var _isCustomBamImages: Boolean = false
+
+  def isCustomBamImages = _isCustomBamImages
+
+  def setCustomBamImages(s: Boolean) {
+    _isCustomBamImages = s
+  }
+
+  var customFlameImageFolder = Option.empty[File]
+
+  def setCustomFlameImageFolder(file: String) {
+    customFlameImageFolder = Option(new File(file))
+  }
+
+  def getCustomFlameImageFolder: String = customFlameImageFolder.map(_.getAbsolutePath).getOrElse("")
+
+  var customBamImageFolder = Option.empty[File]
+
+  def setCustomBamImageFolder(file: String) {
+    customBamImageFolder = Option(new File(file))
+  }
+
+  def getCustomBamImageFolder = customBamImageFolder.map(_.getAbsolutePath).getOrElse("")
 
 }

@@ -20,7 +20,7 @@ import java.awt.{Graphics, Point, Rectangle}
 import javax.swing._
 
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.editor.event.{DocumentAdapter, DocumentEvent}
+import com.intellij.openapi.editor.event._
 import com.intellij.openapi.editor.{Editor, ScrollingModel}
 import de.ax.powermode._
 import de.ax.powermode.power.ElementOfPower
@@ -45,7 +45,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   setVisible(true)
   myParent.addComponentListener(this)
 
-
   val shakeComponents = Seq(editor.getComponent, editor.getContentComponent)
   var elementsOfPower = Seq.empty[(ElementOfPower, (Int, Int))]
   var lastShake = System.currentTimeMillis()
@@ -55,24 +54,23 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
 
 
   var lastPositions = Seq.empty[(Point, Point)]
-  val myThread = new Thread(new Runnable {
-    override def run(): Unit = {
-      while (true) {
-        SwingUtilities.invokeAndWait(new Runnable {
-          override def run(): Unit = {
-            lastPositions = {
-              editor.getCaretModel.getAllCarets.map(caret => {
-                (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
-                  Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionEnd), caret.getEditor))
-              })
-            }
-          }
+  editor.getCaretModel.addCaretListener(new CaretAdapter {
+
+    def changeCarets: Unit ={
+      lastPositions = {
+        editor.getCaretModel.getAllCarets.map(caret => {
+          (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
+            Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionEnd), caret.getEditor))
         })
-        Thread.sleep(1000 / powerMode.frameRate)
       }
     }
+
+    override def caretPositionChanged(e: CaretEvent): Unit = changeCarets
+
+    override def caretAdded(e: CaretEvent): Unit = changeCarets
+
+    override def caretRemoved(e: CaretEvent): Unit = changeCarets
   })
-  myThread.start()
 
   editor.getDocument.addDocumentListener(new DocumentAdapter {
     override def documentChanged(e: DocumentEvent): Unit = {
@@ -82,7 +80,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
             e.getOldFragment.length() > 100 ||
             e.getOldFragment.toString.count('\n' == _) > 1 ||
             e.getNewFragment.toString.count('\n' == _) > 1
-
         }
         if (shouldAnimate) {
           val width = {
@@ -95,10 +92,8 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
           }
           if (lastPositions.nonEmpty) {
             val myLastPositions = lastPositions
-            SwingUtilities.invokeLater(new Runnable {
-              override def run(): Unit = {
-                myLastPositions.foreach { case (a, b) => initializeAnimation(a, new Point(b.x, b.y), width) }
-              }
+            SwingUtilities.invokeLater(() => {
+              myLastPositions.foreach { case (a, b) => initializeAnimation(a, new Point(b.x, b.y), width) }
             })
           }
         }
@@ -264,7 +259,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   }
 
   def renderElementsOfPower(g: Graphics) {
-    //               println(myParent.isDoubleBuffered)
     val scrollingModel: ScrollingModel = editor.getScrollingModel
     val xyNew = (
       scrollingModel.getHorizontalScrollOffset,
@@ -276,11 +270,6 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
       val dxx = x - xyNew._1
       val dyy = y - xyNew._2
       elementOfPower.render(g, dxx, dyy)
-      //      if (elementOfPower.isInstanceOf[PowerIndicator]) {
-      //        elementOfPower.render(g, xyNew._1, xyNew._1)
-      //      } else {
-      //
-      //      }
     }
 
   }

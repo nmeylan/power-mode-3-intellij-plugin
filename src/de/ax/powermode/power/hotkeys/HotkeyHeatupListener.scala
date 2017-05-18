@@ -22,15 +22,11 @@ class HotkeyHeatupListener extends ApplicationComponent with AWTEventListener wi
     if (powerMode.isEnabled) {
       e match {
         case event: KeyEvent => {
-          //        println(s"got key event ${ event.getID == KeyEvent.KEY_RELEASED} ${event.getModifiersEx} &  ${(InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)} = ${(event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK))}")
-          //        println(s"EVENT: $event")
           if ((event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) > 0) {
 
             val eventKeyStroke = KeyStroke.getKeyStroke(event.getKeyCode, event.getModifiersEx)
             val isHotkey = allActionKeyStrokes.contains(eventKeyStroke)
             if (isHotkey) {
-              //            println(s"ISHOTKEY")
-
               powerMode.increaseHeatup(Some(DataManager.getInstance().getDataContext(event.getComponent)), Some(eventKeyStroke))
             }
           }
