@@ -56,7 +56,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
   var lastPositions = Seq.empty[(Point, Point)]
   editor.getCaretModel.addCaretListener(new CaretAdapter {
 
-    def changeCarets: Unit ={
+    def changeCarets: Unit = {
       lastPositions = {
         editor.getCaretModel.getAllCarets.map(caret => {
           (Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart), caret.getEditor),
@@ -127,17 +127,18 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
 
     this.setBounds(getMyBounds)
 
-    if (powerMode.isSparksEnabled) {
-      addSparks(point)
-    }
-    if (powerMode.isFlamesEnabled) {
-      addFlames(point)
-    }
+      if (powerMode.isSparksEnabled) {
+        addSparks(point)
+      }
+      if (powerMode.isFlamesEnabled) {
+        addFlames(point)
+      }
 
-    if (powerMode.isShakeEnabled) {
-      doShake(shakeComponents)
+      if (powerMode.isShakeEnabled) {
+        doShake(shakeComponents)
+      }
+      repaint()
     }
-    repaint()
   }
 
   def initializeAnimation(a: Point, b: Point, lineWidth: Double): Unit = {

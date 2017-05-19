@@ -35,7 +35,7 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     <li>Visualize bigger file editing with "BAM!"</li>
     <li>Everything is configurable</li>
 </ul>
-<h3><a href="paypal.me/AlexanderThom">Buy me a Beer</a></h3>
+<h3><a href="https://www.paypal.me/AlexanderThom">Buy me a Beer</a></h3>
 
 ## Plugin Development Setup 
 ### 1 [install scala 2.11](https://www.scala-lang.org/download/) and create a global scala SDK

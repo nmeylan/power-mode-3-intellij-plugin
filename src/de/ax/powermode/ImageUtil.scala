@@ -23,9 +23,14 @@ object ImageUtil {
       fname => new File(fname).lastModified(),
       fname => !new File(fname).exists())
 
-  val listCache = new Cache[File, List[BufferedImage], Set[(URI, Long)]](
-    f => getImageUrls(f).map(u => (u, new File(u).lastModified())).toSet,
-    f => false)
+  var lastUpdate = System.currentTimeMillis()
+
+  val listCache = new Cache[File, List[BufferedImage], File](
+    f => f,
+    f => if (System.currentTimeMillis() - 5000 > lastUpdate) {
+      lastUpdate = System.currentTimeMillis()
+      true
+    } else false)
 
   def images(imagesPath: File): List[() => BufferedImage] = {
     val imageUrls = getImageUrls(imagesPath)
