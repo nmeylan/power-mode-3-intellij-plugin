@@ -37,7 +37,9 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
     try {
       Success(f).filter(_ != null)
     } catch {
-      case e: Throwable => Failure(e)
+      case e: Throwable =>
+        e.printStackTrace()
+        Failure(e)
     }
   }
 
@@ -59,10 +61,8 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
         .toStream.flatMap(o => o.toOption.flatMap(Option(_)).map(_.asInstanceOf[Project]))
       maybeProject.headOption.foreach(p => {
         val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
-        SwingUtilities.invokeLater(new Runnable {
-          override def run() = {
-            elementsOfPowerContainers.get(textEditor).foreach(_.addPowerIndicator())
-          }
+        SwingUtilities.invokeLater(() => {
+          elementsOfPowerContainers.get(textEditor).foreach(_.addPowerIndicator())
         })
       })
     }

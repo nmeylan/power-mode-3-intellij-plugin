@@ -1,15 +1,14 @@
 package de.ax.powermode
 
 import java.awt.image.BufferedImage
-import java.io.File
-import java.net.URL
+import java.io.{BufferedOutputStream, File, FileOutputStream, InputStream}
 import javax.imageio.ImageIO
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import java.awt.{AlphaComposite, Point}
-import java.io.File
 import java.net.URL
 import java.net.URI
+import java.util.zip.ZipInputStream
 import javax.imageio.ImageIO
 
 import de.ax.powermode.cache.Cache
@@ -24,9 +23,11 @@ import de.ax.powermode.cache.Cache
 import scala.collection.immutable
 
 object ImageUtil {
-  def imagesForPath(folder: Option[File]): scala.List[ BufferedImage] = {
-    ImageUtil.listCache.getOrUpdate(folder.getOrElse(new File("UNDEFINED"))){
-      Some(folder.map(ImageUtil.images).toList.flatten.map(f=>f()))
+  def imagesForPath(folder: Option[File]): scala.List[BufferedImage] = {
+    val orElse = folder.getOrElse(new File("UNDEFINED"))
+    println(s"imagesForPath $folder")
+    ImageUtil.listCache.getOrUpdate(orElse) {
+      Some(folder.map(ImageUtil.images).toList.flatten.map(f => f()))
     }.toList.flatten
   }
 
@@ -36,7 +37,9 @@ object ImageUtil {
       fname => new File(fname).lastModified(),
       fname => !new File(fname).exists())
 
-  val listCache = new Cache[File, List[BufferedImage], Set[(URI,Long)]](f=> getImageUrls(f).map(u=>(u,new File(u).lastModified())).toSet, f => false)
+  val listCache = new Cache[File, List[BufferedImage], Set[(URI, Long)]](
+    f => getImageUrls(f).map(u => (u, new File(u).lastModified())).toSet,
+    f => false)
 
   def images(imagesPath: File): List[() => BufferedImage] = {
     val imageUrls = getImageUrls(imagesPath)
@@ -71,16 +74,27 @@ object ImageUtil {
   }
 
   private def getImageUrls(imagesPath: File): List[URI] = {
-    if (imagesPath.exists()) {
-      getFileImages(imagesPath)
-    } else if (debugFolderExists(imagesPath)) {
-      getImageUrlsFromDebugDir(imagesPath)
-    } else {
-      getImageUrlsFromResources(imagesPath)
+    try {
+      println(s"FILE: $imagesPath")
+      val urls = if (imagesPath.exists()) {
+        getFileImages(imagesPath)
+      } else if (debugFolderExists(imagesPath)) {
+        getImageUrlsFromDebugDir(imagesPath)
+      } else {
+        getImageUrlsFromResources(imagesPath)
+      }
+      println(s"URLS: $urls")
+      urls
+    } catch {
+      case e: Throwable =>
+        e.printStackTrace()
+        throw e
     }
   }
 
   private def getFileImages(imagesPath: File): List[URI] = {
+    println(s"LOADING FROM normal path: $imagesPath")
+
     val files = if (imagesPath.isFile) {
       List(imagesPath)
     } else {
@@ -95,19 +109,42 @@ object ImageUtil {
   }
 
   private def getImageUrlsFromDebugDir(imagesPath: File): List[URI] = {
-    Option(new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), imagesPath.getPath).listFiles())
+    val file = new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), imagesPath.getPath)
+    println(s"LOADING FROM exploded sandbox: $file")
+    Option(file.listFiles())
       .map(_.toList).toList.flatten.filter(_.isFile).map(_.toURI)
   }
 
-
-  def getResourceFolderFiles(folder: File): List[File] = {
-    val loader = Thread.currentThread.getContextClassLoader
-    val url = loader.getResource(folder.getPath)
-    val path = url.getPath
-    Option(new File(path).listFiles).map(_.toList.sortBy(_.getName)).getOrElse(List.empty)
+  def writeBytes(data: Stream[Byte], file: File) = {
+    val target = new BufferedOutputStream(new FileOutputStream(file))
+    try data.foreach(target.write(_)) finally target.close()
   }
 
+  lazy val fireUrls = (1 to 25).map(i => if (i > 9) s"$i" else s"0$i")
+    .map { i =>
+      mkTmpImg(classOf[PowerFlame].getResourceAsStream(s"/fire/animated/256/fire1_ $i.png"))
+    }.toList
+
+  lazy val bamUrls = Option(classOf[PowerFlame].getResourceAsStream(s"/bam/bam.png")).map(mkTmpImg).toList
+
   private def getImageUrlsFromResources(imagesFolder: File): List[URI] = {
-    getResourceFolderFiles(imagesFolder).filter(_.isFile).map(_.toURI)
+    val loader = this.getClass().getClassLoader()
+    println(s"LOADING FROM JAR: $imagesFolder")
+    val uRLs: List[URL] = if (imagesFolder.getPath.contains("fire")) {
+      fireUrls
+    } else if (imagesFolder.getPath.contains("bam")) {
+      bamUrls
+    } else {
+      None.toList
+    }
+    uRLs.map(_.toURI)
+  }
+
+  private def mkTmpImg(stream: InputStream): URL = {
+    import java.io.File
+    val tempFile = File.createTempFile(System.currentTimeMillis() + "_pmtempfile_", ".png")
+    tempFile.deleteOnExit()
+    writeBytes(Stream.continually(stream.read).takeWhile(_ != -1).map(_.toByte), tempFile)
+    tempFile.toURI.toURL
   }
 }
