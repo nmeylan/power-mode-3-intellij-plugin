@@ -82,18 +82,8 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
 
 
   def isLast: Boolean = {
-    PowerIndicator.indicators.lastOption.exists(_.identifier == identifier)
+    PowerIndicator.indicators.lastOption.filter(_ != 0).exists(_.identifier == identifier)
   }
-
-  //
-  //  override def lifeFactor: Float = {
-  //    if(isLast) {
-  //      math.max(super.lifeFactor,0.5)
-  //    } else{
-  //      super.lifeFactor
-  //    }
-  //
-  //  }
 
   override def update(delta: Float): Boolean = {
     if (alive) {

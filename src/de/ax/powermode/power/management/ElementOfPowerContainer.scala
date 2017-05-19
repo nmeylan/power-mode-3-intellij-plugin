@@ -138,7 +138,7 @@ class ElementOfPowerContainer(editor: Editor) extends JComponent with ComponentL
         doShake(shakeComponents)
       }
       repaint()
-    }
+
   }
 
   def initializeAnimation(a: Point, b: Point, lineWidth: Double): Unit = {
