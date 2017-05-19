@@ -17,7 +17,6 @@ package de.ax.powermode
 
 import com.intellij.openapi.options.ConfigurableBase
 import de.ax.powermode.power.ui.PowerModeConfigurableUI
-import org.jetbrains.annotations.NotNull
 
 /**
   * @author Baptiste Mesta

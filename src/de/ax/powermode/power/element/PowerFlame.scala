@@ -1,19 +1,10 @@
 package de.ax.powermode.power.element
 
-import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
 import java.awt.{AlphaComposite, Graphics, Graphics2D}
-import java.io.File
-import java.net.URL
-import javax.imageio.ImageIO
 
-import de.ax.powermode.ImageUtil
-import com.intellij.util.PathUtil
-import de.ax.powermode.cache.Cache
+import de.ax.powermode.{ImageUtil, Util}
 import de.ax.powermode.power.ElementOfPower
-import de.ax.powermode.{PowerMode, Util}
-
-import scala.collection.immutable
 
 
 case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean)

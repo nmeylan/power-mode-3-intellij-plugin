@@ -17,9 +17,8 @@ package de.ax.powermode.power.element
 
 import java.awt._
 
-import de.ax.powermode.{Util, PowerColor}
 import de.ax.powermode.power.ElementOfPower
-import org.jetbrains.annotations.NotNull
+import de.ax.powermode.{PowerColor, Util}
 
 /**
   * @author Baptiste Mesta

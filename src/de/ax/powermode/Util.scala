@@ -1,17 +1,9 @@
 package de.ax.powermode
 
-import java.awt.geom.AffineTransform
-import java.awt.image.BufferedImage
-import java.awt.{AlphaComposite, Point}
-import java.io.File
-import java.net.URL
-import javax.imageio.ImageIO
+import java.awt.Point
 
-import de.ax.powermode.cache.Cache
 import com.intellij.openapi.editor.impl.EditorImpl
 import com.intellij.openapi.editor.{Caret, Editor, VisualPosition}
-import com.intellij.util.PathUtil
-import de.ax.powermode.power.element.PowerFlame
 
 import scala.util.Try
 

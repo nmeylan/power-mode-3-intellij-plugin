@@ -2,10 +2,8 @@ package de.ax.powermode.power.element
 
 import java.awt.image.BufferedImage
 import java.awt.{AlphaComposite, Graphics, Graphics2D}
-import java.io.File
 
-import de.ax.powermode.Util
-import de.ax.powermode.ImageUtil
+import de.ax.powermode.{ImageUtil, Util}
 import de.ax.powermode.power.ElementOfPower
 
 /**

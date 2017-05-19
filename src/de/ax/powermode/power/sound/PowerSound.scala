@@ -2,11 +2,7 @@ package de.ax.powermode.power.sound
 
 import java.io.File
 import javafx.embed.swing.JFXPanel
-import javafx.scene.media.{MediaException, Media, MediaPlayer}
-
-import de.ax.powermode.PowerMode
-
-import scala.util.Try
+import javafx.scene.media.{Media, MediaPlayer}
 
 /**
   * Created by nyxos on 03.10.16.

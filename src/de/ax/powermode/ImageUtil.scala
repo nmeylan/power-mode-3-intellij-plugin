@@ -2,25 +2,12 @@ package de.ax.powermode
 
 import java.awt.image.BufferedImage
 import java.io.{BufferedOutputStream, File, FileOutputStream, InputStream}
-import javax.imageio.ImageIO
-import java.awt.geom.AffineTransform
-import java.awt.image.BufferedImage
-import java.awt.{AlphaComposite, Point}
-import java.net.URL
-import java.net.URI
-import java.util.zip.ZipInputStream
+import java.net.{URI, URL}
 import javax.imageio.ImageIO
 
-import de.ax.powermode.cache.Cache
-import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.openapi.editor.{Caret, Editor, VisualPosition}
 import com.intellij.util.PathUtil
-import de.ax.powermode.power.element.PowerFlame
-
-import scala.util.Try
 import de.ax.powermode.cache.Cache
-
-import scala.collection.immutable
+import de.ax.powermode.power.element.PowerFlame
 
 object ImageUtil {
   def imagesForPath(folder: Option[File]): scala.List[BufferedImage] = {
@@ -30,7 +17,6 @@ object ImageUtil {
       Some(folder.map(ImageUtil.images).toList.flatten.map(f => f()))
     }.toList.flatten
   }
-
 
   val imageCache =
     new Cache[URI, BufferedImage, Long](
@@ -47,8 +33,6 @@ object ImageUtil {
   }
 
   import java.awt.image.BufferedImage
-  import java.awt.image.ColorModel
-  import java.awt.image.WritableRaster
 
   def deepCopy(bi: BufferedImage): BufferedImage = {
     val cm = bi.getColorModel

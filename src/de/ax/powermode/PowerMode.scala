@@ -31,7 +31,6 @@ import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
 import scala.collection.immutable.Seq
-import scala.collection.immutable.Stream.Empty
 import scala.util.Try
 
 /**
