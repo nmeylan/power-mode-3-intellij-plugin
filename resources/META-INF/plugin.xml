@@ -24,6 +24,7 @@
             <li>Play next song action: [shift ctrl alt M]</li>
             <li>Visualize bigger file editing with "BAM!"</li>
             <li>See your power level in the indicator box</li>
+            <li>Customizable animation images</li>
             <li>Everything is configurable</li>
         </ul>
         <h2>Usage</h2>
@@ -32,7 +33,9 @@
             <li>ENTER POWER MODE in Preferences > Appearance > Power mode II</li>
             <li>CHANGE THE SLIDERS and options to your liking</li>
         </ol>
-       <h3><a href="https://www.paypal.me/AlexanderThom">Buy me a Beer</a></h3>
+
+      <a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
+<img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
         ]]></description>
 
     <idea-version since-build="143.0"/>

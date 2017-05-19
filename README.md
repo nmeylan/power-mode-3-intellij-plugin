@@ -33,9 +33,13 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     <li>Play music folder: volume based on heatup</li>
     <li>Play next song action: [shift ctrl alt M]</li>
     <li>Visualize bigger file editing with "BAM!"</li>
+    <li>See your power level in the indicator box</li>
+    <li>Customizable animation images</li>
     <li>Everything is configurable</li>
 </ul>
-<h3><a href="https://www.paypal.me/AlexanderThom">Buy me a Beer</a></h3>
+
+<a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
+<img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
 
 ## Plugin Development Setup 
 ### 1 [install scala 2.11](https://www.scala-lang.org/download/) and create a global scala SDK
