@@ -34,8 +34,8 @@
             <li>CHANGE THE SLIDERS and options to your liking</li>
         </ol>
 
-      <a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
-<img width="100" height="100" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
+<a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
+<img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
         ]]></description>
 
     <idea-version since-build="143.0"/>
