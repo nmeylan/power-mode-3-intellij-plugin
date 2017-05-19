@@ -105,7 +105,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
         }
         sound.foreach(_.setVolume(powerMode.valueFactor))
       } catch {
-        case e: Exception =>
+        case e: Throwable =>
           e.printStackTrace()
       }
     }

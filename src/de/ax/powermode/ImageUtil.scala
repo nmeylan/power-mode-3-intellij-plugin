@@ -12,7 +12,7 @@ import de.ax.powermode.power.element.PowerFlame
 object ImageUtil {
   def imagesForPath(folder: Option[File]): scala.List[BufferedImage] = {
     val orElse = folder.getOrElse(new File("UNDEFINED"))
-    println(s"imagesForPath $folder")
+    //println(s"imagesForPath $folder")
     ImageUtil.listCache.getOrUpdate(orElse) {
       Some(folder.map(ImageUtil.images).toList.flatten.map(f => f()))
     }.toList.flatten
@@ -59,7 +59,7 @@ object ImageUtil {
 
   private def getImageUrls(imagesPath: File): List[URI] = {
     try {
-      println(s"FILE: $imagesPath")
+      //println(s"FILE: $imagesPath")
       val urls = if (imagesPath.exists()) {
         getFileImages(imagesPath)
       } else if (debugFolderExists(imagesPath)) {
@@ -67,7 +67,7 @@ object ImageUtil {
       } else {
         getImageUrlsFromResources(imagesPath)
       }
-      println(s"URLS: $urls")
+      //println(s"URLS: $urls")
       urls
     } catch {
       case e: Throwable =>
@@ -77,7 +77,7 @@ object ImageUtil {
   }
 
   private def getFileImages(imagesPath: File): List[URI] = {
-    println(s"LOADING FROM normal path: $imagesPath")
+    //println(s"LOADING FROM normal path: $imagesPath")
 
     val files = if (imagesPath.isFile) {
       List(imagesPath)
@@ -94,7 +94,7 @@ object ImageUtil {
 
   private def getImageUrlsFromDebugDir(imagesPath: File): List[URI] = {
     val file = new File(PathUtil.getJarPathForClass(classOf[PowerFlame]), imagesPath.getPath)
-    println(s"LOADING FROM exploded sandbox: $file")
+    //println(s"LOADING FROM exploded sandbox: $file")
     Option(file.listFiles())
       .map(_.toList).toList.flatten.filter(_.isFile).map(_.toURI)
   }
@@ -113,7 +113,7 @@ object ImageUtil {
 
   private def getImageUrlsFromResources(imagesFolder: File): List[URI] = {
     val loader = this.getClass().getClassLoader()
-    println(s"LOADING FROM JAR: $imagesFolder")
+    //println(s"LOADING FROM JAR: $imagesFolder")
     val uRLs: List[URL] = if (imagesFolder.getPath.contains("fire")) {
       fireUrls
     } else if (imagesFolder.getPath.contains("bam")) {

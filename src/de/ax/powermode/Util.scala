@@ -34,7 +34,14 @@ object Util {
     })
   }
 
-
+def interceptError[T](f : => T): T ={
+  try{
+    f
+  }catch{
+    case e:Throwable =>
+      throw e
+  }
+}
 
   def getPoint(position: VisualPosition, editor: Editor): Point = {
     val p: Point = editor.visualPositionToXY(position)
