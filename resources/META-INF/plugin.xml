@@ -34,10 +34,13 @@
             <li>CHANGE THE SLIDERS and options to your liking</li>
         </ol>
 
-        <a href="https://github.com/axaluss/power-mode-intellij-plugin/releases/latest">Latest Release Download</a>
+        <a href="https://github.com/axaluss/power-mode-intellij-plugin/releases/latest">Latest Release Download<img
+                src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/download.png"/></a>
+        <br/>
 
-<a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
-<img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
+        <a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
+            <img style="width:100px; height: 100px;"
+                 src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
         ]]></description>
 
     <idea-version since-build="143.0"/>
