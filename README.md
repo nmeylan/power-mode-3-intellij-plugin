@@ -37,7 +37,7 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     <li>Customizable animation images</li>
     <li>Everything is configurable</li>
 </ul>
-
+<a href="https://github.com/axaluss/power-mode-intellij-plugin/releases/latest">Latest Release Download</a>
 <a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
 <img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
 
