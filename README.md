@@ -37,9 +37,12 @@ Install the plugin then simply enable the sparkling in Preferences > Appearance 
     <li>Customizable animation images</li>
     <li>Everything is configurable</li>
 </ul>
-<a href="https://github.com/axaluss/power-mode-intellij-plugin/releases/latest">Latest Release Download<img   width="40" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/download.png"/></a><br/>
-<a href="https://www.paypal.me/AlexanderThom">Want to Donate a Beer?
-<img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/></a>
+
+<a href="https://github.com/axaluss/power-mode-intellij-plugin/releases/latest"><img width="40" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/download.png"/>Latest Release Download</a>
+<br/>
+
+<a href="https://www.paypal.me/AlexanderThom"><img style="width:100px; height: 100px;" src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/>Want to Donate a Beer?</a>
+
 
 ## Plugin Development Setup 
 ### 1 [install scala 2.11](https://www.scala-lang.org/download/) and create a global scala SDK
