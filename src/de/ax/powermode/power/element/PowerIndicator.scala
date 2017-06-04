@@ -82,7 +82,7 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
 
 
   def isLast: Boolean = {
-    PowerIndicator.indicators.lastOption.filter(_ != 0).exists(_.identifier == identifier)
+    PowerIndicator.indicators != null && PowerIndicator.indicators.lastOption.filter(_ != null).exists(i => identifier == i.identifier)
   }
 
   override def update(delta: Float): Boolean = {
