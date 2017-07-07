@@ -58,11 +58,12 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
       playing = false
     }
 
-    if (!playing && files != null && !files.isEmpty) {
-      val f = files(index)
+    val myFiles: Array[File] = files
+    if (!playing && myFiles != null && !myFiles.isEmpty) {
+      index = (Math.random() * (200 * myFiles.length)).toInt % myFiles.length
+      val f = myFiles(index)
       try {
         playing = true
-        index = (Math.random() * (200 * files.length)).toInt % files.length
         new JFXPanel
         val hit = new Media(f.toURI.toString)
         mediaPlayer = Some {
@@ -76,6 +77,7 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) {
         }
       } catch {
         case e: Throwable =>
+          e.printStackTrace()
           playing = false
       }
     }
