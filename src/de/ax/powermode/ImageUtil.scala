@@ -49,11 +49,17 @@ object ImageUtil {
   private def getImagesCached(imageUrls: List[URI]) = {
     imageUrls.flatMap(url => imageCache.getOrUpdate(url) {
       try {
-        val img = ImageIO.read(url.toURL)
-        val bufferedImage = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
-        val graphics = bufferedImage.getGraphics
-        graphics.drawImage(img, 0, 0, null)
-        Some(bufferedImage)
+        val maybeImg = Option(ImageIO.read(url.toURL))
+
+        maybeImg match {
+          case Some(img) =>
+            val bufferedImage = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
+            val graphics = bufferedImage.getGraphics
+            graphics.drawImage(img, 0, 0, null)
+            Some(bufferedImage)
+          case None =>
+            None
+        }
       } catch {
         case e: Exception =>
           e.printStackTrace()

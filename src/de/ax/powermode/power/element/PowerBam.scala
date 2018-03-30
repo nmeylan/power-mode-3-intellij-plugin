@@ -27,7 +27,9 @@ case class PowerBam(_x: Float, _y: Float, _width: Float, _height: Float, initLif
 
         ImageUtil.imagesForPath(powerMode.bamImageFolder)
       }
-      currentImage = bis(i % bis.size)
+      if (bis.nonEmpty) {
+        currentImage = bis(i % bis.size)
+      }
       i += 1
       x = _x + (0.5 * _width) - (0.5 * _width * lifeFactor)
       y = _y + (0.5 * _height) - (0.5 * _height * lifeFactor)
@@ -39,7 +41,7 @@ case class PowerBam(_x: Float, _y: Float, _width: Float, _height: Float, initLif
 
 
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {
-    if (alive) {
+    if (alive && currentImage != null) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
       g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Util.alpha(0.9f * (1 - lifeFactor))))
       g2d.drawImage(currentImage, x + dxx toInt, y + dyy toInt, width toInt, height toInt, null)

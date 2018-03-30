@@ -200,7 +200,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
 
   var caretAction: Boolean = true
 
-  def initComponent {
+  override def initComponent: Unit = {
     val editorFactory = EditorFactory.getInstance
     maybeElementOfPowerContainerManager = Some(new ElementOfPowerContainerManager)
     maybeElementOfPowerContainerManager.foreach(editorFactory.addEditorFactoryListener(_, new Disposable() {
@@ -214,11 +214,11 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
       (new MyTypedActionHandler(editorActionManager.getTypedAction.getRawHandler)))
   }
 
-  def disposeComponent {
+  override def disposeComponent: Unit = {
     maybeElementOfPowerContainerManager.foreach(_.dispose)
   }
 
-  def getComponentName: String = {
+  override def getComponentName: String = {
     return "PowerModeII"
   }
 
