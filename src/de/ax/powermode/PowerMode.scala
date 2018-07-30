@@ -18,7 +18,6 @@ package de.ax.powermode
 import java.awt.event.InputEvent
 import java.io.File
 import javax.swing.KeyStroke
-
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
@@ -186,7 +185,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
         val d = heatupTime.toDouble / (60000.0 / keyStrokesPerMinute)
         val keysWorth = lastKeys.map {
           case (Some(ks), _) =>
-            val size = Seq(InputEvent.CTRL_DOWN_MASK, InputEvent.ALT_DOWN_MASK, InputEvent.SHIFT_DOWN_MASK).filter(m => (ks.getModifiers & m) > 0).size
+            val size = Seq(InputEvent.CTRL_DOWN_MASK, InputEvent.ALT_DOWN_MASK, InputEvent.SHIFT_DOWN_MASK).count(m => (ks.getModifiers & m) > 0)
             val res = size * hotkeyWeight
             res
           case _ => 1

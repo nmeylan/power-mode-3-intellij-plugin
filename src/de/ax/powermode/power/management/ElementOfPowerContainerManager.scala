@@ -39,6 +39,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
     } catch {
       case e: Throwable =>
         e.printStackTrace()
+        logger.error("error doing ForceTry", e)
         Failure(e)
     }
   }
@@ -106,7 +107,7 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
         sound.foreach(_.setVolume(powerMode.valueFactor))
       } catch {
         case e: Throwable =>
-          e.printStackTrace()
+          logger.error(e.getMessage, e)
       }
     }
   })

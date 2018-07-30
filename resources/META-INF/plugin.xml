@@ -1,7 +1,7 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>de.ax.powermode</id>
     <name>Power Mode II</name>
-    <version>3.15</version>     
+    <version>6.28</version>
     <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
     </vendor>
 
@@ -43,7 +43,7 @@
         <a href="https://www.paypal.me/AlexanderThom">
             <img style="width:100px; height: 100px;"
                  src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/>
-            Want to Donate a Beer?
+            Want to pass me a Beer?
         </a>
         ]]></description>
 

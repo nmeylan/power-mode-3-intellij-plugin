@@ -62,7 +62,7 @@ object ImageUtil {
         }
       } catch {
         case e: Exception =>
-          e.printStackTrace()
+          PowerMode.logger.error(e.getMessage, e)
           None
       }
     })
@@ -82,7 +82,7 @@ object ImageUtil {
       urls
     } catch {
       case e: Throwable =>
-        e.printStackTrace()
+        PowerMode.logger.error(s"error getting image urls: ${e.getMessage}", e)
         throw e
     }
   }

@@ -21,7 +21,12 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends Typed
         initializeAnimationByTypedAction(editor)
       }
     }
-    typedActionHandler.execute(editor, c, dataContext)
+    try {
+      typedActionHandler.execute(editor, c, dataContext)
+    } catch {
+      case x: IndexOutOfBoundsException =>
+        logger.info(x.getMessage, x)
+    }
   }
 
   def getEditorCaretPositions(editor: Editor): Seq[Point] = {
