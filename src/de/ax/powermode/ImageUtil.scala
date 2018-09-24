@@ -3,11 +3,13 @@ package de.ax.powermode
 import java.awt.image.BufferedImage
 import java.io.{BufferedOutputStream, File, FileOutputStream, InputStream}
 import java.net.{URI, URL}
-import javax.imageio.ImageIO
 
+import javax.imageio.ImageIO
 import com.intellij.util.PathUtil
 import de.ax.powermode.cache.Cache
 import de.ax.powermode.power.element.PowerFlame
+
+import scala.util.Try
 
 object ImageUtil {
   def imagesForPath(folder: Option[File]): scala.List[BufferedImage] = {
@@ -46,10 +48,12 @@ object ImageUtil {
     new BufferedImage(cm, raster, isAlphaPremultiplied, null)
   }
 
+  def getUrl(uri: URI):Try[URL]= Try{uri.toURL}
+
   private def getImagesCached(imageUrls: List[URI]) = {
-    imageUrls.flatMap(url => imageCache.getOrUpdate(url) {
+    imageUrls.flatMap(uri => imageCache.getOrUpdate(uri) {
       try {
-        val maybeImg = Option(ImageIO.read(url.toURL))
+        val maybeImg = Option(ImageIO.read(uri.toURL))
 
         maybeImg match {
           case Some(img) =>
@@ -62,7 +66,7 @@ object ImageUtil {
         }
       } catch {
         case e: Exception =>
-          PowerMode.logger.error(e.getMessage, e)
+          PowerMode.logger.error(s"Error reading image from uri: '$uri' url: '${getUrl(uri)}': ${e.getMessage} ", e)
           None
       }
     })
@@ -82,7 +86,7 @@ object ImageUtil {
       urls
     } catch {
       case e: Throwable =>
-        PowerMode.logger.error(s"error getting image urls: ${e.getMessage}", e)
+        PowerMode.logger.error(s"error getting image urls from '${imagesPath}': ${e.getMessage}", e)
         throw e
     }
   }
