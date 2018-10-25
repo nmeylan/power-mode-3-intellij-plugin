@@ -14,9 +14,12 @@ import de.ax.powermode.Power
   * Date: 04.09.2006
   * Time: 14:11:03
   */
-class HotkeyHeatupListener extends ApplicationComponent with AWTEventListener with Power {
-  lazy val allActionKeyStrokes: Set[KeyStroke] = actionsToKeyStrokes.values.flatten.toSet
-
+class HotkeyHeatupListener
+    extends ApplicationComponent
+    with AWTEventListener
+    with Power {
+  lazy val allActionKeyStrokes: Set[KeyStroke] =
+    actionsToKeyStrokes.values.flatten.toSet
 
   override def eventDispatched(e: AWTEvent): Unit = {
     if (powerMode.isEnabled) {
@@ -24,10 +27,14 @@ class HotkeyHeatupListener extends ApplicationComponent with AWTEventListener wi
         case event: KeyEvent => {
           if ((event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) > 0) {
 
-            val eventKeyStroke = KeyStroke.getKeyStroke(event.getKeyCode, event.getModifiersEx)
+            val eventKeyStroke =
+              KeyStroke.getKeyStroke(event.getKeyCode, event.getModifiersEx)
             val isHotkey = allActionKeyStrokes.contains(eventKeyStroke)
             if (isHotkey) {
-              powerMode.increaseHeatup(Some(DataManager.getInstance().getDataContext(event.getComponent)), Some(eventKeyStroke))
+              powerMode.increaseHeatup(
+                Some(
+                  DataManager.getInstance().getDataContext(event.getComponent)),
+                Some(eventKeyStroke))
             }
           }
         }
@@ -36,17 +43,18 @@ class HotkeyHeatupListener extends ApplicationComponent with AWTEventListener wi
     }
   }
 
-
   lazy val actionsToKeyStrokes = {
-    Map(KeymapManager.getInstance.getActiveKeymap.getActionIds.seq.map(ActionManager.getInstance.getAction)
-      .filter(a => a != null && a.getShortcutSet != null)
-      .map { a =>
-        val keyStrokes = a.getShortcutSet.getShortcuts.seq
-          .filter(_.isKeyboard)
-          .map(_.asInstanceOf[KeyboardShortcut])
-          .flatMap(a => Seq(a.getFirstKeyStroke, a.getSecondKeyStroke))
-        (a, keyStrokes)
-      }: _*)
+    Map(
+      KeymapManager.getInstance.getActiveKeymap.getActionIds.seq
+        .map(ActionManager.getInstance.getAction)
+        .filter(a => a != null && a.getShortcutSet != null)
+        .map { a =>
+          val keyStrokes = a.getShortcutSet.getShortcuts.seq
+            .filter(_.isKeyboard)
+            .map(_.asInstanceOf[KeyboardShortcut])
+            .flatMap(a => Seq(a.getFirstKeyStroke, a.getSecondKeyStroke))
+          (a, keyStrokes)
+        }: _*)
   }
 
   override def initComponent(): Unit = {

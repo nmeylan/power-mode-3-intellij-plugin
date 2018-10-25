@@ -11,7 +11,6 @@ import scala.util.Try
 class MyCaretListener extends CaretListener with Power {
   var modified = true
 
-
   override def caretPositionChanged(caretEvent: CaretEvent): Unit = {
     if (!modified && powerMode.caretAction) {
       initializeAnimationByCaretEvent(caretEvent.getCaret)
@@ -32,7 +31,12 @@ class MyCaretListener extends CaretListener with Power {
       caret.getEditor.getColorsScheme.getClass.getName.contains("EditorImpl")
     }.getOrElse(false)
     if (isActualEditor) {
-      Util.getCaretPosition(caret).toOption.foreach(p => powerMode.maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(caret.getEditor, p)))
+      Util
+        .getCaretPosition(caret)
+        .toOption
+        .foreach(p =>
+          powerMode.maybeElementOfPowerContainerManager.foreach(
+            _.initializeAnimation(caret.getEditor, p)))
     }
   }
 }

@@ -23,7 +23,15 @@ import de.ax.powermode.{PowerColor, Util}
 /**
   * @author Baptiste Mesta
   */
-case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size: Float, val initLife: Long, color: PowerColor, gravityFactor: Float) extends ElementOfPower {
+case class PowerSpark(var x: Float,
+                      var y: Float,
+                      dx: Float,
+                      var dy: Float,
+                      size: Float,
+                      val initLife: Long,
+                      color: PowerColor,
+                      gravityFactor: Float)
+    extends ElementOfPower {
   val life = System.currentTimeMillis() + initLife
 
   def update(delta: Float): Boolean = {
@@ -33,11 +41,15 @@ case class PowerSpark(var x: Float, var y: Float, dx: Float, var dy: Float, size
     !alive
   }
 
-  def render( g: Graphics, dxx: Int, dyy: Int) {
+  def render(g: Graphics, dxx: Int, dyy: Int) {
     if (alive) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setColor(new Color(color._1, color._2, color._3, Util.alpha(color._4)))
-      g2d.fillOval((dxx + x - (size / 2)).toInt, (dyy + y - (size / 2)).toInt, size.toInt, size.toInt)
+      g2d.setColor(
+        new Color(color._1, color._2, color._3, Util.alpha(color._4)))
+      g2d.fillOval((dxx + x - (size / 2)).toInt,
+                   (dyy + y - (size / 2)).toInt,
+                   size.toInt,
+                   size.toInt)
       g2d.dispose()
     }
   }

@@ -22,6 +22,7 @@ trait ElementOfPower extends Power {
   }
 
   def alive: Boolean = {
-    life > System.currentTimeMillis() && powerMode.isEnabled //&& width >= 0 && width <= _width
+    life > System
+      .currentTimeMillis() && powerMode.isEnabled //&& width >= 0 && width <= _width
   }
 }

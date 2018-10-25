@@ -9,7 +9,12 @@ import de.ax.powermode.power.ElementOfPower
 /**
   * Created by nyxos on 28.12.16.
   */
-case class PowerBam(_x: Float, _y: Float, _width: Float, _height: Float, initLife: Long) extends ElementOfPower {
+case class PowerBam(_x: Float,
+                    _y: Float,
+                    _width: Float,
+                    _height: Float,
+                    initLife: Long)
+    extends ElementOfPower {
 
   val life = System.currentTimeMillis() + initLife
   var x: Double = _x
@@ -39,12 +44,18 @@ case class PowerBam(_x: Float, _y: Float, _width: Float, _height: Float, initLif
     !alive
   }
 
-
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {
     if (alive && currentImage != null) {
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Util.alpha(0.9f * (1 - lifeFactor))))
-      g2d.drawImage(currentImage, x + dxx toInt, y + dyy toInt, width toInt, height toInt, null)
+      g2d.setComposite(
+        AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                                   Util.alpha(0.9f * (1 - lifeFactor))))
+      g2d.drawImage(currentImage,
+                    x + dxx toInt,
+                    y + dyy toInt,
+                    width toInt,
+                    height toInt,
+                    null)
       g2d.dispose()
     }
   }

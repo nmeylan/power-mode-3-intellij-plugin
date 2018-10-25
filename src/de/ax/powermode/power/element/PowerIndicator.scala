@@ -13,7 +13,6 @@ import scala.collection.mutable
 /**
   * Created by nyxos on 25.02.17.
   */
-
 object PowerIndicator {
   var indicators = mutable.Queue.empty[PowerIndicator]
 
@@ -25,16 +24,16 @@ object PowerIndicator {
   }
 
   val grands = Seq("perfect",
-    "excellent",
-    "superb",
-    "sublime",
-    "dominating",
-    "marvelous",
-    "splendid",
-    "majestic",
-    "unreal",
-    "fabulous",
-    "great")
+                   "excellent",
+                   "superb",
+                   "sublime",
+                   "dominating",
+                   "marvelous",
+                   "splendid",
+                   "majestic",
+                   "unreal",
+                   "fabulous",
+                   "great")
 
   var lastGrand = Option.empty[String]
 
@@ -59,7 +58,13 @@ object PowerIndicator {
   }
 }
 
-case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, initLife: Long, editor: Editor) extends ElementOfPower {
+case class PowerIndicator(_x: Float,
+                          _y: Float,
+                          _width: Float,
+                          _height: Float,
+                          initLife: Long,
+                          editor: Editor)
+    extends ElementOfPower {
   val identifier = System.currentTimeMillis() + (Math.random() * 1000000)
   var diffLife = Option.empty[Long]
   var x: Double = _x
@@ -75,14 +80,17 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
     if (isLast) {
       math.max(life2, System.currentTimeMillis() + (initLife * 0.75)) toLong
     } else {
-      diffLife = Some(diffLife.getOrElse(System.currentTimeMillis() + (initLife * 0.75) toLong))
+      diffLife = Some(
+        diffLife.getOrElse(
+          System.currentTimeMillis() + (initLife * 0.75) toLong))
       diffLife.get
     }
   }
 
-
   def isLast: Boolean = {
-    PowerIndicator.indicators != null && PowerIndicator.indicators.lastOption.filter(_ != null).exists(i => identifier == i.identifier)
+    PowerIndicator.indicators != null && PowerIndicator.indicators.lastOption
+      .filter(_ != null)
+      .exists(i => identifier == i.identifier)
   }
 
   override def update(delta: Float): Boolean = {
@@ -104,20 +112,36 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
     }
 
     if (alive && powerMode.isEnabled && powerMode.powerIndicatorEnabled) {
-      val Some((dxx, dyy)) = lastScrollPosition.map(lp => {
-        val (nx, ny) = (editor.getScrollingModel.getHorizontalScrollOffset, editor.getScrollingModel.getVerticalScrollOffset)
-        (lp._1 - nx, lp._2 - ny)
-      }).orElse(Some(0, 0)).map { case (x, y) => (limit(x, 100), limit(y, 100)) }
+      val Some((dxx, dyy)) = lastScrollPosition
+        .map(lp => {
+          val (nx, ny) = (editor.getScrollingModel.getHorizontalScrollOffset,
+                          editor.getScrollingModel.getVerticalScrollOffset)
+          (lp._1 - nx, lp._2 - ny)
+        })
+        .orElse(Some(0, 0))
+        .map { case (x, y) => (limit(x, 100), limit(y, 100)) }
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-        Util.alpha(1f * (1 - lifeFactor) * (1 - lifeFactor))))
+      g2d.setComposite(
+        AlphaComposite.getInstance(
+          AlphaComposite.SRC_OVER,
+          Util.alpha(1f * (1 - lifeFactor) * (1 - lifeFactor))))
 
-      val bufferedImage = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB)
+      val bufferedImage =
+        new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB)
       val graphics = bufferedImage.getGraphics
-      drawIndicator(graphics.asInstanceOf[Graphics2D], bufferedImage.getWidth, bufferedImage.getHeight)
-      g2d.drawImage(bufferedImage, math.max(x, 0) - dxx toInt, math.max(y, 0) - dyy toInt, width toInt, height toInt, null)
+      drawIndicator(graphics.asInstanceOf[Graphics2D],
+                    bufferedImage.getWidth,
+                    bufferedImage.getHeight)
+      g2d.drawImage(bufferedImage,
+                    math.max(x, 0) - dxx toInt,
+                    math.max(y, 0) - dyy toInt,
+                    width toInt,
+                    height toInt,
+                    null)
       g2d.dispose()
-      lastScrollPosition = Some((editor.getScrollingModel.getHorizontalScrollOffset, editor.getScrollingModel.getVerticalScrollOffset))
+      lastScrollPosition = Some(
+        (editor.getScrollingModel.getHorizontalScrollOffset,
+         editor.getScrollingModel.getVerticalScrollOffset))
     }
   }
 
@@ -126,11 +150,14 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
     graphics.fillRect(10, 10, width - 10, 200)
     graphics.setColor(Color.white)
     graphics.setFont(new Font("Dialog", Font.PLAIN, 100))
-    graphics.drawString((powerMode.rawValueFactor * 100).toInt.toString + " %", 10, 100)
+    graphics.drawString((powerMode.rawValueFactor * 100).toInt.toString + " %",
+                        10,
+                        100)
     graphics.setColor(Color.white)
     graphics.drawString(grand, 10, 200)
     graphics.setColor(Color.white)
-    var f = math.min(powerMode.rawValueFactor, 20 + (powerMode.rawValueFactor % 1))
+    var f =
+      math.min(powerMode.rawValueFactor, 20 + (powerMode.rawValueFactor % 1))
     var max: Double = math.ceil(f)
     val maxLines = 8
 
@@ -140,10 +167,18 @@ case class PowerIndicator(_x: Float, _y: Float, _width: Float, _height: Float, i
 
     while (f > 0) {
       graphics.setColor(Color.white)
-      graphics.fillRect(10, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) toInt, width * (if (f >= 1) 1 else f) - 10 toInt, barHeight)
+      graphics.fillRect(10,
+                        height - (((max.toInt + 1) - math
+                          .ceil(f)) * (barSpace + barHeight)) toInt,
+                        width * (if (f >= 1) 1 else f) - 10 toInt,
+                        barHeight)
       graphics.setColor(Color.black)
       graphics.setStroke(new BasicStroke(10))
-      graphics.drawRect(9, height - (((max.toInt + 1) - math.ceil(f)) * (barSpace + barHeight)) - 1 toInt, width * (if (f >= 1) 1 else f) - 1 - 10 toInt, barHeight - 1)
+      graphics.drawRect(9,
+                        height - (((max.toInt + 1) - math
+                          .ceil(f)) * (barSpace + barHeight)) - 1 toInt,
+                        width * (if (f >= 1) 1 else f) - 1 - 10 toInt,
+                        barHeight - 1)
       f -= 1
     }
   }

@@ -6,9 +6,13 @@ import java.awt.{AlphaComposite, Graphics, Graphics2D}
 import de.ax.powermode.{ImageUtil, Util}
 import de.ax.powermode.power.ElementOfPower
 
-
-case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Long, up: Boolean)
-  extends ElementOfPower {
+case class PowerFlame(_x: Int,
+                      _y: Int,
+                      _width: Int,
+                      _height: Int,
+                      initLife: Long,
+                      up: Boolean)
+    extends ElementOfPower {
   val life = System.currentTimeMillis() + initLife
   var x = _x
   var y = _y
@@ -17,7 +21,6 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
 
   var i = 0
   var currentImage: BufferedImage = null
-
 
   override def update(delta: Float): Boolean = {
     if (alive) {
@@ -37,22 +40,29 @@ case class PowerFlame(_x: Int, _y: Int, _width: Int, _height: Int, initLife: Lon
     !alive
   }
 
-
   override def render(g: Graphics, dxx: Int, dyy: Int): Unit = {
     if (alive) {
 
       val g2d: Graphics2D = g.create.asInstanceOf[Graphics2D]
-      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Util.alpha(0.9f * (1 - lifeFactor))))
+      g2d.setComposite(
+        AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                                   Util.alpha(0.9f * (1 - lifeFactor))))
 
       if (up) {
-        if (currentImage != null) g2d.drawImage(currentImage, x + dxx, y + dyy, width, height, null)
+        if (currentImage != null)
+          g2d.drawImage(currentImage, x + dxx, y + dyy, width, height, null)
       } else {
         // flip horizontally
-        if (currentImage != null) g2d.drawImage(currentImage, x + dxx, y + dyy + height, width, -height, null)
+        if (currentImage != null)
+          g2d.drawImage(currentImage,
+                        x + dxx,
+                        y + dyy + height,
+                        width,
+                        -height,
+                        null)
       }
       g2d.dispose()
     }
   }
-
 
 }

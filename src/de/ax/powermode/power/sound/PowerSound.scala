@@ -8,8 +8,8 @@ import javafx.scene.media.{Media, MediaPlayer}
 /**
   * Created by nyxos on 03.10.16.
   */
-
-class PowerSound(folder: => Option[File], valueFactor: => Double) extends Power {
+class PowerSound(folder: => Option[File], valueFactor: => Double)
+    extends Power {
   def next(): Unit = {
     this.synchronized {
       doStop()
@@ -21,12 +21,15 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) extends Power 
     override def run(): Unit = playing = false
   }
 
-  def files = folder.flatMap(f => Option(f.listFiles())).getOrElse(Array.empty[File]).filter(f => f.isFile && f.exists)
+  def files =
+    folder
+      .flatMap(f => Option(f.listFiles()))
+      .getOrElse(Array.empty[File])
+      .filter(f => f.isFile && f.exists)
 
   var playing = false
 
   var current = 1
-
 
   def setVolume(v: Double) = this.synchronized {
     mediaPlayer.foreach(_.setVolume((0.75 * v * v) + (0.25 * v)))
@@ -62,12 +65,12 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) extends Power 
     val myFiles: Array[File] = files
     if (!playing && myFiles != null && !myFiles.isEmpty) {
       index = (Math.random() * (200 * myFiles.length)).toInt % myFiles.length
-      val f = myFiles(index)
-      logger.info(s"playing sound file $f")
+      val f = myFiles(index).toURI.toString
+      logger.info(s"playing sound file '$f'")
       try {
         playing = true
         new JFXPanel
-        val hit = new Media(f.toURI.toString)
+        val hit = new Media(f)
         mediaPlayer = Some {
           val mediaPlayer = new MediaPlayer(hit)
           mediaPlayer.setOnError(ResetPlaying)
@@ -85,6 +88,3 @@ class PowerSound(folder: => Option[File], valueFactor: => Double) extends Power 
     }
   }
 }
-
-
-

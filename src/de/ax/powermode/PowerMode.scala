@@ -21,7 +21,12 @@ import javax.swing.KeyStroke
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
+import com.intellij.openapi.components.{
+  ApplicationComponent,
+  PersistentStateComponent,
+  State,
+  Storage
+}
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
 import com.intellij.util.xmlb.XmlSerializerUtil
@@ -49,7 +54,6 @@ object PowerMode {
     }
   }
 
-
   def obtainColorEdges(pm: PowerMode): ColorEdges = {
     import pm._
     val edges = new ColorEdges()
@@ -64,12 +68,14 @@ object PowerMode {
   }
 }
 
-@State(name = "PowerModeII", storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
-class PowerMode extends ApplicationComponent with PersistentStateComponent[PowerMode] {
+@State(name = "PowerModeII",
+       storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
+class PowerMode
+    extends ApplicationComponent
+    with PersistentStateComponent[PowerMode] {
   var bamLife: Long = 1000
 
   var soundsFolder = Option.empty[File]
-
 
   var gravityFactor: Double = 21.21
 
@@ -103,7 +109,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   var sparkCount = 10
   var shakeRange = 4
   var flamesEnabled: Boolean = true
-  var maybeElementOfPowerContainerManager = Option.empty[ElementOfPowerContainerManager]
+  var maybeElementOfPowerContainerManager =
+    Option.empty[ElementOfPowerContainerManager]
   private var enabled: Boolean = true
   private var shakeEnabled: Boolean = true
   var isBamEnabled: Boolean = true
@@ -111,20 +118,26 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
   var powerIndicatorEnabled = true
 
   def flameImageFolder = {
-    if (!_isCustomFlameImages) Some(new File("fire/animated/256")) else customFlameImageFolder
+    if (!_isCustomFlameImages) Some(new File("fire/animated/256"))
+    else customFlameImageFolder
   }
 
   def bamImageFolder = {
     if (!_isCustomBamImages) Some(new File("bam")) else customBamImageFolder
   }
 
-  def increaseHeatup(dataContext: Option[DataContext] = Option.empty[DataContext], keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
+  def increaseHeatup(
+      dataContext: Option[DataContext] = Option.empty[DataContext],
+      keyStroke: Option[KeyStroke] = Option.empty[KeyStroke]): Unit = {
     val ct = System.currentTimeMillis()
     lastKeys = (keyStroke, ct) :: filterLastKeys(ct)
-    dataContext.foreach(dc => maybeElementOfPowerContainerManager.foreach(_.showIndicator(dc)))
+    dataContext.foreach(dc =>
+      maybeElementOfPowerContainerManager.foreach(_.showIndicator(dc)))
 
   }
-
+  val mediaPlayerExists = Try {
+    Class.forName("javafx.scene.media.MediaPlayer")
+  }
 
   def reduceHeatup: Unit = {
     val ct = System.currentTimeMillis()
@@ -154,7 +167,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     max
   }
 
-
   var hotkeyWeight: Double = keyStrokesPerMinute * 0.05
 
   def rawTimeFactor: Double = {
@@ -165,7 +177,10 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
         val d = heatupTime.toDouble / (60000.0 / keyStrokesPerMinute)
         val keysWorth = lastKeys.map {
           case (Some(ks), _) =>
-            val size = Seq(InputEvent.CTRL_DOWN_MASK, InputEvent.ALT_DOWN_MASK, InputEvent.SHIFT_DOWN_MASK).count(m => (ks.getModifiers & m) > 0)
+            val size = Seq(InputEvent.CTRL_DOWN_MASK,
+                           InputEvent.ALT_DOWN_MASK,
+                           InputEvent.SHIFT_DOWN_MASK).count(m =>
+              (ks.getModifiers & m) > 0)
             val res = size * hotkeyWeight
             res
           case _ => 1
@@ -176,7 +191,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     tf
   }
 
-
   def timeFactor: Double = {
     val tf = Try {
       if (heatupTime < 1000) {
@@ -185,7 +199,10 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
         val d = heatupTime.toDouble / (60000.0 / keyStrokesPerMinute)
         val keysWorth = lastKeys.map {
           case (Some(ks), _) =>
-            val size = Seq(InputEvent.CTRL_DOWN_MASK, InputEvent.ALT_DOWN_MASK, InputEvent.SHIFT_DOWN_MASK).count(m => (ks.getModifiers & m) > 0)
+            val size = Seq(InputEvent.CTRL_DOWN_MASK,
+                           InputEvent.ALT_DOWN_MASK,
+                           InputEvent.SHIFT_DOWN_MASK).count(m =>
+              (ks.getModifiers & m) > 0)
             val res = size * hotkeyWeight
             res
           case _ => 1
@@ -196,21 +213,26 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     tf
   }
 
-
   var caretAction: Boolean = true
 
   override def initComponent: Unit = {
     val editorFactory = EditorFactory.getInstance
-    maybeElementOfPowerContainerManager = Some(new ElementOfPowerContainerManager)
-    maybeElementOfPowerContainerManager.foreach(editorFactory.addEditorFactoryListener(_, new Disposable() {
-      def dispose {
-      }
-    }))
+    maybeElementOfPowerContainerManager = Some(
+      new ElementOfPowerContainerManager)
+    maybeElementOfPowerContainerManager.foreach(
+      editorFactory.addEditorFactoryListener(_, new Disposable() {
+        def dispose {}
+      }))
     val editorActionManager = EditorActionManager.getInstance
-    EditorFactory.getInstance().getEventMulticaster.addCaretListener(new MyCaretListener())
-    maybeElementOfPowerContainerManager.map(cm =>
-      editorActionManager.getTypedAction.setupRawHandler
-      (new MyTypedActionHandler(editorActionManager.getTypedAction.getRawHandler)))
+    EditorFactory
+      .getInstance()
+      .getEventMulticaster
+      .addCaretListener(new MyCaretListener())
+    maybeElementOfPowerContainerManager.map(
+      cm =>
+        editorActionManager.getTypedAction.setupRawHandler(
+          new MyTypedActionHandler(
+            editorActionManager.getTypedAction.getRawHandler)))
   }
 
   override def disposeComponent: Unit = {
@@ -469,7 +491,6 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     _isCustomFlameImages = s
   }
 
-
   var _isCustomBamImages: Boolean = false
 
   def isCustomBamImages = _isCustomBamImages
@@ -484,7 +505,8 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     customFlameImageFolder = Option(new File(file))
   }
 
-  def getCustomFlameImageFolder: String = customFlameImageFolder.map(_.getAbsolutePath).getOrElse("")
+  def getCustomFlameImageFolder: String =
+    customFlameImageFolder.map(_.getAbsolutePath).getOrElse("")
 
   var customBamImageFolder = Option.empty[File]
 
@@ -492,6 +514,7 @@ class PowerMode extends ApplicationComponent with PersistentStateComponent[Power
     customBamImageFolder = Option(new File(file))
   }
 
-  def getCustomBamImageFolder = customBamImageFolder.map(_.getAbsolutePath).getOrElse("")
+  def getCustomBamImageFolder =
+    customBamImageFolder.map(_.getAbsolutePath).getOrElse("")
 
 }

@@ -18,9 +18,16 @@ package de.ax.powermode.power.management
 import java.awt._
 import javax.swing._
 
-import com.intellij.openapi.actionSystem.{DataConstants, DataContext, PlatformDataKeys}
+import com.intellij.openapi.actionSystem.{
+  DataConstants,
+  DataContext,
+  PlatformDataKeys
+}
 import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.event.{EditorFactoryAdapter, EditorFactoryEvent}
+import com.intellij.openapi.editor.event.{
+  EditorFactoryAdapter,
+  EditorFactoryEvent
+}
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import de.ax.powermode.power.sound.PowerSound
@@ -44,26 +51,32 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
     }
   }
 
-  val elementsOfPowerContainers = mutable.Map.empty[Editor, ElementOfPowerContainer]
-  lazy val sound = ForceTry {
-    new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
-  }
+  val elementsOfPowerContainers =
+    mutable.Map.empty[Editor, ElementOfPowerContainer]
 
+  private lazy val triedSound: Try[PowerSound] =
+    powerMode.mediaPlayerExists.flatMap { _ =>
+      Try {
+        new PowerSound(powerMode.soundsFolder, powerMode.valueFactor)
+      }
+    }
+  lazy val sound = triedSound
 
   def showIndicator(dataContext: DataContext) {
     if (powerMode.powerIndicatorEnabled && powerMode.isEnabled) {
-      val maybeProject: Seq[Project] = Seq(
-        ForceTry {
-          dataContext.getData(DataConstants.PROJECT)
-        },
-        ForceTry {
-          dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT)
-        })
-        .toStream.flatMap(o => o.toOption.flatMap(Option(_)).map(_.asInstanceOf[Project]))
+      val maybeProject: Seq[Project] = Seq(ForceTry {
+        dataContext.getData(DataConstants.PROJECT)
+      }, ForceTry {
+        dataContext.getData(PlatformDataKeys.PROJECT_CONTEXT)
+      }).toStream.flatMap(o =>
+        o.toOption.flatMap(Option(_)).map(_.asInstanceOf[Project]))
       maybeProject.headOption.foreach(p => {
-        val textEditor: Editor = FileEditorManager.getInstance(p).getSelectedTextEditor
+        val textEditor: Editor =
+          FileEditorManager.getInstance(p).getSelectedTextEditor
         SwingUtilities.invokeLater(() => {
-          elementsOfPowerContainers.get(textEditor).foreach(_.addPowerIndicator())
+          elementsOfPowerContainers
+            .get(textEditor)
+            .foreach(_.addPowerIndicator())
         })
       })
     }
@@ -79,10 +92,8 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
             updateContainers
             try {
               Thread.sleep(1000 / powerMode.frameRate)
-            }
-            catch {
-              case ignored: InterruptedException => {
-              }
+            } catch {
+              case ignored: InterruptedException => {}
             }
           }
         } catch {
@@ -95,11 +106,18 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
       elementsOfPowerContainers.values.foreach(_.updateElementsOfPower())
     }
 
+    var soundErrorLogged = System.currentTimeMillis()
+
     def updateSound: Unit = {
       try {
         if (powerMode.isEnabled &&
-          powerMode.soundsFolder.exists(f => f.exists() && f.isDirectory)
-          && powerMode.isSoundsPlaying) {
+            powerMode.soundsFolder.exists(f => f.exists() && f.isDirectory)
+            && powerMode.isSoundsPlaying) {
+          if (sound.isFailure && soundErrorLogged + 5000 < System
+                .currentTimeMillis()) {
+            logger.error(sound.failed.get.getMessage, sound.failed.get)
+            soundErrorLogged += 1
+          }
           sound.foreach(_.play())
         } else {
           sound.foreach(_.stop())
@@ -116,7 +134,8 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   override def editorCreated(event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
     val isActualEditor = Try {
-      editor.getColorsScheme.getClass.getName.contains("EditorImpl") && Util.editorOk(editor, 100)
+      editor.getColorsScheme.getClass.getName
+        .contains("EditorImpl") && Util.editorOk(editor, 100)
     }.getOrElse(false)
     if (isActualEditor) {
       elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor))
@@ -140,7 +159,6 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   private def initializeInUI(editor: Editor, pos: Point) {
     elementsOfPowerContainers.get(editor).foreach(_.initializeAnimation(pos))
   }
-
 
   def dispose {
     elementsOfPowerUpdateThread.interrupt()

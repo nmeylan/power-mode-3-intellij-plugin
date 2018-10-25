@@ -9,9 +9,7 @@ class ColorEdges(var leftTop: MyPaint = MyPaint(0, 0, 0, 255),
                  var leftBottom: MyPaint = MyPaint(0, 255, 0, 255),
                  var rightBottom: MyPaint = MyPaint(255, 255, 0, 255)) {
 
-
   implicit def mp2Color(mp: MyPaint): Color = mp.color
-
 
   def getLeftTop: Color = {
     return leftTop

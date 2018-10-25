@@ -12,7 +12,9 @@ import scala.util.Try
 /**
   * Created by nyxos on 04.01.17.
   */
-class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends TypedActionHandler with Power {
+class MyTypedActionHandler(typedActionHandler: TypedActionHandler)
+    extends TypedActionHandler
+    with Power {
 
   def execute(editor: Editor, c: Char, dataContext: DataContext) {
     if (powerMode.isEnabled) {
@@ -30,9 +32,11 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends Typed
   }
 
   def getEditorCaretPositions(editor: Editor): Seq[Point] = {
-    editor.getCaretModel.getAllCarets.map({ c =>
-      Util.getCaretPosition(editor, c)
-    }).filter(_.isSuccess)
+    editor.getCaretModel.getAllCarets
+      .map({ c =>
+        Util.getCaretPosition(editor, c)
+      })
+      .filter(_.isSuccess)
       .map(_.get)
   }
 
@@ -44,7 +48,8 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler) extends Typed
     if (isActualEditor) {
       val positions = getEditorCaretPositions(editor)
       positions.foreach(pos => {
-        powerMode.maybeElementOfPowerContainerManager.foreach(_.initializeAnimation(editor, pos))
+        powerMode.maybeElementOfPowerContainerManager.foreach(
+          _.initializeAnimation(editor, pos))
       })
     }
   }

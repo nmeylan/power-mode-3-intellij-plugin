@@ -21,18 +21,20 @@ import de.ax.powermode.power.ui.PowerModeConfigurableUI
 /**
   * @author Baptiste Mesta
   */
-class PowerModeConfigurable( settings: PowerMode = PowerMode.getInstance)
-  extends ConfigurableBase[PowerModeConfigurableUI, PowerMode]("power.mode.II", "Power Mode II", "power.mode.II") {
+class PowerModeConfigurable(settings: PowerMode = PowerMode.getInstance)
+    extends ConfigurableBase[PowerModeConfigurableUI, PowerMode](
+      "power.mode.II",
+      "Power Mode II",
+      "power.mode.II") {
 
-
-   protected def getSettings: PowerMode = {
+  protected def getSettings: PowerMode = {
     if (settings == null) {
       throw new IllegalStateException("power mode is null")
     }
     settings
   }
 
-   protected def createUi: PowerModeConfigurableUI = {
+  protected def createUi: PowerModeConfigurableUI = {
     new PowerModeConfigurableUI(settings)
   }
 }
