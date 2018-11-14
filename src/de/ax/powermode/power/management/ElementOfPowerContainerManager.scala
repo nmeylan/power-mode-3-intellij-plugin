@@ -16,7 +16,6 @@
 package de.ax.powermode.power.management
 
 import java.awt._
-import javax.swing._
 
 import com.intellij.openapi.actionSystem.{
   DataConstants,
@@ -32,6 +31,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import de.ax.powermode.power.sound.PowerSound
 import de.ax.powermode.{Power, PowerMode, Util}
+import javax.swing._
 
 import scala.collection.mutable
 import scala.util.{Failure, Success, Try}
@@ -134,11 +134,11 @@ class ElementOfPowerContainerManager extends EditorFactoryAdapter with Power {
   override def editorCreated(event: EditorFactoryEvent) {
     val editor: Editor = event.getEditor
     val isActualEditor = Try {
-      editor.getColorsScheme.getClass.getName
-        .contains("EditorImpl") && Util.editorOk(editor, 100)
+      Util.isActualEditor(editor)
     }.getOrElse(false)
     if (isActualEditor) {
-      elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor))
+      elementsOfPowerContainers
+        .put(editor, new ElementOfPowerContainer(editor))
     }
   }
 

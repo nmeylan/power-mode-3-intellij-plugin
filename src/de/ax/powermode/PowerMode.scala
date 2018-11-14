@@ -17,20 +17,16 @@ package de.ax.powermode
 
 import java.awt.event.InputEvent
 import java.io.File
-import javax.swing.KeyStroke
+
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.{
-  ApplicationComponent,
-  PersistentStateComponent,
-  State,
-  Storage
-}
+import com.intellij.openapi.components.{ApplicationComponent, PersistentStateComponent, State, Storage}
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.editor.actionSystem.EditorActionManager
 import com.intellij.util.xmlb.XmlSerializerUtil
 import de.ax.powermode.power.management.ElementOfPowerContainerManager
+import javax.swing.KeyStroke
 import org.apache.log4j._
 import org.jetbrains.annotations.Nullable
 
@@ -72,7 +68,7 @@ object PowerMode {
        storages = Array(new Storage(file = "$APP_CONFIG$/power.mode.ii.xml")))
 class PowerMode
     extends ApplicationComponent
-    with PersistentStateComponent[PowerMode] {
+    with PersistentStateComponent[PowerMode]  {
   var bamLife: Long = 1000
 
   var soundsFolder = Option.empty[File]
@@ -216,6 +212,7 @@ class PowerMode
   var caretAction: Boolean = true
 
   override def initComponent: Unit = {
+PowerMode.logger.debug("initComponent...")
     val editorFactory = EditorFactory.getInstance
     maybeElementOfPowerContainerManager = Some(
       new ElementOfPowerContainerManager)
@@ -233,6 +230,7 @@ class PowerMode
         editorActionManager.getTypedAction.setupRawHandler(
           new MyTypedActionHandler(
             editorActionManager.getTypedAction.getRawHandler)))
+    PowerMode.logger.debug("initComponent done")
   }
 
   override def disposeComponent: Unit = {

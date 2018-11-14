@@ -3,7 +3,7 @@ package de.ax.powermode
 import java.awt.Point
 
 import com.intellij.openapi.editor.impl.EditorImpl
-import com.intellij.openapi.editor.{Caret, Editor, VisualPosition}
+import com.intellij.openapi.editor.{Caret, Editor, EditorKind, VisualPosition}
 
 import scala.util.Try
 
@@ -18,6 +18,21 @@ object Util {
       1f
     } else {
       f
+    }
+  }
+
+  def isActualEditor(editor: Editor): Boolean = {
+    editor match {
+      case impl: EditorImpl =>
+        try {
+          Set(EditorKind.UNTYPED, EditorKind.MAIN_EDITOR, EditorKind.DIFF)
+            .contains(impl.getEditorKind) &&
+          !impl.isOneLineMode
+        } catch {
+          case _ => false
+        }
+      case _ =>
+        false
     }
   }
 

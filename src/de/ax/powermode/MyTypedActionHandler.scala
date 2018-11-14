@@ -7,7 +7,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler
 
 import scala.collection.JavaConversions._
-import scala.util.Try
 
 /**
   * Created by nyxos on 04.01.17.
@@ -41,10 +40,8 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler)
   }
 
   def initializeAnimationByTypedAction(editor: Editor): Unit = {
-    val triedBoolean = Try {
-      editor.getColorsScheme.getClass.getName.contains("EditorImpl")
-    }
-    val isActualEditor = triedBoolean.getOrElse(false)
+
+    val isActualEditor =Util.isActualEditor(editor)
     if (isActualEditor) {
       val positions = getEditorCaretPositions(editor)
       positions.foreach(pos => {
