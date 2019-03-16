@@ -2,13 +2,13 @@ package de.ax.powermode.power.hotkeys
 
 import java.awt._
 import java.awt.event._
-import javax.swing._
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem._
 import com.intellij.openapi.components.ApplicationComponent
 import com.intellij.openapi.keymap.KeymapManager
 import de.ax.powermode.Power
+import javax.swing._
 
 /**
   * Date: 04.09.2006
@@ -21,8 +21,23 @@ class HotkeyHeatupListener
   lazy val allActionKeyStrokes: Set[KeyStroke] =
     actionsToKeyStrokes.values.flatten.toSet
 
+  lazy val actionsToKeyStrokes = {
+    Map(
+      KeymapManager.getInstance.getActiveKeymap.getActionIds.seq
+        .map(ActionManager.getInstance.getAction)
+        .filter(a => a != null && a.getShortcutSet != null)
+        .map { a =>
+          val keyStrokes = a.getShortcutSet.getShortcuts.seq
+            .filter(_.isKeyboard)
+            .filter(_.isInstanceOf[KeyboardShortcut])
+            .map(_.asInstanceOf[KeyboardShortcut])
+            .flatMap(a => Seq(a.getFirstKeyStroke, a.getSecondKeyStroke))
+          (a, keyStrokes)
+        }: _*)
+  }
+
   override def eventDispatched(e: AWTEvent): Unit = {
-    if (powerMode.isEnabled) {
+    if (powerMode.isEnabled && powerMode.isHotkeyHeatup) {
       e match {
         case event: KeyEvent => {
           if ((event.getModifiersEx & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) > 0) {
@@ -41,20 +56,6 @@ class HotkeyHeatupListener
         case _ =>
       }
     }
-  }
-
-  lazy val actionsToKeyStrokes = {
-    Map(
-      KeymapManager.getInstance.getActiveKeymap.getActionIds.seq
-        .map(ActionManager.getInstance.getAction)
-        .filter(a => a != null && a.getShortcutSet != null)
-        .map { a =>
-          val keyStrokes = a.getShortcutSet.getShortcuts.seq
-            .filter(_.isKeyboard)
-            .map(_.asInstanceOf[KeyboardShortcut])
-            .flatMap(a => Seq(a.getFirstKeyStroke, a.getSecondKeyStroke))
-          (a, keyStrokes)
-        }: _*)
   }
 
   override def initComponent(): Unit = {

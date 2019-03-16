@@ -15,7 +15,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="27dc6" layout-manager="GridLayoutManager" row-count="18" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="27dc6" layout-manager="GridLayoutManager" row-count="19" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints/>
             <properties/>
@@ -23,7 +23,7 @@
             <children>
               <component id="c1982" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="17" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="18" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="176" height="15"/>
                   </grid>
                 </constraints>
@@ -34,7 +34,7 @@
               </component>
               <component id="43211" class="javax.swing.JLabel" binding="frameRateValue">
                 <constraints>
-                  <grid row="17" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="18" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Label"/>
@@ -42,7 +42,7 @@
               </component>
               <component id="ddd7e" class="javax.swing.JSlider" binding="frameRate">
                 <constraints>
-                  <grid row="17" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="18" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <maximum value="120"/>
@@ -94,7 +94,7 @@
               <grid id="40358" layout-manager="GridLayoutManager" row-count="16" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="10" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                  <grid row="11" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                     <preferred-size width="200" height="245"/>
                   </grid>
                 </constraints>
@@ -406,7 +406,7 @@
               </grid>
               <component id="1f2a3" class="javax.swing.JCheckBox" binding="PLAYMUSICCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="PLAY MUSIC"/>
@@ -415,7 +415,7 @@
               </component>
               <component id="d851e" class="javax.swing.JTextField" binding="soundsFolder">
                 <constraints>
-                  <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
@@ -423,7 +423,7 @@
               </component>
               <component id="64868" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="music folder:"/>
@@ -440,7 +440,7 @@
               </component>
               <component id="4bca3" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="BAM! life [ms]"/>
@@ -448,7 +448,7 @@
               </component>
               <component id="794d8" class="javax.swing.JLabel" binding="bamLifeValue">
                 <constraints>
-                  <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Label"/>
@@ -456,7 +456,7 @@
               </component>
               <component id="f621e" class="javax.swing.JSlider" binding="bamLife">
                 <constraints>
-                  <grid row="15" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="16" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <maximum value="10000"/>
@@ -464,7 +464,7 @@
               </component>
               <component id="16478" class="javax.swing.JCheckBox" binding="PowerIndicatorCheckBox">
                 <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="POWER INDICATOR!"/>
@@ -473,7 +473,7 @@
               </component>
               <component id="fdd66" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="!Music requires javaFX installed with required dependencies and on IDE classpath! This is quite experimental!"/>
@@ -482,7 +482,7 @@
               <grid id="30a31" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="9" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="10" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none" title="Heatup"/>
@@ -612,7 +612,7 @@
               </grid>
               <component id="2456b" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="176" height="15"/>
                   </grid>
                 </constraints>
@@ -623,7 +623,7 @@
               </component>
               <component id="a35ff" class="javax.swing.JLabel" binding="shakeRangeValue">
                 <constraints>
-                  <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Label"/>
@@ -631,13 +631,13 @@
               </component>
               <component id="d66bd" class="javax.swing.JSlider" binding="shakeRange">
                 <constraints>
-                  <grid row="11" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
               </component>
               <component id="72e7" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="176" height="15"/>
                   </grid>
                 </constraints>
@@ -648,7 +648,7 @@
               </component>
               <component id="afddc" class="javax.swing.JLabel" binding="maxFlameSizeValue">
                 <constraints>
-                  <grid row="12" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Label"/>
@@ -656,7 +656,7 @@
               </component>
               <component id="acbf8" class="javax.swing.JSlider" binding="maxFlameSize">
                 <constraints>
-                  <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <maximum value="500"/>
@@ -664,7 +664,7 @@
               </component>
               <component id="74982" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <preferred-size width="176" height="15"/>
                   </grid>
                 </constraints>
@@ -675,7 +675,7 @@
               </component>
               <component id="badbb" class="javax.swing.JLabel" binding="flameLifeValue">
                 <constraints>
-                  <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Label"/>
@@ -683,7 +683,7 @@
               </component>
               <component id="321e2" class="javax.swing.JSlider" binding="flameLife">
                 <constraints>
-                  <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <maximum value="10000"/>
@@ -691,7 +691,7 @@
               </component>
               <component id="4ae70" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="hint: 'heatup base level' should be &lt;100%"/>
@@ -699,7 +699,7 @@
               </component>
               <component id="ae24c" class="javax.swing.JCheckBox" binding="customFlameImages">
                 <constraints>
-                  <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="custom flame images"/>
@@ -708,7 +708,7 @@
               </component>
               <component id="f9586" class="javax.swing.JTextField" binding="flameImagesFolder">
                 <constraints>
-                  <grid row="14" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="15" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
@@ -716,7 +716,7 @@
               </component>
               <component id="b4da3" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="14" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="15" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="image folder:"/>
@@ -724,7 +724,7 @@
               </component>
               <component id="b011a" class="javax.swing.JCheckBox" binding="customBamImages">
                 <constraints>
-                  <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="17" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="custom BAM! images"/>
@@ -733,7 +733,7 @@
               </component>
               <component id="31962" class="javax.swing.JTextField" binding="bamImagesFolder">
                 <constraints>
-                  <grid row="16" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="17" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
                 </constraints>
@@ -741,10 +741,19 @@
               </component>
               <component id="ebfd1" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="16" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="17" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="image folder:"/>
+                </properties>
+              </component>
+              <component id="1304a" class="javax.swing.JCheckBox" binding="HOTKEYHEATUPCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="HOTKEY HEATUP"/>
+                  <toolTipText value="Disable if having problems with hotkey visualization"/>
                 </properties>
               </component>
             </children>

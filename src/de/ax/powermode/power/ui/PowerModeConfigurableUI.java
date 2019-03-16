@@ -75,6 +75,7 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
     private JTextField bamImagesFolder;
     private JCheckBox customFlameImages;
     private JCheckBox customBamImages;
+    private JCheckBox HOTKEYHEATUPCheckBox;
 
 
     public PowerModeConfigurableUI(PowerMode powerMode) {
@@ -94,7 +95,8 @@ public class PowerModeConfigurableUI implements ConfigurableUi<PowerMode> {
         PLAYMUSICCheckBox.setEnabled(powerMode.mediaPlayerExists().isSuccess());
         PLAYMUSICCheckBox.setSelected(powerMode.isSoundsPlaying()&&powerMode.mediaPlayerExists().isSuccess());
         PLAYMUSICCheckBox.addChangeListener(e -> powerMode.setIsSoundsPlaying(PLAYMUSICCheckBox.isSelected()));
-
+        HOTKEYHEATUPCheckBox.setSelected(powerMode.isHotkeyHeatup());
+        HOTKEYHEATUPCheckBox.addChangeListener(e -> powerMode.setHotkeyHeatup(HOTKEYHEATUPCheckBox.isSelected()));
         PowerIndicatorCheckBox.setSelected(powerMode.getIsPowerIndicatorEnabled());
         PowerIndicatorCheckBox.addChangeListener(e -> powerMode.setIsPowerIndicatorEnabled(PowerIndicatorCheckBox.isSelected()));
 

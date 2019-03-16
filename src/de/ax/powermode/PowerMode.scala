@@ -69,6 +69,8 @@ object PowerMode {
 class PowerMode
     extends ApplicationComponent
     with PersistentStateComponent[PowerMode]  {
+  var hotkeyHeatup: Boolean = true
+
   var bamLife: Long = 1000
 
   var soundsFolder = Option.empty[File]
@@ -112,6 +114,12 @@ class PowerMode
   var isBamEnabled: Boolean = true
   var isSoundsPlaying = false
   var powerIndicatorEnabled = true
+
+  def isHotkeyHeatup = hotkeyHeatup
+
+  def setHotkeyHeatup(h: Boolean): Unit = {
+    hotkeyHeatup = h
+  }
 
   def flameImageFolder = {
     if (!_isCustomFlameImages) Some(new File("fire/animated/256"))

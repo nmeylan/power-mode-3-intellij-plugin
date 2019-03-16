@@ -1,10 +1,9 @@
 <idea-plugin>
     <id>de.ax.powermode</id>
     <name>Power Mode II</name>
-    <version>48.84</version>
+    <version>97.68</version>
     <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
     </vendor>
-
     <description><![CDATA[
         <h1>Power Mode</h1>
         <span>Based on the activate-power-mode atom plugin and forked from Baptiste Mesta on Github.</span>
