@@ -54,7 +54,7 @@ object Util {
       f
     } catch {
       case e: Throwable =>
-        throw e
+      throw e
     }
   }
 

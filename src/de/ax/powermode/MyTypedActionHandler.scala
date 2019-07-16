@@ -5,7 +5,7 @@ import java.awt.Point
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler
-
+import java.lang.IllegalStateException
 import scala.collection.JavaConversions._
 
 /**
@@ -25,6 +25,8 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler)
     try {
       typedActionHandler.execute(editor, c, dataContext)
     } catch {
+      case x: IllegalStateException =>
+        logger.info(x.getMessage, x)
       case x: IndexOutOfBoundsException =>
         logger.info(x.getMessage, x)
     }
@@ -41,7 +43,7 @@ class MyTypedActionHandler(typedActionHandler: TypedActionHandler)
 
   def initializeAnimationByTypedAction(editor: Editor): Unit = {
 
-    val isActualEditor =Util.isActualEditor(editor)
+    val isActualEditor = Util.isActualEditor(editor)
     if (isActualEditor) {
       val positions = getEditorCaretPositions(editor)
       positions.foreach(pos => {
