@@ -4,12 +4,12 @@ import java.awt.image.BufferedImage
 import java.io.{BufferedOutputStream, File, FileOutputStream, InputStream}
 import java.net.{URI, URL}
 
-import javax.imageio.ImageIO
+import javax.imageio.{IIOException, ImageIO}
 import com.intellij.util.PathUtil
 import de.ax.powermode.cache.Cache
 import de.ax.powermode.power.element.PowerFlame
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 object ImageUtil {
   def imagesForPath(folder: Option[File]): scala.List[BufferedImage] = {
@@ -53,31 +53,41 @@ object ImageUtil {
     new BufferedImage(cm, raster, isAlphaPremultiplied, null)
   }
 
-  def getUrl(uri: URI): Try[URL] = Try { uri.toURL }
+  def getUrl(uri: URI): Try[URL] = Try {
+    uri.toURL
+  }
 
   private def getImagesCached(imageUrls: List[URI]) = {
     imageUrls.flatMap(uri =>
       imageCache.getOrUpdate(uri) {
         try {
-          val maybeImg = Option(ImageIO.read(uri.toURL))
+          val maybeImg = Try(ImageIO.read(uri.toURL))
 
           maybeImg match {
-            case Some(img) =>
+            case Success(img) =>
               val bufferedImage = new BufferedImage(img.getWidth,
                                                     img.getHeight,
                                                     BufferedImage.TYPE_INT_ARGB)
               val graphics = bufferedImage.getGraphics
               graphics.drawImage(img, 0, 0, null)
               Some(bufferedImage)
-            case None =>
+            case Failure(e) =>
+               e match {
+                 case io:IIOException =>
+                   PowerMode.logger
+                     .error(
+                       s"could not load image file! Please try to store your PowerMode " +
+                         s"Images/Animations in a different folder and restart the application! File not found: '$uri'!",
+                       e)
+                 case ex =>
+                   PowerMode.logger
+                     .error(
+                       s"could not load image file! Please try to store your PowerMode " +
+                         s"Images/Animations in a different folder and restart the application! File not found: '$uri'!",
+                       ex)
+               }
               None
           }
-        } catch {
-          case e: Exception =>
-            PowerMode.logger.error(
-              s"Error reading image from uri: '$uri' url: '${getUrl(uri)}': ${e.getMessage} ",
-              e)
-            None
         }
     })
   }
