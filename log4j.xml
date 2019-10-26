@@ -9,7 +9,7 @@
         </layout>
     </appender>
 
-    <category name="de.ax.powermode">
+    <category name="com.nmeylan.powermode">
         <priority value="trace"/>
         <appender-ref ref="console"/>
     </category>

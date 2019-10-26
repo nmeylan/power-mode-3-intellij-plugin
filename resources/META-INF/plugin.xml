@@ -1,49 +1,12 @@
 <idea-plugin>
-    <id>de.ax.powermode</id>
-    <name>Power Mode II</name>
+    <id>com.nmeylan.powermode</id>
+    <name>Power Mode 3</name>
     <version>97.68</version>
-    <vendor email="axaluss@gmail.com" url="https://github.com/axaluss/power-mode-intellij-plugin">Alexander Thom
+    <vendor email="nmeylan@gmail.com" url="https://github.com/nmeylan/power-mode-3-intellij-plugin">Nicolas Meylan
     </vendor>
     <description><![CDATA[
-        <h1>Power Mode</h1>
-        <span>Based on the activate-power-mode atom plugin and forked from Baptiste Mesta on Github.</span>
-        <h2>Features</h2>
-        <ul>
-            <li>Exploding falling sparks</li>
-            <li>Editor shaking</li>
-            <li>Flames</li>
-            <li>Heatup based on typing speed. The more you type the more happens.</li>
-            <li>Keyboard shortcut to toggle power mode [shift ctrl alt O]</li>
-            <li>Choose particle colors and transparency within a color space</li>
-            <li>Adjust particle velocity and gravitation</li>
-            <li>Modify the animation frame rate</li>
-            <li>Multi caret support</li>
-            <li>Animation on caret movement</li>
-            <li>Play music folder: volume based on heatup</li>
-            <li>Play next song action: [shift ctrl alt M]</li>
-            <li>Visualize bigger file editing with "BAM!"</li>
-            <li>See your power level in the indicator box</li>
-            <li>Customizable animation images</li>
-            <li>Everything is configurable</li>
-        </ul>
-        <h2>Usage</h2>
-        <ol>
-            <li>Install the plugin</li>
-            <li>ENTER POWER MODE in Preferences > Appearance > Power mode II</li>
-            <li>CHANGE THE SLIDERS and options to your liking</li>
-        </ol>
-
-        <a href="https://github.com/axaluss/power-mode-intellij-plugin/releases/latest"><img
-                width="40"
-                src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/download.png"/>
-            Latest Release Download</a>
-        <br/>
-
-        <a href="https://www.paypal.me/AlexanderThom">
-            <img style="width:100px; height: 100px;"
-                 src="https://raw.githubusercontent.com/axaluss/power-mode-intellij-plugin/master/images/beer.png"/>
-            Want to pass me a Beer?
-        </a>
+        <h1>Power Mode 3</h1>
+        <span>Forked from axaluss on Github.</span>
         ]]></description>
 
     <idea-version since-build="143.0"/>
@@ -52,29 +15,29 @@
 
     <application-components>
         <component>
-            <implementation-class>de.ax.powermode.PowerMode</implementation-class>
+            <implementation-class>com.nmeylan.powermode.PowerMode</implementation-class>
         </component>
         <component>
-            <implementation-class>de.ax.powermode.power.hotkeys.HotkeyHeatupListener</implementation-class>
+            <implementation-class>com.nmeylan.powermode.power.hotkeys.HotkeyHeatupListener</implementation-class>
         </component>
     </application-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode.ii" displayName="Power Mode II"
-                                 instance="de.ax.powermode.PowerModeConfigurable"/>
+        <applicationConfigurable groupId="appearance" groupWeight="20" id="power.mode.ii" displayName="Power Mode III"
+                                 instance="com.nmeylan.powermode.PowerModeConfigurable"/>
+        <enterHandlerDelegate implementation="com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter"/>
     </extensions>
 
     <actions>
 
-        <action id="togglePowerModeII" class="de.ax.powermode.TogglePowerMode" text="Toggle Power Mode II"
-                description="Toggle Power Mode II">
+        <action id="togglePowerModeIII" class="com.nmeylan.powermode.TogglePowerMode" text="Toggle Power Mode III"
+                description="Toggle Power Mode">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt O"/>
         </action>
-        <action id="powerModeIInextSong" class="de.ax.powermode.NextSongAction" text="next Power Mode song"
-                description="next Power Mode song">
+        <action id="toggleCaretPowerModeIII" class="com.nmeylan.powermode.ToggleCaretPowerMode" text="Toggle Caret Power Mode"
+                description="Toggle Caret Power Mode III">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt M"/>
         </action>
     </actions>
 
