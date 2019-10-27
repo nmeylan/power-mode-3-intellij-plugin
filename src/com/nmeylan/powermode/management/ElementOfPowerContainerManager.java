@@ -1,8 +1,8 @@
 package com.nmeylan.powermode.management;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.event.EditorFactoryAdapter;
 import com.intellij.openapi.editor.event.EditorFactoryEvent;
+import com.intellij.openapi.editor.event.EditorFactoryListener;
 import com.nmeylan.powermode.Power;
 import com.nmeylan.powermode.PowerMode;
 import com.nmeylan.powermode.util.Util;
@@ -13,7 +13,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ElementOfPowerContainerManager extends EditorFactoryAdapter implements Power {
+public class ElementOfPowerContainerManager implements EditorFactoryListener, Power {
 
   private static Map<Editor, ElementOfPowerContainer> elementsOfPowerContainers = new HashMap<>();
   private Thread elementsOfPowerUpdateThread;

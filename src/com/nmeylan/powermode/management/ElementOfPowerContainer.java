@@ -6,13 +6,14 @@ import com.intellij.openapi.editor.event.CaretAdapter;
 import com.intellij.openapi.editor.event.CaretEvent;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.nmeylan.powermode.util.Pair;
 import com.nmeylan.powermode.Power;
-import com.nmeylan.powermode.util.Util;
 import com.nmeylan.powermode.element.ElementOfPower;
 import com.nmeylan.powermode.element.PowerBam;
 import com.nmeylan.powermode.element.PowerFlame;
 import com.nmeylan.powermode.element.PowerSpark;
+import com.nmeylan.powermode.listeners.MyCaretListener;
+import com.nmeylan.powermode.util.Pair;
+import com.nmeylan.powermode.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JComponent;
@@ -54,6 +55,8 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
     this.setBounds(myParent.getBounds());
     setVisible(true);
     myParent.addComponentListener(this);
+    editor.getCaretModel().addCaretListener(new MyCaretListener());
+
     editor.getCaretModel().addCaretListener(new CaretAdapter() {
       public void changeCarets() {
         lastPositionsPerCarets = editor.getCaretModel().getAllCarets().stream().map(

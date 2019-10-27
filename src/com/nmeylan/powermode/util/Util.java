@@ -5,6 +5,10 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorKind;
 import com.intellij.openapi.editor.VisualPosition;
 import com.intellij.openapi.editor.impl.EditorImpl;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.testFramework.LightVirtualFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
 import java.util.Arrays;
@@ -22,9 +26,14 @@ public class Util {
     }
   }
 
+  public static boolean isFileEditor(@NotNull Editor editor) {
+    final VirtualFile virtualFile = FileDocumentManager.getInstance().getFile(editor.getDocument());
+    return virtualFile != null && !(virtualFile instanceof LightVirtualFile);
+  }
+
   public static boolean isActualEditor(Editor editor) {
     if (editor instanceof  EditorImpl) {
-      return EDITOR_KINDS.contains(editor.getEditorKind()) && !editor.isOneLineMode();
+      return EDITOR_KINDS.contains(editor.getEditorKind()) && isFileEditor(editor) && !editor.isOneLineMode();
     }
     return  false;
   }

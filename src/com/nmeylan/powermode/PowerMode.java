@@ -10,7 +10,6 @@ import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.nmeylan.powermode.color.ColorEdges;
-import com.nmeylan.powermode.listeners.MyCaretListener;
 import com.nmeylan.powermode.listeners.MyTypedActionHandler;
 import com.nmeylan.powermode.management.ElementOfPowerContainerManager;
 import org.apache.log4j.Logger;
@@ -158,10 +157,6 @@ public class PowerMode implements PersistentStateComponent<PowerMode>, Applicati
     maybeElementOfPowerContainerManager.ifPresent(e -> editorFactory.addEditorFactoryListener(e, () -> {
     }));
     EditorActionManager editorActionManager = EditorActionManager.getInstance();
-    EditorFactory
-      .getInstance()
-      .getEventMulticaster()
-      .addCaretListener(new MyCaretListener());
     editorActionManager.getTypedAction().setupRawHandler(
       new MyTypedActionHandler(
         editorActionManager.getTypedAction().getRawHandler()));
