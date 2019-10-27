@@ -40,18 +40,22 @@ public class MyTypedActionHandler implements TypedActionHandler, Power {
 
   @Override
   public void execute(@NotNull Editor editor, char c, @NotNull DataContext dataContext) {
-    if (powerMode().isEnabled()) {
-      powerMode().increaseHeatup(Optional.of(dataContext), null);
-      if (!powerMode().isCaretActionEnabled()) {
-        initializeAnimationByTypedAction(editor);
-      }
-    }
+    powerType(editor, dataContext);
     try {
       typedActionHandler.execute(editor, c, dataContext);
     } catch (IllegalStateException x) {
       PowerMode.logger().info(x.getMessage(), x);
     } catch (IndexOutOfBoundsException x) {
       PowerMode.logger().info(x.getMessage(), x);
+    }
+  }
+
+  public void powerType(@NotNull Editor editor, @NotNull DataContext dataContext) {
+    if (powerMode().isEnabled()) {
+      powerMode().increaseHeatup(Optional.of(dataContext), null);
+      if (!powerMode().isCaretActionEnabled()) {
+        initializeAnimationByTypedAction(editor);
+      }
     }
   }
 }

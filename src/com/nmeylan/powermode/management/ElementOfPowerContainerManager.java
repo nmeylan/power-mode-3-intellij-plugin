@@ -3,6 +3,7 @@ package com.nmeylan.powermode.management;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.EditorFactoryEvent;
 import com.intellij.openapi.editor.event.EditorFactoryListener;
+import com.intellij.openapi.editor.impl.EditorImpl;
 import com.nmeylan.powermode.Power;
 import com.nmeylan.powermode.PowerMode;
 import com.nmeylan.powermode.util.Util;
@@ -49,7 +50,7 @@ public class ElementOfPowerContainerManager implements EditorFactoryListener, Po
   public void editorCreated(@NotNull EditorFactoryEvent event) {
     Editor editor = event.getEditor();
     if (Util.isActualEditor(editor)) {
-      elementsOfPowerContainers.put(editor, new ElementOfPowerContainer(editor));
+      elementsOfPowerContainers.put(editor, new ElementOfPowerContainer((EditorImpl) editor));
     }
   }
 

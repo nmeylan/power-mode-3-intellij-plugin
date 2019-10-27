@@ -1,11 +1,7 @@
 package com.nmeylan.powermode.management;
 
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollingModel;
-import com.intellij.openapi.editor.event.CaretAdapter;
-import com.intellij.openapi.editor.event.CaretEvent;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.impl.EditorImpl;
 import com.nmeylan.powermode.Power;
 import com.nmeylan.powermode.element.ElementOfPower;
 import com.nmeylan.powermode.element.PowerBam;
@@ -14,7 +10,6 @@ import com.nmeylan.powermode.element.PowerSpark;
 import com.nmeylan.powermode.listeners.MyCaretListener;
 import com.nmeylan.powermode.util.Pair;
 import com.nmeylan.powermode.util.Util;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -25,84 +20,36 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class ElementOfPowerContainer extends JComponent implements ComponentListener, Power {
 
-  private Editor editor;
+  private EditorImpl editor;
 
   private List<JComponent> shakeComponents;
   private List<Pair<ElementOfPower, Point>> elementsOfPower;
   private long lastShake;
   private long lastUpdate;
   private List<Point> shakeData;
-  private List<List<Point>> lastPositionsPerCarets;
 
-  public ElementOfPowerContainer(Editor editor) {
+  public ElementOfPowerContainer(EditorImpl editor) {
     super();
     this.editor = editor;
     this.shakeComponents = Arrays.asList(editor.getComponent(), editor.getContentComponent());
     this.elementsOfPower = new ArrayList<>();
-    this.lastPositionsPerCarets = new ArrayList<>();
     this.shakeData = new ArrayList<>();
     this.lastShake = System.currentTimeMillis();
     this.lastUpdate = System.currentTimeMillis();
     JComponent myParent = editor.getContentComponent();
     myParent.add(this);
     this.setBounds(myParent.getBounds());
-    setVisible(true);
     myParent.addComponentListener(this);
     editor.getCaretModel().addCaretListener(new MyCaretListener());
 
-    editor.getCaretModel().addCaretListener(new CaretAdapter() {
-      public void changeCarets() {
-        lastPositionsPerCarets = editor.getCaretModel().getAllCarets().stream().map(
-          caret -> Arrays.asList(
-            Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionStart()), caret.getEditor()),
-            Util.getPoint(editor.offsetToVisualPosition(caret.getSelectionEnd()), caret.getEditor()))).collect(Collectors.toList());
-      }
-
-      @Override
-      public void caretPositionChanged(@NotNull CaretEvent event) {
-        changeCarets();
-      }
-
-      @Override
-      public void caretAdded(@NotNull CaretEvent event) {
-        changeCarets();
-      }
-
-      @Override
-      public void caretRemoved(@NotNull CaretEvent event) {
-        changeCarets();
-      }
-    });
-
-    editor.getDocument().addDocumentListener(new DocumentAdapter() {
-      @Override
-      public void documentChanged(@NotNull DocumentEvent event) {
-        if (powerMode().isBamEnabled()) {
-          boolean shouldAnimate = (
-            event.getNewFragment().length() > 100 ||
-              event.getOldFragment().length() > 100 ||
-              event.getOldFragment().toString().contains("\n") ||
-              event.getNewFragment().toString().contains("\n")
-          );
-          if (shouldAnimate) {
-            List<String> lineFeeds = Arrays.asList((event.getOldFragment().toString() + event.getNewFragment().toString()).split("\n"));
-            int width = lineFeeds.isEmpty() ? 0 : (int) (lineFeeds.stream().max(Comparator.comparing(String::length)).get().length() / 2.0) * editor.getLineHeight();
-            if (!lastPositionsPerCarets.isEmpty()) {
-              SwingUtilities.invokeLater(() -> lastPositionsPerCarets.stream()
-                .forEach(caretPositions -> initializeAnimation(caretPositions.get(0), caretPositions.get(1), width)));
-            }
-          }
-        }
-      }
-
-    });
+    SwingUtilities.invokeLater(() -> onOpenEditor());
+    setVisible(true);
   }
 
 
@@ -127,7 +74,7 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
           p.first().update((deltaa / db));
 
           long diff = (System.nanoTime() - start);
-          System.out.println(diff / 1000.0 + " ms");
+//          System.out.println(diff / 1000.0 + " ms");
           return p.first().alive();
         }).collect(Collectors.toList());
       repaint();
@@ -150,15 +97,26 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
     repaint();
   }
 
-  private void initializeAnimation(Point a, Point b, int lineWidth) {
-    int x = a.x;
-    int y = a.y;
-    int width = Math.max(b.x - x, 50);
-    int height = Math.max(b.y - y, 50);
-    int dim = (int) (Arrays.asList(lineWidth, width, height, 50).stream().mapToInt(i -> i).max().getAsInt() * powerMode().valueFactor());
-    if (b.y - Math.abs(y) < dim) {
-      y = y - dim / 2;
+  private void onOpenEditor() {
+    int dim = editor.getScrollPane().getHeight() / 2;
+    int x = editor.getScrollPane().getWidth() / 2;
+    int y = editor.getScrollPane().getHeight() / 2 - (dim / 2);
+    if (powerMode().isBamEnabled()) {
+      addBam(new Point(x, y));
     }
+    if (powerMode().isSparksEnabled()) {
+      addSparks(new Point(editor.getScrollPane().getWidth() / 4, editor.getScrollPane().getHeight() / 4));
+      addSparks(new Point(editor.getScrollPane().getWidth() * 3 / 4, editor.getScrollPane().getHeight() * 3 / 4));
+      addSparks(new Point(editor.getScrollPane().getWidth() / 4, editor.getScrollPane().getHeight() * 3 / 4));
+      addSparks(new Point(editor.getScrollPane().getWidth() * 3 / 4, editor.getScrollPane().getHeight() / 4));
+    }
+
+  }
+
+  private void addBam(Point point) {
+    int dim = editor.getScrollPane().getHeight() / 2;
+    int x = point.x - (dim / 2);
+    int y = point.y - (dim / 2);
     elementsOfPower.add(
       Pair.with(
         new PowerBam(x, y, dim, dim, (long) (powerMode().getBamLife() * powerMode().valueFactor())),
@@ -267,6 +225,7 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
     setBounds(getMyBounds());
     powerMode().logger().debug("Moved");
   }
+
 
   @Override
   public void componentShown(ComponentEvent e) {
