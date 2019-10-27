@@ -1,4 +1,4 @@
-package com.nmeylan.powermode.power.hotkeys;
+package com.nmeylan.powermode.listeners;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.components.ApplicationComponent;
@@ -22,7 +22,7 @@ class HotkeyHeatupListener implements AWTEventListener, Power, ApplicationCompon
         KeyEvent event = (KeyEvent) e;
         if ((event.getModifiersEx() & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)) > 0) {
           KeyStroke eventKeyStroke = KeyStroke.getKeyStroke(event.getKeyCode(), event.getModifiersEx());
-          if (false) { // TODO set conditions to increaHeatup
+          if (true) { // TODO set conditions to increaHeatup
             powerMode().increaseHeatup(
               Optional.of(
                 DataManager.getInstance().getDataContext(event.getComponent()))

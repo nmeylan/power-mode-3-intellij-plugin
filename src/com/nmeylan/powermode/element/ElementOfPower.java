@@ -1,4 +1,4 @@
-package com.nmeylan.powermode.power;
+package com.nmeylan.powermode.element;
 
 
 import com.nmeylan.powermode.Power;

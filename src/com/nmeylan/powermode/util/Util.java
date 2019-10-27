@@ -1,4 +1,4 @@
-package com.nmeylan.powermode;
+package com.nmeylan.powermode.util;
 
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;

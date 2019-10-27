@@ -1,4 +1,4 @@
-package com.nmeylan.powermode.power.color;
+package com.nmeylan.powermode.color;
 
 import javax.swing.JPanel;
 import java.awt.Color;

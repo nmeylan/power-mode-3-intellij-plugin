@@ -1,4 +1,4 @@
-package com.nmeylan.powermode;
+package com.nmeylan.powermode.util;
 
 public class Pair <X, Y> {
   private X x;

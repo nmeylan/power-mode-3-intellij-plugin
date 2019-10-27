@@ -3,7 +3,7 @@ package com.nmeylan.powermode;
 
 import com.intellij.openapi.options.ConfigurableBase;
 import com.intellij.openapi.options.ConfigurableUi;
-import com.nmeylan.powermode.power.ui.PowerModeConfigurableUI;
+import com.nmeylan.powermode.ui.PowerModeConfigurableUI;
 import org.jetbrains.annotations.NotNull;
 
 public class PowerModeConfigurable extends ConfigurableBase {

@@ -1,7 +1,6 @@
-package com.nmeylan.powermode.power.element;
+package com.nmeylan.powermode.element;
 
-import com.nmeylan.powermode.Util;
-import com.nmeylan.powermode.power.ElementOfPower;
+import com.nmeylan.powermode.util.Util;
 
 import java.awt.Color;
 import java.awt.Graphics;

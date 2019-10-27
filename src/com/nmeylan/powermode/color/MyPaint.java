@@ -1,4 +1,4 @@
-package com.nmeylan.powermode.power.color;
+package com.nmeylan.powermode.color;
 
 import java.awt.Color;
 
@@ -20,27 +20,23 @@ public class MyPaint {
   }
 
   public MyPaint withRed(int r) {
-    MyPaint p = new MyPaint();
-    p.setR(r);
-    return p;
+    this.setR(r);
+    return this;
   }
 
   public MyPaint withGreen(int g) {
-    MyPaint p = new MyPaint();
-    p.setG(g);
-    return p;
+    this.setG(g);
+    return this;
   }
 
   public MyPaint withBlue(int b) {
-    MyPaint p = new MyPaint();
-    p.setB(b);
-    return p;
+    this.setB(b);
+    return this;
   }
 
   public MyPaint withAlpha(int a) {
-    MyPaint p = new MyPaint();
-    p.setA(a);
-    return p;
+    this.setA(a);
+    return this;
   }
 
   public int getR() {

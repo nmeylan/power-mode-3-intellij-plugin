@@ -1,8 +1,11 @@
-package com.nmeylan.powermode;
+package com.nmeylan.powermode.listeners;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
+import com.nmeylan.powermode.Power;
+import com.nmeylan.powermode.PowerMode;
+import com.nmeylan.powermode.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
@@ -11,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-class MyTypedActionHandler implements TypedActionHandler, Power {
+public class MyTypedActionHandler implements TypedActionHandler, Power {
 
   private TypedActionHandler typedActionHandler;
 

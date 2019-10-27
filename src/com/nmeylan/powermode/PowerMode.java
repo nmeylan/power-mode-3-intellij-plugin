@@ -9,8 +9,10 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.nmeylan.powermode.power.color.ColorEdges;
-import com.nmeylan.powermode.power.management.ElementOfPowerContainerManager;
+import com.nmeylan.powermode.color.ColorEdges;
+import com.nmeylan.powermode.listeners.MyCaretListener;
+import com.nmeylan.powermode.listeners.MyTypedActionHandler;
+import com.nmeylan.powermode.management.ElementOfPowerContainerManager;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 

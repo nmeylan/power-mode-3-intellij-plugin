@@ -1,4 +1,4 @@
-package com.nmeylan.powermode;
+package com.nmeylan.powermode.util;
 
 
 import javax.imageio.ImageIO;

@@ -18,7 +18,7 @@
             <implementation-class>com.nmeylan.powermode.PowerMode</implementation-class>
         </component>
         <component>
-            <implementation-class>com.nmeylan.powermode.power.hotkeys.HotkeyHeatupListener</implementation-class>
+            <implementation-class>com.nmeylan.powermode.listeners.HotkeyHeatupListener</implementation-class>
         </component>
     </application-components>
 
@@ -30,12 +30,12 @@
 
     <actions>
 
-        <action id="togglePowerModeIII" class="com.nmeylan.powermode.TogglePowerMode" text="Toggle Power Mode III"
+        <action id="togglePowerModeIII" class="com.nmeylan.powermode.listeners.TogglePowerMode" text="Toggle Power Mode III"
                 description="Toggle Power Mode">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt O"/>
         </action>
-        <action id="toggleCaretPowerModeIII" class="com.nmeylan.powermode.ToggleCaretPowerMode" text="Toggle Caret Power Mode"
+        <action id="toggleCaretPowerModeIII" class="com.nmeylan.powermode.listeners.ToggleCaretPowerMode" text="Toggle Caret Power Mode"
                 description="Toggle Caret Power Mode III">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>

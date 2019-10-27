@@ -1,4 +1,4 @@
-package com.nmeylan.powermode.power.management;
+package com.nmeylan.powermode.management;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollingModel;
@@ -6,13 +6,13 @@ import com.intellij.openapi.editor.event.CaretAdapter;
 import com.intellij.openapi.editor.event.CaretEvent;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
-import com.nmeylan.powermode.Pair;
+import com.nmeylan.powermode.util.Pair;
 import com.nmeylan.powermode.Power;
-import com.nmeylan.powermode.Util;
-import com.nmeylan.powermode.power.ElementOfPower;
-import com.nmeylan.powermode.power.element.PowerBam;
-import com.nmeylan.powermode.power.element.PowerFlame;
-import com.nmeylan.powermode.power.element.PowerSpark;
+import com.nmeylan.powermode.util.Util;
+import com.nmeylan.powermode.element.ElementOfPower;
+import com.nmeylan.powermode.element.PowerBam;
+import com.nmeylan.powermode.element.PowerFlame;
+import com.nmeylan.powermode.element.PowerSpark;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JComponent;
