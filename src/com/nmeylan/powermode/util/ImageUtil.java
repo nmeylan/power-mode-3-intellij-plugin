@@ -22,7 +22,11 @@ public class ImageUtil {
             return Files.walk(folder.get().toPath())
               .map(p -> {
                 try {
-                  return ImageIO.read(p.toFile());
+                  File file = p.toFile();
+                  if (file.isDirectory()) {
+                    return null;
+                  }
+                  return ImageIO.read(file);
                 } catch (IOException e) {
                   return null;
                 }
@@ -37,12 +41,15 @@ public class ImageUtil {
           if (folder.get().getPath().contains("bam")) {
             return Arrays.asList(ImageIO.read(ImageUtil.class.getResourceAsStream("/bam/bam.png")));
           } else if(folder.get().getPath().contains("fire")) {
-            return Files.walk(Paths.get(ImageUtil.class.getClassLoader().getResource("fire/animated/256").toURI()))
+            return Files.walk(Paths.get(ImageUtil.class.getClassLoader().getResource("/fire/animated/256").toURI()))
               .map(p -> {
                 try {
-                  return ImageIO.read(p.toFile());
+                  File file = p.toFile();
+                  if (file.isDirectory()) {
+                    return null;
+                  }
+                  return ImageIO.read(file);
                 } catch (IOException e) {
-                  e.printStackTrace();
                   return null;
                 }
               })
