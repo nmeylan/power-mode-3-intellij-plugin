@@ -2,6 +2,7 @@ package com.nmeylan.powermode.management;
 
 import com.intellij.openapi.editor.ScrollingModel;
 import com.intellij.openapi.editor.impl.EditorImpl;
+import com.nmeylan.powermode.Direction;
 import com.nmeylan.powermode.Power;
 import com.nmeylan.powermode.element.ElementOfPower;
 import com.nmeylan.powermode.element.PowerBam;
@@ -88,7 +89,7 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
       addSparks(point);
     }
     if (powerMode().isFlamesEnabled()) {
-      addFlames(point);
+      addFlames(point, null);
     }
 
     if (powerMode().isShakeEnabled()) {
@@ -111,6 +112,10 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
       addSparks(new Point(editor.getScrollPane().getWidth() * 3 / 4, editor.getScrollPane().getHeight() / 4));
     }
 
+    for(int i = 0; i < editor.getScrollPane().getHeight(); i += 15) {
+      addFlames(new Point(0, i), Direction.RIGHT);
+      addFlames(new Point(editor.getScrollPane().getWidth() - 75, i), Direction.LEFT);
+    }
   }
 
   private void addBam(Point point) {
@@ -123,20 +128,27 @@ public class ElementOfPowerContainer extends JComponent implements ComponentList
         getScrollPosition()));
   }
 
-  private void addFlames(Point point) {
+  private void addFlames(Point point, Direction direction) {
     float base = 0.3f;
     int wh = (int) ((powerMode().getMaxFlameSize() * base +
       ((Math.random() * powerMode().getMaxFlameSize() * (1 - base)) * powerMode().valueFactor())));
     int initLife = (int) (powerMode().getMaxFlameLife() * powerMode().valueFactor());
     if (initLife > 100) {
-      elementsOfPower.add(
-        Pair.with(
-          new PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, true),
-          getScrollPosition()));
-      elementsOfPower.add(
-        Pair.with(
-          new PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, false),
-          getScrollPosition()));
+      if (direction != null) {
+        elementsOfPower.add(
+          Pair.with(
+            new PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, direction),
+            getScrollPosition()));
+      } else {
+        elementsOfPower.add(
+          Pair.with(
+            new PowerFlame(point.x + 5, point.y - 1, wh, wh, initLife, Direction.UP),
+            getScrollPosition()));
+        elementsOfPower.add(
+          Pair.with(
+            new PowerFlame(point.x + 5, point.y + 15, wh, wh, initLife, Direction.DOWN),
+            getScrollPosition()));
+      }
     }
   }
 

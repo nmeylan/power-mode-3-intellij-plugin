@@ -6,7 +6,8 @@
     </vendor>
     <description><![CDATA[
         <h1>Power Mode 3</h1>
-        <span>Forked from axaluss on Github.</span>
+        <div>Forked from axaluss on Github. Credits to https://github.com/axaluss/power-mode-intellij-plugin.</div>
+        <div>Source available here: https://github.com/nmeylan/power-mode-3-intellij-plugin</div>
         ]]></description>
 
     <idea-version since-build="143.0"/>

@@ -1,5 +1,6 @@
 package com.nmeylan.powermode.element;
 
+import com.nmeylan.powermode.Direction;
 import com.nmeylan.powermode.util.ImageUtil;
 import com.nmeylan.powermode.util.Util;
 
@@ -27,10 +28,10 @@ public class PowerFlame implements ElementOfPower {
   private int _height;
   private long initLife;
   private long life;
-  private boolean up;
+  private Direction direction;
   private String cacheKey;
 
-  public PowerFlame(float _x, float _y, int _width, int _height, long initLife, boolean up) {
+  public PowerFlame(float _x, float _y, int _width, int _height, long initLife, Direction direction) {
     this.x = _x;
     this.y = _y;
     this.width = 0;
@@ -41,7 +42,7 @@ public class PowerFlame implements ElementOfPower {
     this._height = _height;
     this.initLife = initLife;
     this.life = System.currentTimeMillis() + initLife;
-    this.up = up;
+    this.direction = direction;
     this.cacheKey = powerMode().flameImageFolder().get().getAbsolutePath();
     findFlameImages();
   }
@@ -66,10 +67,14 @@ public class PowerFlame implements ElementOfPower {
     if (alive()) {
       i += 1;
       x = _x - (int) (0.5 * _width * lifeFactor());
-      if (up) {
+      if (direction == Direction.UP) {
         y = _y - (int) (1.1 * _height * lifeFactor());
-      } else {
+      } else if (direction == Direction.DOWN) {
         y = _y + (int) (0.25 * _height * lifeFactor());
+      } else if (direction == Direction.LEFT) {
+        y = _y - (int) (0.5 * _height * lifeFactor());
+      } else if (direction == Direction.RIGHT) {
+        y = _y - (int) (0.5 * _height * lifeFactor());
       }
       width = (int) (_width * lifeFactor());
       height = (int) (_height * lifeFactor());
@@ -85,11 +90,10 @@ public class PowerFlame implements ElementOfPower {
       g2d.setComposite(
         AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
           Util.alpha(0.9f * (1 - lifeFactor()))));
-      if (up) {
-        g2d.drawImage(flameImagesCache.get(cacheKey).get(i % flameImagesCount), (int) x + dxx, (int) y + dyy, width, height, null);
-      } else {
-        // flip horizontally
+      if (direction == Direction.DOWN) {
         g2d.drawImage(flameImagesCache.get(cacheKey).get(i % flameImagesCount), (int) x + dxx, (int) (y + dyy + height), width, -height, null);
+      } else {
+        g2d.drawImage(flameImagesCache.get(cacheKey).get(i % flameImagesCount), (int) x + dxx, (int) y + dyy, width, height, null);
       }
 
       g2d.dispose();
